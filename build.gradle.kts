@@ -8,8 +8,8 @@ val slf4jVersion = ext.get("slf4jVersion").toString()
 val kotlinxCoroutinesVersion = ext.get("kotlinxCoroutinesVersion").toString()
 
 val openhtmltopdfVersion = "1.0.2"
-val kafkaEmbeddedEnvVersion = "2.2.3" // 2.4.0
-val kafkaVersion = "2.3.0" // Alligned med version fra kafka-embedded-env
+val kafkaEmbeddedEnvVersion = "2.4.0"
+val kafkaVersion = "2.4.0" // Alligned med version fra kafka-embedded-env
 val handlebarsVersion = "4.1.2"
 
 val mainClass = "no.nav.helse.OmsorgspengerutbetalingeSoknadProsesseringKt"
@@ -21,7 +21,7 @@ plugins {
 
 buildscript {
     // Henter ut diverse dependency versjoner, i.e. ktorVersion.
-    apply("https://raw.githubusercontent.com/navikt/dusseldorf-ktor/b7013abce578447fb79186175b728e26e1537c27/gradle/dusseldorf-ktor.gradle.kts")
+    apply("https://raw.githubusercontent.com/navikt/dusseldorf-ktor/e71617ba8509178ddf18e79b9f9ddac0ac9dcb4e/gradle/dusseldorf-ktor.gradle.kts")
 }
 
 dependencies {
@@ -56,7 +56,6 @@ dependencies {
         exclude(group = "org.eclipse.jetty")
     }
     testCompile("org.skyscreamer:jsonassert:1.5.0")
-    //implementation(kotlin("stdlib-jdk8"))
 }
 
 repositories {
