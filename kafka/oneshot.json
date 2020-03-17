@@ -1,0 +1,72 @@
+{
+  "topics": [
+    {
+      "configEntries": {
+        "retention.ms": -1
+      },
+      "members": [
+        {
+          "member": "srvomsut-mottak",
+          "role": "PRODUCER"
+        },
+        {
+          "member": "srvomsut-prs",
+          "role": "CONSUMER"
+        }
+      ],
+      "numPartitions": 3,
+      "topicName": "privat-omsorgspengerutbetalingsoknad-mottatt"
+    },
+    {
+      "configEntries": {
+        "retention.ms": -1
+      },
+      "members": [
+        {
+          "member": "srvomsorgspeng-prs",
+          "role": "PRODUCER"
+        },
+        {
+          "member": "srvomsorgspeng-prs",
+          "role": "CONSUMER"
+        }
+      ],
+      "numPartitions": 3,
+      "topicName": "privat-omsorgspengerutbetalingsoknad-preprossesert"
+    },
+    {
+      "configEntries": {
+        "retention.ms": -1
+      },
+      "members": [
+        {
+          "member": "srvomsut-prs",
+          "role": "PRODUCER"
+        },
+        {
+          "member": "srvomsut-prs",
+          "role": "CONSUMER"
+        }
+      ],
+      "numPartitions": 3,
+      "topicName": "privat-omsorgspengerutbetalingsoknad-cleanup"
+    },
+    {
+      "configEntries": {
+        "retention.ms": -1
+      },
+      "members": [
+        {
+          "member": "srvomsut-prs",
+          "role": "PRODUCER"
+        },
+        {
+          "member": "srvk9-fordel",
+          "role": "CONSUMER"
+        }
+      ],
+      "numPartitions": 3,
+      "topicName": "privat-omsorgspengerutbetalingsoknad-journalfort"
+    }
+  ]
+}
