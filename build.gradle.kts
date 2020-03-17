@@ -1,22 +1,22 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val dusseldorfKtorVersion = "1.3.0.b7013ab"
-val k9FormatVersion = "1.0.0.0356f75"
+val dusseldorfKtorVersion = "1.3.2.e71617b"
 val ktorVersion = ext.get("ktorVersion").toString()
+val k9FormatVersion = "3.0.0.f341850"
 val slf4jVersion = ext.get("slf4jVersion").toString()
 val kotlinxCoroutinesVersion = ext.get("kotlinxCoroutinesVersion").toString()
 
-val openhtmltopdfVersion = "1.0.0"
-val kafkaEmbeddedEnvVersion = "2.2.3"
+val openhtmltopdfVersion = "1.0.2"
+val kafkaEmbeddedEnvVersion = "2.2.3" // 2.4.0
 val kafkaVersion = "2.3.0" // Alligned med version fra kafka-embedded-env
 val handlebarsVersion = "4.1.2"
 
 val mainClass = "no.nav.helse.OmsorgspengerutbetalingeSoknadProsesseringKt"
 
 plugins {
-    kotlin("jvm") version "1.3.50"
-    id("com.github.johnrengelman.shadow") version "5.1.0"
+    kotlin("jvm") version "1.3.70"
+    id("com.github.johnrengelman.shadow") version "5.2.0"
 }
 
 buildscript {
@@ -33,7 +33,7 @@ dependencies {
     compile ( "no.nav.helse:dusseldorf-ktor-auth:$dusseldorfKtorVersion")
     compile ( "no.nav.k9:soknad-omsorgspenger:$k9FormatVersion")
     compile ( "no.nav.k9:soknad-felles:$k9FormatVersion")
-    compile ("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:$kotlinxCoroutinesVersion")
+    compile ( "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:$kotlinxCoroutinesVersion")
     
     // Client
     compile ( "no.nav.helse:dusseldorf-ktor-client:$dusseldorfKtorVersion")
@@ -42,21 +42,21 @@ dependencies {
     // PDF
     compile ( "com.openhtmltopdf:openhtmltopdf-pdfbox:$openhtmltopdfVersion")
     compile ( "com.openhtmltopdf:openhtmltopdf-slf4j:$openhtmltopdfVersion")
-    compile("org.slf4j:jcl-over-slf4j:$slf4jVersion")
-    compile("com.github.jknack:handlebars:$handlebarsVersion")
+    compile ( "org.slf4j:jcl-over-slf4j:$slf4jVersion")
+    compile ( "com.github.jknack:handlebars:$handlebarsVersion")
 
     // Kafka
     compile("org.apache.kafka:kafka-streams:$kafkaVersion")
 
     // Test
-    testCompile("org.apache.kafka:kafka-clients:$kafkaVersion")
-    testCompile ("no.nav:kafka-embedded-env:$kafkaEmbeddedEnvVersion")
+    testCompile ( "org.apache.kafka:kafka-clients:$kafkaVersion")
+    testCompile ( "no.nav:kafka-embedded-env:$kafkaEmbeddedEnvVersion")
     testCompile ( "no.nav.helse:dusseldorf-test-support:$dusseldorfKtorVersion")
-    testCompile("io.ktor:ktor-server-test-host:$ktorVersion") {
+    testCompile ( "io.ktor:ktor-server-test-host:$ktorVersion") {
         exclude(group = "org.eclipse.jetty")
     }
     testCompile("org.skyscreamer:jsonassert:1.5.0")
-    implementation(kotlin("stdlib-jdk8"))
+    //implementation(kotlin("stdlib-jdk8"))
 }
 
 repositories {
@@ -102,5 +102,5 @@ tasks.withType<ShadowJar> {
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = "5.6.2"
+    gradleVersion = "6.2.2"
 }
