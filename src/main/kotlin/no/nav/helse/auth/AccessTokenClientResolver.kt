@@ -2,7 +2,6 @@ package no.nav.helse.auth
 
 import com.nimbusds.jose.jwk.JWK
 import no.nav.helse.dusseldorf.ktor.auth.Client
-import no.nav.helse.dusseldorf.ktor.auth.ClientSecretClient
 import no.nav.helse.dusseldorf.ktor.auth.PrivateKeyClient
 import no.nav.helse.dusseldorf.oauth2.client.DirectKeyId
 import no.nav.helse.dusseldorf.oauth2.client.FromJwk
@@ -16,13 +15,8 @@ internal class AccessTokenClientResolver(
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(AccessTokenClientResolver::class.java)
-        private const val NAIS_STS_ALIAS = "nais-sts"
         private const val AZURE_V2_ALIAS = "azure-v2"
     }
-
-    private val naisStsClient = clients.getOrElse(NAIS_STS_ALIAS) {
-        throw IllegalStateException("Client[$NAIS_STS_ALIAS] må være satt opp.")
-    } as ClientSecretClient
 
     private val azureV2Client = clients.getOrElse(AZURE_V2_ALIAS) {
         throw IllegalStateException("Client[$AZURE_V2_ALIAS] må være satt opp.")
@@ -36,12 +30,6 @@ internal class AccessTokenClientResolver(
         throw IllegalArgumentException("Azure JWK på feil format.")
     }
 
-    private val naisStsAccessTokenClient = NaisStsAccessTokenClient(
-        clientId = naisStsClient.clientId(),
-        clientSecret = naisStsClient.clientSecret,
-        tokenEndpoint = naisStsClient.tokenEndpoint()
-    )
-
     private val azureV2AccessTokenClient = SignedJwtAccessTokenClient(
         clientId = azureV2Client.clientId(),
         tokenEndpoint = azureV2Client.tokenEndpoint(),
@@ -51,6 +39,4 @@ internal class AccessTokenClientResolver(
 
     internal fun dokumentAccessTokenClient() = azureV2AccessTokenClient
     internal fun joarkAccessTokenClient() = azureV2AccessTokenClient
-    internal fun aktoerRegisterAccessTokenClient() = naisStsAccessTokenClient
-    internal fun tpsProxyAccessTokenClient() = naisStsAccessTokenClient
 }
