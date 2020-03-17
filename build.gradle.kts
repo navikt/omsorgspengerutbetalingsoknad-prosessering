@@ -12,7 +12,7 @@ val kafkaEmbeddedEnvVersion = "2.2.3"
 val kafkaVersion = "2.3.0" // Alligned med version fra kafka-embedded-env
 val handlebarsVersion = "4.1.2"
 
-val mainClass = "no.nav.helse.OmsorgspengerutbetalingSoknadProsesseringKt"
+val mainClass = "no.nav.helse.OmsorgspengerutbetalingeSoknadProsesseringKt"
 
 plugins {
     kotlin("jvm") version "1.3.50"
