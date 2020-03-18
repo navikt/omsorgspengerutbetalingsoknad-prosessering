@@ -8,6 +8,7 @@ import com.github.jknack.handlebars.io.ClassPathTemplateLoader
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import no.nav.helse.dusseldorf.ktor.core.fromResources
+import no.nav.helse.prosessering.v1.SpørsmålId.*
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.time.ZoneId
@@ -80,12 +81,18 @@ internal class PdfV1Generator {
                             "navn" to melding.søker.formatertNavn(),
                             "fødselsnummer" to melding.søker.fødselsnummer
                         ),
+                        "bosteder" to melding.bosteder.somMap(),
+                        "opphold" to melding.opphold.somMap(),
+                        "utbetalingsperioder" to melding.utbetalingsperioder.somUtbetalingsPeriodeMap(),
+                        "spørsmål" to melding.spørsmål.somSpørsmålMap(),
                         "samtykke" to mapOf(
-                            "harForståttRettigheterOgPlikter" to melding.spørsmål,
-                            "harBekreftetOpplysninger" to melding.spørsmål
+                            "harForståttRettigheterOgPlikter" to melding.spørsmål.filter { it.id === HarForståttRettigheterOgPlikter }
+                                .first().svar.name,
+                            "harBekreftetOpplysninger" to melding.spørsmål.filter { it.id === HarBekreftetOpplysninger }
+                                .first().svar.name
                         ),
                         "hjelp" to mapOf(
-                            "språk" to melding.språk?.språk.sprakTilTekst()
+                            "språk" to melding.språk.språk.sprakTilTekst()
                         )
                     )
                 )
@@ -107,7 +114,6 @@ internal class PdfV1Generator {
             }
         }
     }
-
 
     private fun PdfRendererBuilder.medFonter() =
         useFont(
@@ -131,12 +137,24 @@ internal class PdfV1Generator {
                 BaseRendererBuilder.FontStyle.ITALIC,
                 false
             )
+
 }
 
-private fun List<Utenlandsopphold>.somMapUtenlandsopphold(): List<Map<String, Any?>> {
+private fun List<SpørsmålOgSvar>.somSpørsmålMap(): List<Map<String, Any>> {
+    return this.filter { it.id == null }
+        .map {
+            mapOf(
+                "spørsmål" to it.spørsmål,
+                "svar" to it.svar.name,
+                "fritekst" to it.fritekst.toString()
+            )
+        }
+}
+
+private fun List<Bosted>.somMap(): List<Map<String, String>> {
     val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(ZoneId.of("Europe/Oslo"))
     return map {
-        mapOf<String, Any?>(
+        mapOf(
             "landnavn" to it.landnavn,
             "fraOgMed" to dateFormatter.format(it.fraOgMed),
             "tilOgMed" to dateFormatter.format(it.tilOgMed)
@@ -144,6 +162,16 @@ private fun List<Utenlandsopphold>.somMapUtenlandsopphold(): List<Map<String, An
     }
 }
 
+private fun List<UtbetalingsperiodeUtenVedlegg>.somUtbetalingsPeriodeMap(): List<Map<String, String>> {
+    val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(ZoneId.of("Europe/Oslo"))
+    return map {
+        mapOf(
+            "lengde" to it.lengde.toString(),
+            "fraOgMed" to dateFormatter.format(it.fraOgMed),
+            "tilOgMed" to dateFormatter.format(it.tilOgMed)
+        )
+    }
+}
 
 private fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
 private fun String.sprakTilTekst() = when (this.toLowerCase()) {
