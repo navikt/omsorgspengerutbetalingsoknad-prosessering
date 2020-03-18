@@ -7,7 +7,6 @@ import com.github.jknack.handlebars.context.MapValueResolver
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
-import no.nav.helse.aktoer.NorskIdent
 import no.nav.helse.dusseldorf.ktor.core.fromResources
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -68,9 +67,7 @@ internal class PdfV1Generator {
     }
 
     internal fun generateSoknadOppsummeringPdf(
-        melding: MeldingV1,
-        barnetsIdent: NorskIdent?,
-        barnetsNavn: String?
+        melding: MeldingV1
     ): ByteArray {
         soknadTemplate.apply(
             Context
@@ -85,9 +82,9 @@ internal class PdfV1Generator {
                             "relasjonTilBarnet" to melding.relasjonTilBarnet
                         ),
                         "barn" to mapOf(
-                            "navn" to barnetsNavn,
-                            "id" to barnetsIdent?.getValue(),
-                            "fødselsdato" to melding.barn.fødselsdato
+                            "navn" to "Fjern",
+                            "id" to "Fjern",
+                            "fødselsdato" to "Fjern"
                         ),
                         "sammeAddresse" to melding.sammeAdresse,
                         "kroniskEllerFunksjonshemming" to melding.kroniskEllerFunksjonshemming,

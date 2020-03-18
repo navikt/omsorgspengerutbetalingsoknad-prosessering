@@ -7,7 +7,6 @@ import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-
 class OmsorgspengerutbetalingsoknadProsesseringWithMocks {
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(OmsorgspengerutbetalingsoknadProsesseringWithMocks::class.java)
@@ -17,17 +16,13 @@ class OmsorgspengerutbetalingsoknadProsesseringWithMocks {
 
             val wireMockServer: WireMockServer = WireMockBuilder()
                 .withPort(8091)
-                .withNaisStsSupport()
                 .withAzureSupport()
-                .navnOppslagConfig()
                 .build()
                 .stubK9DokumentHealth()
-                .stubOmsorgspengerJoarkHealth()
+                .stubK9JoarkHealth()
                 .stubJournalfor()
                 .stubLagreDokument()
                 .stubSlettDokument()
-                .stubTpsProxyGetNavn("Ole", "Dole", "Klok")
-                .stubAktørRegister("29099012345", "123456")
 
             val kafkaEnvironment = KafkaWrapper.bootstrap()
 

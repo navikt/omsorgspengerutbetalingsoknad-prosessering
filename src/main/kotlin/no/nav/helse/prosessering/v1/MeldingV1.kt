@@ -1,7 +1,6 @@
 package no.nav.helse.prosessering.v1
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URI
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -13,7 +12,6 @@ data class MeldingV1(
     val språk: String? = "nb",
     val kroniskEllerFunksjonshemming: Boolean = false,
     val arbeidssituasjon: List<String>,
-    val barn: Barn,
     val søker: Søker,
     val relasjonTilBarnet: String? = null,
     val sammeAdresse: Boolean = false,
@@ -37,16 +35,6 @@ data class Søker(
     }
 }
 
-data class Barn(
-    val navn: String?,
-    val norskIdentifikator: String?,
-    @JsonFormat(pattern = "yyyy-MM-dd") val fødselsdato: LocalDate?,
-    val aktørId: String?
-) {
-    override fun toString(): String {
-        return "Barn(navn=$navn, aktørId=$aktørId)"
-    }
-}
 
 data class Medlemskap(
     val harBoddIUtlandetSiste12Mnd: Boolean,

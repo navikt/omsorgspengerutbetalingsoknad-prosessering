@@ -7,7 +7,6 @@ import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
-import no.nav.helse.prosessering.v1.PreprossesertBarn
 import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
 import no.nav.helse.prosessering.v1.PreprossesertSøker
 import no.nav.k9.søknad.felles.Barn
@@ -20,7 +19,7 @@ import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.Produced
 import org.slf4j.LoggerFactory
-import java.net.URI
+import java.time.LocalDate
 
 internal class JournalforingsStream(
     joarkGateway: JoarkGateway,
@@ -88,22 +87,10 @@ internal class JournalforingsStream(
 private fun PreprossesertMeldingV1.tilK9Omsorgspengesøknad(): OmsorgspengerSøknad = OmsorgspengerSøknad.builder()
     .søknadId(SøknadId.of(soknadId))
     .mottattDato(mottatt)
-    .barn(barn.tilK9Barn())
+    .barn(Barn.builder().fødselsdato(LocalDate.now()).build())
     .søker(søker.tilK9Søker())
     .build()
 
 private fun PreprossesertSøker.tilK9Søker(): Søker = Søker.builder()
     .norskIdentitetsnummer(NorskIdentitetsnummer.of(fødselsnummer))
     .build()
-
-private fun PreprossesertBarn.tilK9Barn(): Barn {
-    return when {
-        !norskIdentifikator.isNullOrBlank() -> Barn.builder().norskIdentitetsnummer(
-            NorskIdentitetsnummer.of(
-                norskIdentifikator
-            )
-        ).build()
-        fødselsDato != null -> Barn.builder().fødselsdato(fødselsDato).build()
-        else -> throw IllegalArgumentException("Ikke tillatt med barn som mangler både fødselsdato og fødselnummer.")
-    }
-}
