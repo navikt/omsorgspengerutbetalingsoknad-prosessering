@@ -55,27 +55,8 @@
                     </li>
                 {{/each}}
             </ul>
-            <!-- BOSTEDER -->
 
-            <h2><span>Bosteder</span></h2>
-            <ul>
-                {{# each søknad.bosteder as |b|}}
-                    <li>
-                        {{b.landnavn}} ({{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}})
-                    </li>
-                {{/each}}
-            </ul>
-
-            <!-- UTENLANDSOPPHOLD -->
-            <h2><span>Utenlandsopphold</span></h2>
-            <ul>
-                {{# each søknad.opphold as |o|}}
-                    <li>
-                        {{o.landnavn}} ({{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}})
-                    </li>
-                {{/each}}
-            </ul>
-
+            <!-- SPØRSMÅL -->
             <h2><span>Spørsmål</span></h2>
             {{# each søknad.spørsmål as |s|}}
                 <p class="sporsmalstekst">{{s.spørsmål}}</p>
@@ -106,6 +87,27 @@
 
                 <hr/>
             {{/each}}
+
+            <!-- BOSTEDER -->
+
+            <h2><span>Bosteder</span></h2>
+            <ul>
+                {{# each søknad.bosteder as |b|}}
+                    <li>
+                        {{b.landnavn}} ({{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}})
+                    </li>
+                {{/each}}
+            </ul>
+
+            <!-- UTENLANDSOPPHOLD -->
+            <h2><span>Utenlandsopphold</span></h2>
+            <ul>
+                {{# each søknad.opphold as |o|}}
+                    <li>
+                        {{o.landnavn}} ({{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}})
+                    </li>
+                {{/each}}
+            </ul>
         </div>
 
         <!-- FOOTER -->

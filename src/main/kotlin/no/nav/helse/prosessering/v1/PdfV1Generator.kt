@@ -146,7 +146,7 @@ internal class PdfV1Generator {
 private fun Duration.tilString() = "${this.toHoursPart()} timer og ${this.toMinutesPart()} minutter"
 private fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
 private fun String.sprakTilTekst() = when (this.toLowerCase()) {
-    "nb" -> "bokmål"
-    "nn" -> "nynorsk"
+    "nb" -> "Bokmål"
+    "nn" -> "Nynorsk"
     else -> this
 }
