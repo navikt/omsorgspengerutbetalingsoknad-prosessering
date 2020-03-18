@@ -205,7 +205,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         kafkaTestProducer.leggTilMottak(melding)
         val preprossesertMelding: TopicEntry<PreprossesertMeldingV1> =
             preprossesertKonsumer.hentPreprossesertMelding(melding.søknadId)
-        assertEquals(5, preprossesertMelding.data.dokumentUrls.size)
+        assertEquals(4, preprossesertMelding.data.dokumentUrls.size)
         // 2 legeerklæringsvedlegg, 2, to samværsavtalevedlegg, og 1 søknadPdf.
     }
 
@@ -225,11 +225,12 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
     }
 
     private fun gyldigMelding(
+        start: LocalDate = LocalDate.parse("2020-01-01"),
         fødselsnummerSoker: String,
-        sprak: String? = null
+        sprak: Språk = Språk.BOKMÅL
     ): MeldingV1 = MeldingV1(
-        språk = sprak,
         søknadId = UUID.randomUUID().toString(),
+        språk = sprak,
         mottatt = ZonedDateTime.now(),
         søker = Søker(
             aktørId = "123456",
@@ -237,23 +238,79 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             fødselsdato = LocalDate.now().minusDays(1000),
             etternavn = "Nordmann",
             mellomnavn = "Mellomnavn",
-            fornavn = "Ola"
+            fornavn = "Ola",
+            myndig = true
         ),
-        legeerklæring = listOf(
+        bosteder = listOf(
+            Bosted(
+                fraOgMed = start,
+                tilOgMed = start.plusDays(5),
+                landnavn = "Sverige",
+                landkode = "SWE"
+            ),
+            Bosted(
+                fraOgMed = start.plusDays(10),
+                tilOgMed = start.plusDays(10),
+                landnavn = "Norge",
+                landkode = "NOR"
+            )
+        ),
+        opphold = listOf(
+            Bosted(
+                fraOgMed = start.plusDays(15),
+                tilOgMed = start.plusDays(20),
+                landnavn = "England",
+                landkode = "Eng"
+            ),
+            Bosted(
+                fraOgMed = start.minusDays(10),
+                tilOgMed = start.minusDays(5),
+                landnavn = "Kroatia",
+                landkode = "CRO"
+            )
+        ),
+        spørsmål = listOf(
+            SpørsmålOgSvar(
+                id = SpørsmålId.HarForståttRettigheterOgPlikter,
+                spørsmål = "HarForståttRettigheterOgPlikter?",
+                svar = Svar.Ja
+            ),
+            SpørsmålOgSvar(
+                id = SpørsmålId.HarBekreftetOpplysninger,
+                spørsmål = "HarBekreftetOpplysninger?",
+                svar = Svar.Ja
+            ),
+            SpørsmålOgSvar(
+                spørsmål = "Har du vært hjemme?",
+                svar = Svar.Nei
+            ),
+            SpørsmålOgSvar(
+                spørsmål = "Skal du være hjemme?",
+                svar = Svar.VetIkke,
+                fritekst = "Umulig å si"
+            )
+        ),
+        utbetalingsperioder = listOf(
+            UtbetalingsperiodeUtenVedlegg(
+                fraOgMed = start,
+                tilOgMed = start.plusDays(10),
+                lengde = Duration.ofHours(5).plusMinutes(30)
+            ),
+            UtbetalingsperiodeUtenVedlegg(
+                fraOgMed = start.plusDays(20),
+                tilOgMed = start.plusDays(20),
+                lengde = Duration.ofHours(5).plusMinutes(30)
+            ),
+            UtbetalingsperiodeUtenVedlegg(
+                fraOgMed = start.plusDays(30),
+                tilOgMed = start.plusDays(35),
+                lengde = Duration.ofHours(5).plusMinutes(30)
+            )
+        ),
+        vedlegg = listOf(
             URI("http://localhost:8080/vedlegg/1"),
-            URI("http://localhost:8080/vedlegg/2")
-        ),
-        samværsavtale = listOf(
-            URI("http://localhost:8080/vedlegg/3"),
-            URI("http://localhost:8080/vedlegg/4")
-        ),
-        relasjonTilBarnet = "Mor",
-        arbeidssituasjon = listOf("Arbeidstaker", "Frilans", "Selvstendig Næringsdrivende"),
-        harBekreftetOpplysninger = true,
-        harForståttRettigheterOgPlikter = true,
-        medlemskap = Medlemskap(
-            harBoddIUtlandetSiste12Mnd = true,
-            skalBoIUtlandetNeste12Mnd = true
+            URI("http://localhost:8080/vedlegg/2"),
+            URI("http://localhost:8080/vedlegg/3")
         )
     )
 

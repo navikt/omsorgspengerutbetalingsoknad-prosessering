@@ -78,29 +78,14 @@ internal class PdfV1Generator {
                         "soknad_mottatt" to DATE_TIME_FORMATTER.format(melding.mottatt),
                         "søker" to mapOf(
                             "navn" to melding.søker.formatertNavn(),
-                            "fødselsnummer" to melding.søker.fødselsnummer,
-                            "relasjonTilBarnet" to melding.relasjonTilBarnet
-                        ),
-                        "barn" to mapOf(
-                            "navn" to "Fjern",
-                            "id" to "Fjern",
-                            "fødselsdato" to "Fjern"
-                        ),
-                        "sammeAddresse" to melding.sammeAdresse,
-                        "kroniskEllerFunksjonshemming" to melding.kroniskEllerFunksjonshemming,
-                        "arbeidssituasjon" to melding.arbeidssituasjon,
-                        "medlemskap" to mapOf(
-                            "har_bodd_i_utlandet_siste_12_mnd" to melding.medlemskap.harBoddIUtlandetSiste12Mnd,
-                            "utenlandsopphold_siste_12_mnd" to melding.medlemskap.utenlandsoppholdSiste12Mnd.somMapUtenlandsopphold(),
-                            "skal_bo_i_utlandet_neste_12_mnd" to melding.medlemskap.skalBoIUtlandetNeste12Mnd,
-                            "utenlandsopphold_neste_12_mnd" to melding.medlemskap.utenlandsoppholdNeste12Mnd.somMapUtenlandsopphold()
+                            "fødselsnummer" to melding.søker.fødselsnummer
                         ),
                         "samtykke" to mapOf(
-                            "harForståttRettigheterOgPlikter" to melding.harForståttRettigheterOgPlikter,
-                            "harBekreftetOpplysninger" to melding.harBekreftetOpplysninger
+                            "harForståttRettigheterOgPlikter" to melding.spørsmål,
+                            "harBekreftetOpplysninger" to melding.spørsmål
                         ),
                         "hjelp" to mapOf(
-                            "språk" to melding.språk?.sprakTilTekst()
+                            "språk" to melding.språk?.språk.sprakTilTekst()
                         )
                     )
                 )

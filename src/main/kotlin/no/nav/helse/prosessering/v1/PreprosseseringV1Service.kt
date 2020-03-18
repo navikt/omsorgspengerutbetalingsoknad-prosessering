@@ -58,10 +58,8 @@ internal class PreprosseseringV1Service(
             )
         )
 
-        if (!melding.samværsavtale.isNullOrEmpty()) {
-            melding.samværsavtale.forEach { komplettDokumentUrls.add(listOf(it)) }
-        }
-        melding.legeerklæring.forEach { komplettDokumentUrls.add(listOf(it)) }
+
+        melding.vedlegg.forEach { komplettDokumentUrls.add(listOf(it)) }
 
         logger.info("Totalt ${komplettDokumentUrls.size} dokumentbolker.")
 
