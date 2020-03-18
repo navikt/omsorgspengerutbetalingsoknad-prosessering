@@ -23,11 +23,11 @@
       },
       "members": [
         {
-          "member": "srvomsorgspeng-prs",
+          "member": "srvomsut-prs",
           "role": "PRODUCER"
         },
         {
-          "member": "srvomsorgspeng-prs",
+          "member": "srvomsut-prs",
           "role": "CONSUMER"
         }
       ],
