@@ -1,5 +1,7 @@
 package no.nav.helse.prosessering.v1
 
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jknack.handlebars.Context
 import com.github.jknack.handlebars.Handlebars
 import com.github.jknack.handlebars.Helper
@@ -8,22 +10,23 @@ import com.github.jknack.handlebars.io.ClassPathTemplateLoader
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import no.nav.helse.dusseldorf.ktor.core.fromResources
+import no.nav.helse.omsorgspengerKonfiguert
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.time.Duration
-import java.time.ZoneId
+import java.time.*
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 internal class PdfV1Generator {
     private companion object {
+        private val mapper = jacksonObjectMapper().omsorgspengerKonfiguert()
+
         private const val ROOT = "handlebars"
         private const val SOKNAD = "soknad"
 
         private val REGULAR_FONT = "$ROOT/fonts/SourceSansPro-Regular.ttf".fromResources().readBytes()
         private val BOLD_FONT = "$ROOT/fonts/SourceSansPro-Bold.ttf".fromResources().readBytes()
         private val ITALIC_FONT = "$ROOT/fonts/SourceSansPro-Italic.ttf".fromResources().readBytes()
-
 
         private val images = loadImages()
         private val handlebars = Handlebars(ClassPathTemplateLoader("/$ROOT")).apply {
@@ -40,6 +43,15 @@ internal class PdfV1Generator {
                         .replace(Regex("\\r\\n|[\\n\\r]"), "<br/>")
                     Handlebars.SafeString(text)
                 }
+            })
+            registerHelper("dato", Helper<String> { context, _ ->
+                DATE_FORMATTER.format(LocalDate.parse(context))
+            })
+            registerHelper("tidspunkt", Helper<String> { context, _ ->
+                DATE_TIME_FORMATTER.format(ZonedDateTime.parse(context))
+            })
+            registerHelper("varighet", Helper<String> { context, _ ->
+                Duration.parse(context).tilString()
             })
 
             infiniteLoops(true)
@@ -74,19 +86,11 @@ internal class PdfV1Generator {
             Context
                 .newBuilder(
                     mapOf(
-                        "soknad_id" to melding.søknadId,
-                        "soknad_mottatt_dag" to melding.mottatt.withZoneSameInstant(ZONE_ID).norskDag(),
-                        "soknad_mottatt" to DATE_TIME_FORMATTER.format(melding.mottatt),
+                        "søknad" to melding.somMap(),
+                        "språk" to melding.språk.sprakTilTekst(),
+                        "mottaksUkedag" to melding.mottatt.withZoneSameInstant(ZONE_ID).norskDag(),
                         "søker" to mapOf(
-                            "navn" to melding.søker.formatertNavn(),
-                            "fødselsnummer" to melding.søker.fødselsnummer
-                        ),
-                        "bosteder" to melding.bosteder.somMap(),
-                        "opphold" to melding.opphold.somMap(),
-                        "utbetalingsperioder" to melding.utbetalingsperioder.somUtbetalingsPeriodeMap(),
-                        "spørsmål" to melding.spørsmål.somSpørsmålMap(),
-                        "hjelp" to mapOf(
-                            "språk" to melding.språk.sprakTilTekst()
+                            "formatertNavn" to melding.søker.formatertNavn()
                         )
                     )
                 )
@@ -132,44 +136,14 @@ internal class PdfV1Generator {
                 false
             )
 
+    private fun MeldingV1.somMap() = mapper.convertValue(
+        this,
+        object :
+            TypeReference<MutableMap<String, Any?>>() {})
+
 }
 
-private fun List<SpørsmålOgSvar>.somSpørsmålMap(): List<Map<String, Any>> {
-    return map {
-            mapOf(
-                "spørsmål" to it.spørsmål,
-                "svar" to it.svar.name,
-                "fritekst" to it.fritekst.toString()
-            )
-        }
-}
-
-private fun List<Bosted>.somMap(): List<Map<String, String>> {
-    val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(ZoneId.of("Europe/Oslo"))
-    return map {
-        mapOf(
-            "landnavn" to it.landnavn,
-            "fraOgMed" to dateFormatter.format(it.fraOgMed),
-            "tilOgMed" to dateFormatter.format(it.tilOgMed)
-        )
-    }
-}
-
-private fun List<Utbetalingsperiode>.somUtbetalingsPeriodeMap(): List<Map<String, String?>> {
-    val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(ZoneId.of("Europe/Oslo"))
-    return map {
-        mapOf(
-            "lengde" to it.lengde?.tilString(),
-            "fraOgMed" to dateFormatter.format(it.fraOgMed),
-            "tilOgMed" to dateFormatter.format(it.tilOgMed)
-        )
-    }
-}
-
-private fun Duration.tilString(): String {
-    return "${this.toHoursPart()} timer og ${this.toMinutesPart()} minutter"
-}
-
+private fun Duration.tilString() = "${this.toHoursPart()} timer og ${this.toMinutesPart()} minutter"
 private fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
 private fun String.sprakTilTekst() = when (this.toLowerCase()) {
     "nb" -> "bokmål"

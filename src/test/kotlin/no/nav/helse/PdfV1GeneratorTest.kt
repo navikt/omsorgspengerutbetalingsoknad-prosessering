@@ -6,6 +6,7 @@ import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
+import kotlin.test.Ignore
 import kotlin.test.Test
 
 class PdfV1GeneratorTest {
@@ -87,8 +88,7 @@ class PdfV1GeneratorTest {
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(20),
-                    tilOgMed = start.plusDays(20),
-                    lengde = Duration.ofHours(5).plusMinutes(30)
+                    tilOgMed = start.plusDays(20)
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(30),
@@ -111,12 +111,6 @@ class PdfV1GeneratorTest {
         )
         if (writeBytes) File(pdfPath(soknadId = id)).writeBytes(pdf)
 
-        id = "2-full-søknad-barnets-fødsesldato"
-        pdf = generator.generateSoknadOppsummeringPdf(
-            melding = fullGyldigMelding(søknadId = id)
-        )
-        if (writeBytes) File(pdfPath(soknadId = id)).writeBytes(pdf)
-
     }
 
     private fun pdfPath(soknadId: String) = "${System.getProperty("user.dir")}/generated-pdf-$soknadId.pdf"
@@ -127,7 +121,7 @@ class PdfV1GeneratorTest {
     }
 
     @Test
-    //@Ignore
+    @Ignore
     fun `opprett lesbar oppsummerings-PDF`() {
         genererOppsummeringsPdfer(true)
     }

@@ -17,7 +17,11 @@
             <br/><br/>
             <p>
                 <span class="nokkeldata__overskrift">Sendt til NAV</span><br/>
-                {{soknad_mottatt_dag}} {{ soknad_mottatt }}
+                {{mottaksUkedag}} {{#tidspunkt søknad.mottatt}}{{/tidspunkt}}
+            </p>
+            <p>
+                <span class="nokkeldata__overskrift">Språk</span><br/>
+                {{språk}}
             </p>
         </div>
         <div class="personinfo">
@@ -26,10 +30,10 @@
                     <img class="ikon" src="{{ image "Personikon.png" }}"/>
                     <div class="persontekst__personalia">
                         <p class="navn">
-                            {{ søker.navn }}
+                            {{ søker.formatertNavn }}
                         </p>
                         <p class="id">
-                            {{ søker.fødselsnummer }}<br/>
+                            {{ søknad.søker.fødselsnummer }}<br/>
                         </p>
                     </div>
                     <br/>
@@ -37,41 +41,43 @@
             </div>
         </div>
     </div>
-    <!-- SAMTYKKE -->
     <br/>
+    <!-- UTBETALINGSPERIODER -->
+    <h2><span>Utbetalingsperioder</span></h2>
+    <ul>
+        {{# each søknad.utbetalingsperioder as |u|}}
+            <li>
+                Periode: {{#dato u.fraOgMed}}{{/dato}} - {{#dato u.tilOgMed}}{{/dato}}
+                {{#if u.lengde}}
+                    <br/>Lengde: {{#varighet u.lengde}}{{/varighet}}
+                {{/if}}
+                <br/><br/>
+            </li>
+        {{/each}}
+    </ul>
+    <!-- BOSTEDER -->
 
     <h2><span>Bosteder</span></h2>
     <ul>
-        {{# each bosteder as |b|}}
+        {{# each søknad.bosteder as |b|}}
             <li>
-                {{b.landnavn}} ({{b.fraOgMed}} - {{b.tilOgMed}})
+                {{b.landnavn}} ({{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}})
             </li>
         {{/each}}
     </ul>
 
-    <!-- MEDLEMSKAP -->
-    <h2><span>Medlemskap</span></h2>
+    <!-- UTENLANDSOPPHOLD -->
+    <h2><span>Utenlandsopphold</span></h2>
     <ul>
-        {{# each opphold as |o|}}
+        {{# each søknad.opphold as |o|}}
             <li>
-                {{o.landnavn}} ({{o.fraOgMed}} - {{o.tilOgMed}})
-            </li>
-        {{/each}}
-    </ul>
-
-
-    <h2><span>Utbetalingsperioder</span></h2>
-    <ul>
-        {{# each utbetalingsperioder as |u|}}
-            <li>
-                Periode: {{u.fraOgMed}} - {{u.tilOgMed}}<br/>
-                Lengde: {{u.lengde}}<br/><br/>
+                {{o.landnavn}} ({{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}})
             </li>
         {{/each}}
     </ul>
 
     <h2><span>Spørsmål</span></h2>
-    {{# each spørsmål as |s|}}
+    {{# each søknad.spørsmål as |s|}}
         <p class="sporsmalstekst">{{s.spørsmål}}</p>
         {{#eq s.svar "Ja"}}
             <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
@@ -90,43 +96,21 @@
             <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
             <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Vet Ikke
         {{/eq}}
+
+        {{#if s.fritekst }}
+            <div class="fritekst">
+                <p class="sporsmalstekst"><img class="lite_ikon" src="{{ image "Fritekst.png" }}"/> Tilleggsopplysninger:</p>
+                <p class="fritekst_textarea">{{s.fritekst}}</p>
+            </div>
+        {{/if}}
+
         <hr/>
     {{/each}}
-
-
-    <!-- SAMTYKKE -->
-    <br/>
-    <br/>
-    <h2><span>Samtykke</span></h2>
-
-    <p class="sporsmalstekst">Har forstått rettigheter og plikter?</p>
-    {{#eq samtykke.harForståttRettigheterOgPlikter "Ja"}}
-        <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
-        <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
-    {{/eq}}
-
-    {{#eq samtykke.harForståttRettigheterOgPlikter "Nei"}}
-        <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
-        <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
-    {{/eq}}
-
-    <hr/>
-
-    <p class="sporsmalstekst">Har bekreftet opplysninger?</p>
-    {{#eq samtykke.harBekreftetOpplysninger "Ja"}}
-        <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
-        <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
-    {{/eq}}
-
-    {{#eq samtykke.harBekreftetOpplysninger "Nei"}}
-        <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
-        <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
-    {{/eq}}
 </div>
 
 <!-- FOOTER -->
 <div id="footer">
-    <span class="soknadsid">{{ soknad_id }}</span>
+    <span class="soknadsid">{{ søknad.søknadId }}</span>
     <span class="sidetall">side <span id="pagenumber"></span> av <span id="pagecount"></span></span>
 </div>
 </body>

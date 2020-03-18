@@ -34,7 +34,7 @@ data class Søker(
 data class Utbetalingsperiode(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,
-    val lengde: Duration?
+    val lengde: Duration? = null
 )
 
 data class Bosted(
