@@ -11,6 +11,7 @@ import no.nav.helse.dusseldorf.ktor.core.fromResources
 import no.nav.helse.prosessering.v1.SpørsmålId.*
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.time.Duration
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -162,15 +163,19 @@ private fun List<Bosted>.somMap(): List<Map<String, String>> {
     }
 }
 
-private fun List<UtbetalingsperiodeUtenVedlegg>.somUtbetalingsPeriodeMap(): List<Map<String, String>> {
+private fun List<UtbetalingsperiodeUtenVedlegg>.somUtbetalingsPeriodeMap(): List<Map<String, String?>> {
     val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(ZoneId.of("Europe/Oslo"))
     return map {
         mapOf(
-            "lengde" to it.lengde.toString(),
+            "lengde" to it.lengde?.tilString(),
             "fraOgMed" to dateFormatter.format(it.fraOgMed),
             "tilOgMed" to dateFormatter.format(it.tilOgMed)
         )
     }
+}
+
+private fun Duration.tilString(): String {
+    return "${this.toHoursPart()} timer og ${this.toMinutesPart()} minutter"
 }
 
 private fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
