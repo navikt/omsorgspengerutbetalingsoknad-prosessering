@@ -6,8 +6,6 @@ import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
-import java.util.*
-import kotlin.test.Ignore
 import kotlin.test.Test
 
 class PdfV1GeneratorTest {
@@ -24,7 +22,7 @@ class PdfV1GeneratorTest {
     ): MeldingV1 {
         return MeldingV1(
             søknadId = søknadId,
-            språk = Språk.BOKMÅL,
+            språk = "nb",
             mottatt = ZonedDateTime.now(),
             søker = Søker(
                 aktørId = "123456",
@@ -32,8 +30,7 @@ class PdfV1GeneratorTest {
                 fødselsdato = LocalDate.now().minusDays(1000),
                 etternavn = "Nordmann",
                 mellomnavn = "Mellomnavn",
-                fornavn = "Ola",
-                myndig = true
+                fornavn = "Ola"
             ),
             bosteder = listOf(
                 Bosted(
@@ -65,12 +62,10 @@ class PdfV1GeneratorTest {
             ),
             spørsmål = listOf(
                 SpørsmålOgSvar(
-                    id = SpørsmålId.HarForståttRettigheterOgPlikter,
                     spørsmål = "HarForståttRettigheterOgPlikter?",
                     svar = Svar.Ja
                 ),
                 SpørsmålOgSvar(
-                    id = SpørsmålId.HarBekreftetOpplysninger,
                     spørsmål = "HarBekreftetOpplysninger?",
                     svar = Svar.Ja
                 ),
@@ -85,17 +80,17 @@ class PdfV1GeneratorTest {
                 )
             ),
             utbetalingsperioder = listOf(
-                UtbetalingsperiodeUtenVedlegg(
+                Utbetalingsperiode(
                     fraOgMed = start,
                     tilOgMed = start.plusDays(10),
                     lengde = Duration.ofHours(5).plusMinutes(30)
                 ),
-                UtbetalingsperiodeUtenVedlegg(
+                Utbetalingsperiode(
                     fraOgMed = start.plusDays(20),
                     tilOgMed = start.plusDays(20),
                     lengde = Duration.ofHours(5).plusMinutes(30)
                 ),
-                UtbetalingsperiodeUtenVedlegg(
+                Utbetalingsperiode(
                     fraOgMed = start.plusDays(30),
                     tilOgMed = start.plusDays(35),
                     lengde = Duration.ofHours(5).plusMinutes(30)

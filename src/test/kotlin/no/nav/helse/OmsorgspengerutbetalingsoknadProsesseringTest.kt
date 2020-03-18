@@ -227,7 +227,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
     private fun gyldigMelding(
         start: LocalDate = LocalDate.parse("2020-01-01"),
         fødselsnummerSoker: String,
-        sprak: Språk = Språk.BOKMÅL
+        sprak: String = "nb"
     ): MeldingV1 = MeldingV1(
         søknadId = UUID.randomUUID().toString(),
         språk = sprak,
@@ -238,8 +238,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             fødselsdato = LocalDate.now().minusDays(1000),
             etternavn = "Nordmann",
             mellomnavn = "Mellomnavn",
-            fornavn = "Ola",
-            myndig = true
+            fornavn = "Ola"
         ),
         bosteder = listOf(
             Bosted(
@@ -271,12 +270,10 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         ),
         spørsmål = listOf(
             SpørsmålOgSvar(
-                id = SpørsmålId.HarForståttRettigheterOgPlikter,
                 spørsmål = "HarForståttRettigheterOgPlikter?",
                 svar = Svar.Ja
             ),
             SpørsmålOgSvar(
-                id = SpørsmålId.HarBekreftetOpplysninger,
                 spørsmål = "HarBekreftetOpplysninger?",
                 svar = Svar.Ja
             ),
@@ -291,17 +288,17 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             )
         ),
         utbetalingsperioder = listOf(
-            UtbetalingsperiodeUtenVedlegg(
+            Utbetalingsperiode(
                 fraOgMed = start,
                 tilOgMed = start.plusDays(10),
                 lengde = Duration.ofHours(5).plusMinutes(30)
             ),
-            UtbetalingsperiodeUtenVedlegg(
+            Utbetalingsperiode(
                 fraOgMed = start.plusDays(20),
                 tilOgMed = start.plusDays(20),
                 lengde = Duration.ofHours(5).plusMinutes(30)
             ),
-            UtbetalingsperiodeUtenVedlegg(
+            Utbetalingsperiode(
                 fraOgMed = start.plusDays(30),
                 tilOgMed = start.plusDays(35),
                 lengde = Duration.ofHours(5).plusMinutes(30)

@@ -8,7 +8,6 @@ import com.github.jknack.handlebars.io.ClassPathTemplateLoader
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import no.nav.helse.dusseldorf.ktor.core.fromResources
-import no.nav.helse.prosessering.v1.SpørsmålId.*
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.time.Duration
@@ -86,14 +85,8 @@ internal class PdfV1Generator {
                         "opphold" to melding.opphold.somMap(),
                         "utbetalingsperioder" to melding.utbetalingsperioder.somUtbetalingsPeriodeMap(),
                         "spørsmål" to melding.spørsmål.somSpørsmålMap(),
-                        "samtykke" to mapOf(
-                            "harForståttRettigheterOgPlikter" to melding.spørsmål.filter { it.id === HarForståttRettigheterOgPlikter }
-                                .first().svar.name,
-                            "harBekreftetOpplysninger" to melding.spørsmål.filter { it.id === HarBekreftetOpplysninger }
-                                .first().svar.name
-                        ),
                         "hjelp" to mapOf(
-                            "språk" to melding.språk.språk.sprakTilTekst()
+                            "språk" to melding.språk.sprakTilTekst()
                         )
                     )
                 )
@@ -142,8 +135,7 @@ internal class PdfV1Generator {
 }
 
 private fun List<SpørsmålOgSvar>.somSpørsmålMap(): List<Map<String, Any>> {
-    return this.filter { it.id == null }
-        .map {
+    return map {
             mapOf(
                 "spørsmål" to it.spørsmål,
                 "svar" to it.svar.name,
@@ -163,7 +155,7 @@ private fun List<Bosted>.somMap(): List<Map<String, String>> {
     }
 }
 
-private fun List<UtbetalingsperiodeUtenVedlegg>.somUtbetalingsPeriodeMap(): List<Map<String, String?>> {
+private fun List<Utbetalingsperiode>.somUtbetalingsPeriodeMap(): List<Map<String, String?>> {
     val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(ZoneId.of("Europe/Oslo"))
     return map {
         mapOf(

@@ -35,8 +35,7 @@ class SøknadsformatTest {
                 "fødselsdato": "1999-11-02",
                 "etternavn": "Nordmann",
                 "mellomnavn" : null,
-                "fornavn" : "Ola",
-                "myndig" : true
+                "fornavn" : "Ola"
             },
             "bosteder": [{
                 "fraOgMed": "2020-01-01",
@@ -61,22 +60,18 @@ class SøknadsformatTest {
                 "landnavn": "Kroatia"
             }],
             "spørsmål": [{
-                "id": "HarForståttRettigheterOgPlikter",
                 "spørsmål": "HarForståttRettigheterOgPlikter?",
                 "svar": "Ja",
                 "fritekst": null
             }, {
-                "id": "HarBekreftetOpplysninger",
                 "spørsmål": "HarBekreftetOpplysninger?",
                 "svar": "Ja",
                 "fritekst": null
             }, {
-                "id": null,
                 "spørsmål": "Har du vært hjemme?",
                 "svar": "Nei",
                 "fritekst": null
             }, {
-                "id": null,
                 "spørsmål": "Skal du være hjemme?",
                 "svar": "VetIkke",
                 "fritekst": "Umulig å si"
@@ -111,7 +106,7 @@ class SøknadsformatTest {
         mottatt: ZonedDateTime
     ): MeldingV1 = MeldingV1(
         søknadId = søknadId,
-        språk = Språk.BOKMÅL,
+        språk = "nb",
         mottatt = mottatt,
         søker = Søker(
             aktørId = "123456",
@@ -119,8 +114,7 @@ class SøknadsformatTest {
             fødselsdato = LocalDate.parse("1999-11-02"),
             etternavn = "Nordmann",
             mellomnavn = null,
-            fornavn = "Ola",
-            myndig = true
+            fornavn = "Ola"
         ),
         bosteder = listOf(
             Bosted(
@@ -152,12 +146,10 @@ class SøknadsformatTest {
         ),
         spørsmål = listOf(
             SpørsmålOgSvar(
-                id = SpørsmålId.HarForståttRettigheterOgPlikter,
                 spørsmål = "HarForståttRettigheterOgPlikter?",
                 svar = Svar.Ja
             ),
             SpørsmålOgSvar(
-                id = SpørsmålId.HarBekreftetOpplysninger,
                 spørsmål = "HarBekreftetOpplysninger?",
                 svar = Svar.Ja
             ),
@@ -172,17 +164,17 @@ class SøknadsformatTest {
             )
         ),
         utbetalingsperioder = listOf(
-            UtbetalingsperiodeUtenVedlegg(
+            Utbetalingsperiode(
                 fraOgMed = start,
                 tilOgMed = start.plusDays(10),
                 lengde = Duration.ofHours(5).plusMinutes(30)
             ),
-            UtbetalingsperiodeUtenVedlegg(
+            Utbetalingsperiode(
                 fraOgMed = start.plusDays(20),
                 tilOgMed = start.plusDays(20),
                 lengde = Duration.ofHours(5).plusMinutes(30)
             ),
-            UtbetalingsperiodeUtenVedlegg(
+            Utbetalingsperiode(
                 fraOgMed = start.plusDays(30),
                 tilOgMed = start.plusDays(35),
                 lengde = Duration.ofHours(5).plusMinutes(30)
