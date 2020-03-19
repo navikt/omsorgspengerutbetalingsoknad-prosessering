@@ -3,6 +3,7 @@ package no.nav.helse.prosessering.v1.asynkron
 import no.nav.helse.CorrelationId
 import no.nav.helse.aktoer.AktørId
 import no.nav.helse.joark.JoarkGateway
+import no.nav.helse.joark.JoarkNavn
 import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
@@ -46,7 +47,7 @@ internal class JournalforingsStream(
             val tilCleanup: Topic<TopicEntry<Cleanup>> = Topics.CLEANUP
 
             val mapValues = builder
-                .stream<String, TopicEntry<PreprossesertMeldingV1>>(
+                .stream(
                     fraPreprossesert.name,
                     Consumed.with(fraPreprossesert.keySerde, fraPreprossesert.valueSerde)
                 )
@@ -60,6 +61,11 @@ internal class JournalforingsStream(
                             mottatt = entry.data.mottatt,
                             aktørId = AktørId(entry.data.søker.aktørId),
                             norskIdent = entry.data.søker.fødselsnummer,
+                            navn = JoarkNavn(
+                                fornavn = entry.data.søker.fornavn,
+                                mellomnanvn = entry.data.søker.mellomnavn,
+                                etternavn = entry.data.søker.etternavn
+                            ),
                             correlationId = CorrelationId(entry.metadata.correlationId),
                             dokumenter = dokumenter
                         )

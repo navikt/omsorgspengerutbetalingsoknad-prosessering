@@ -39,7 +39,8 @@ class JoarkGateway(
 
     private val completeUrl = Url.buildURL(
         baseUrl = baseUrl,
-        pathParts = listOf("v1", "omsorgspenge", "journalforing")
+        pathParts = listOf("v1", "omsorgspengeutbetaling", "journalforing"),
+        queryParameters = mapOf("arbeidstype" to listOf("frilanser", "selvstendig næringsdrivende"))
     ).toString()
 
     private val objectMapper = configuredObjectMapper()
@@ -59,6 +60,7 @@ class JoarkGateway(
     suspend fun journalfør(
         aktørId: AktørId,
         norskIdent: String,
+        navn: JoarkNavn,
         mottatt: ZonedDateTime,
         dokumenter: List<List<URI>>,
         correlationId: CorrelationId
@@ -70,7 +72,8 @@ class JoarkGateway(
             aktoerId = aktørId.id,
             norskIdent = norskIdent,
             mottatt = mottatt,
-            dokumenter = dokumenter
+            dokumenter = dokumenter,
+            sokerNavn = navn
         )
 
         val body = objectMapper.writeValueAsBytes(joarkRequest)
@@ -114,7 +117,15 @@ private data class JoarkRequest(
     @JsonProperty("aktoer_id") val aktoerId: String,
     @JsonProperty("norsk_ident") val norskIdent: String,
     val mottatt: ZonedDateTime,
-    val dokumenter: List<List<URI>>
+    val dokumenter: List<List<URI>>,
+    @JsonProperty("soker_navn")
+    val sokerNavn: JoarkNavn
 )
 
 data class JournalPostId(@JsonProperty("journal_post_id") val journalpostId: String)
+
+data class JoarkNavn(
+    val fornavn: String,
+    val mellomnanvn: String?,
+    val etternavn: String
+)
