@@ -88,9 +88,29 @@
                 <hr/>
             {{/each}}
 
-            <!-- BOSTEDER -->
+            <!-- MEDLEMSKAP -->
+            <h2><span>Medlemskap</span></h2>
 
-            <h2><span>Bosteder</span></h2>
+            <p class="sporsmalstekst">Bodd i utlandet siste 12 månedene?</p>
+            {{#if medlemskap.siste12}}
+                <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
+                <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
+            {{else}}
+                <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
+                <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
+            {{/if}}
+            <hr/>
+
+            <p class="sporsmalstekst">Skal bo i utlandet neste 12 månedene?</p>
+            {{#if medlemskap.neste12}}
+                <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
+                <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
+            {{else}}
+                <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
+                <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
+            {{/if}}
+            <hr/>
+
             <ul>
                 {{# each søknad.bosteder as |b|}}
                     <li>

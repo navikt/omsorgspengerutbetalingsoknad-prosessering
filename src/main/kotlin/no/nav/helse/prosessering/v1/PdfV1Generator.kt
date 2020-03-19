@@ -82,6 +82,7 @@ internal class PdfV1Generator {
     internal fun generateSoknadOppsummeringPdf(
         melding: MeldingV1
     ): ByteArray {
+        val mottatt = melding.mottatt.toLocalDate()
         soknadTemplate.apply(
             Context
                 .newBuilder(
@@ -91,6 +92,14 @@ internal class PdfV1Generator {
                         "mottaksUkedag" to melding.mottatt.withZoneSameInstant(ZONE_ID).norskDag(),
                         "søker" to mapOf(
                             "formatertNavn" to melding.søker.formatertNavn()
+                        ),
+                        "medlemskap" to mapOf(
+                            "siste12" to melding.bosteder.any {
+                                it.fraOgMed.isBefore(mottatt) || it.tilOgMed.isEqual(mottatt)
+                            },
+                            "neste12" to melding.bosteder.any {
+                                it.fraOgMed.isEqual(mottatt) || it.fraOgMed.isAfter(mottatt)
+                            }
                         )
                     )
                 )
