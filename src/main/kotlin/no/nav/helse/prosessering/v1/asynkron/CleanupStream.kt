@@ -38,7 +38,7 @@ internal class CleanupStream(
             val tilJournalfort: Topic<TopicEntry<Journalfort>> = Topics.JOURNALFORT
 
             builder
-                .stream<String, TopicEntry<Cleanup>>(
+                .stream(
                     fraCleanup.name, Consumed.with(fraCleanup.keySerde, fraCleanup.valueSerde)
                 )
                 .filter { _, entry -> 1 == entry.metadata.version }

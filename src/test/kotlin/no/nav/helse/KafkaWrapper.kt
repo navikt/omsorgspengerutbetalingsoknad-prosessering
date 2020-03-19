@@ -72,11 +72,11 @@ private fun KafkaEnvironment.testProducerProperties(): MutableMap<String, Any>? 
 }
 
 
-fun KafkaEnvironment.journalføringsKonsumer(): KafkaConsumer<String, TopicEntry<Journalfort>> {
-    val consumer = KafkaConsumer<String, TopicEntry<Journalfort>>(
+fun KafkaEnvironment.journalføringsKonsumer(): KafkaConsumer<String, String> {
+    val consumer = KafkaConsumer(
         testConsumerProperties("K9FordelKonsumer"),
         StringDeserializer(),
-        JOURNALFORT.serDes
+        StringDeserializer()
     )
     consumer.subscribe(listOf(JOURNALFORT.name))
     return consumer
@@ -102,16 +102,16 @@ fun KafkaEnvironment.preprossesertKonsumer(): KafkaConsumer<String, TopicEntry<P
     return consumer
 }
 
-fun KafkaEnvironment.meldingsProducer() = KafkaProducer<String, TopicEntry<MeldingV1>>(
+fun KafkaEnvironment.meldingsProducer() = KafkaProducer(
     testProducerProperties(),
     MOTTATT.keySerializer,
     MOTTATT.serDes
 )
 
-fun KafkaConsumer<String, TopicEntry<Journalfort>>.hentJournalførtMelding(
+fun KafkaConsumer<String, String>.hentJournalførtMelding(
     soknadId: String,
     maxWaitInSeconds: Long = 20
-): TopicEntry<Journalfort> {
+): String {
     val end = System.currentTimeMillis() + Duration.ofSeconds(maxWaitInSeconds).toMillis()
     while (System.currentTimeMillis() < end) {
         seekToBeginning(assignment())

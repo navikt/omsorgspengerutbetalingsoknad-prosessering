@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val dusseldorfKtorVersion = "1.3.2.e71617b"
 val ktorVersion = ext.get("ktorVersion").toString()
-val k9FormatVersion = "3.0.0.f341850"
+val k9FormatVersion = "3.0.0.868ddcc"
 val slf4jVersion = ext.get("slf4jVersion").toString()
 val kotlinxCoroutinesVersion = ext.get("kotlinxCoroutinesVersion").toString()
 
@@ -31,8 +31,7 @@ dependencies {
     compile ( "no.nav.helse:dusseldorf-ktor-metrics:$dusseldorfKtorVersion")
     compile ( "no.nav.helse:dusseldorf-ktor-health:$dusseldorfKtorVersion")
     compile ( "no.nav.helse:dusseldorf-ktor-auth:$dusseldorfKtorVersion")
-    compile ( "no.nav.k9:soknad-omsorgspenger:$k9FormatVersion")
-    compile ( "no.nav.k9:soknad-felles:$k9FormatVersion")
+    compile ( "no.nav.k9:soknad-omsorgspenger-utbetaling:$k9FormatVersion")
     compile ( "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:$kotlinxCoroutinesVersion")
     
     // Client

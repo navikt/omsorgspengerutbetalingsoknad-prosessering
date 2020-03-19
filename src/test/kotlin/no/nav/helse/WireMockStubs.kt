@@ -2,6 +2,7 @@ package no.nav.helse
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
+import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import java.util.*
 
 private const val k9JoarkBasePath = "/k9-joark-mock"
@@ -32,17 +33,22 @@ internal fun WireMockServer.stubSlettDokument(): WireMockServer {
 
 internal fun WireMockServer.stubJournalfor(responseCode: Int = 201): WireMockServer {
     WireMock.stubFor(
-        WireMock.post(WireMock.urlPathMatching(".*$k9JoarkBasePath.*")).willReturn(
-            WireMock.aResponse()
-                .withHeader("Content-Type", "application/json")
-                .withBody(
-                    """
-                    {
-                        "journal_post_id" : "9101112"
-                    }
-                    """.trimIndent()
-                )
-                .withStatus(responseCode)
+        WireMock.post(
+                WireMock
+                .urlPathMatching(".*$k9JoarkBasePath/v1/omsorgspengeutbetaling/journalforing"))
+                .withQueryParam("arbeidstype", equalTo("frilanser"))
+                .withQueryParam("arbeidstype", equalTo("selvstendig næringsdrivende"))
+                .willReturn(
+                    WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(
+                            """
+                            {
+                                "journal_post_id" : "9101112"
+                            }
+                            """.trimIndent()
+                        )
+                        .withStatus(responseCode)
         )
     )
     return this

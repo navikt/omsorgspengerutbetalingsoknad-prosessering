@@ -1,6 +1,5 @@
 package no.nav.helse
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.typesafe.config.ConfigFactory
 import io.ktor.config.ApplicationConfig
@@ -17,7 +16,6 @@ import kotlinx.coroutines.time.delay
 import no.nav.common.KafkaEnvironment
 import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
 import no.nav.helse.prosessering.v1.*
-import no.nav.helse.prosessering.v1.asynkron.Journalfort
 import no.nav.helse.prosessering.v1.asynkron.TopicEntry
 import org.junit.AfterClass
 import org.junit.BeforeClass
@@ -134,7 +132,9 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        journalføringsKonsumer.hentJournalførtMelding(melding.søknadId)
+        journalføringsKonsumer
+            .hentJournalførtMelding(melding.søknadId)
+            .assertJournalførtFormat()
     }
 
     @Test
@@ -151,7 +151,9 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
         wireMockServer.stubJournalfor(201) // Simulerer journalføring fungerer igjen
         restartEngine()
-        journalføringsKonsumer.hentJournalførtMelding(melding.søknadId)
+        journalføringsKonsumer
+            .hentJournalførtMelding(melding.søknadId)
+            .assertJournalførtFormat()
     }
 
     private fun readyGir200HealthGir503() {
@@ -172,7 +174,9 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        journalføringsKonsumer.hentJournalførtMelding(melding.søknadId)
+        journalføringsKonsumer
+            .hentJournalførtMelding(melding.søknadId)
+            .assertJournalførtFormat()
     }
 
     @Test
@@ -182,8 +186,9 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        journalføringsKonsumer.hentJournalførtMelding(melding.søknadId)
-    }
+        journalføringsKonsumer
+            .hentJournalførtMelding(melding.søknadId)
+            .assertJournalførtFormat()    }
 
     @Test
     fun `Melding lagt til prosessering selv om oppslag paa aktør ID for barn feiler`() {
@@ -216,12 +221,9 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        val prossesertMelding: TopicEntry<Journalfort> = journalføringsKonsumer.hentJournalførtMelding(melding.søknadId)
-        println(
-            jacksonObjectMapper()
-                .writerWithDefaultPrettyPrinter()
-                .writeValueAsString(prossesertMelding)
-        )
+        journalføringsKonsumer
+            .hentJournalførtMelding(melding.søknadId)
+            .assertJournalførtFormat()
     }
 
     private fun gyldigMelding(

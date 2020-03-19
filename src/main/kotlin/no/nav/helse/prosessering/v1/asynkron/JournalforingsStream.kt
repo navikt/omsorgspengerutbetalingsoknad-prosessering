@@ -3,23 +3,22 @@ package no.nav.helse.prosessering.v1.asynkron
 import no.nav.helse.CorrelationId
 import no.nav.helse.aktoer.AktørId
 import no.nav.helse.joark.JoarkGateway
+import no.nav.helse.joark.JoarkNavn
 import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
 import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
 import no.nav.helse.prosessering.v1.PreprossesertSøker
-import no.nav.k9.søknad.felles.Barn
 import no.nav.k9.søknad.felles.NorskIdentitetsnummer
 import no.nav.k9.søknad.felles.Søker
 import no.nav.k9.søknad.felles.SøknadId
-import no.nav.k9.søknad.omsorgspenger.OmsorgspengerSøknad
+import no.nav.k9.søknad.omsorgspenger.utbetaling.OmsorgspengerUtbetalingSøknad
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.Produced
 import org.slf4j.LoggerFactory
-import java.time.LocalDate
 
 internal class JournalforingsStream(
     joarkGateway: JoarkGateway,
@@ -46,7 +45,7 @@ internal class JournalforingsStream(
             val tilCleanup: Topic<TopicEntry<Cleanup>> = Topics.CLEANUP
 
             val mapValues = builder
-                .stream<String, TopicEntry<PreprossesertMeldingV1>>(
+                .stream(
                     fraPreprossesert.name,
                     Consumed.with(fraPreprossesert.keySerde, fraPreprossesert.valueSerde)
                 )
@@ -60,13 +59,18 @@ internal class JournalforingsStream(
                             mottatt = entry.data.mottatt,
                             aktørId = AktørId(entry.data.søker.aktørId),
                             norskIdent = entry.data.søker.fødselsnummer,
+                            navn = JoarkNavn(
+                                fornavn = entry.data.søker.fornavn,
+                                mellomnanvn = entry.data.søker.mellomnavn,
+                                etternavn = entry.data.søker.etternavn
+                            ),
                             correlationId = CorrelationId(entry.metadata.correlationId),
                             dokumenter = dokumenter
                         )
                         logger.info("Dokumenter journalført med ID = ${journaPostId.journalpostId}.")
                         val journalfort = Journalfort(
                             journalpostId = journaPostId.journalpostId,
-                            søknad = entry.data.tilK9Omsorgspengesøknad()
+                            søknad = entry.data.tilKOmsorgspengerUtbetalingSøknad()
                         )
                         Cleanup(
                             metadata = entry.metadata,
@@ -84,13 +88,12 @@ internal class JournalforingsStream(
     internal fun stop() = stream.stop(becauseOfError = false)
 }
 
-private fun PreprossesertMeldingV1.tilK9Omsorgspengesøknad(): OmsorgspengerSøknad = OmsorgspengerSøknad.builder()
+private fun PreprossesertMeldingV1.tilKOmsorgspengerUtbetalingSøknad() = OmsorgspengerUtbetalingSøknad.builder()
     .søknadId(SøknadId.of(soknadId))
     .mottattDato(mottatt)
-    .barn(Barn.builder().fødselsdato(LocalDate.now()).build())
     .søker(søker.tilK9Søker())
     .build()
 
-private fun PreprossesertSøker.tilK9Søker(): Søker = Søker.builder()
+private fun PreprossesertSøker.tilK9Søker() = Søker.builder()
     .norskIdentitetsnummer(NorskIdentitetsnummer.of(fødselsnummer))
     .build()
