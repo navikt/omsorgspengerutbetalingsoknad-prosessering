@@ -13,7 +13,9 @@ data class PreprossesertMeldingV1(
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
     val dokumentUrls: List<List<URI>>,
-    val utbetalingsperioder: List<Utbetalingsperiode>
+    val utbetalingsperioder: List<Utbetalingsperiode>,
+    val frilans: Frilans? = null,
+    val selvstendigVirksomheter: List<Virksomhet>? = null
 ) {
     internal constructor(
         melding: MeldingV1,
@@ -28,7 +30,9 @@ data class PreprossesertMeldingV1(
         opphold = melding.opphold,
         spørsmål = melding.spørsmål,
         dokumentUrls = dokumentUrls,
-        utbetalingsperioder = melding.utbetalingsperioder
+        utbetalingsperioder = melding.utbetalingsperioder,
+        frilans = melding.frilans,
+        selvstendigVirksomheter = melding.selvstendigVirksomheter
 
     )
 }

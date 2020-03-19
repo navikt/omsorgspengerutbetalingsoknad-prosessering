@@ -1,139 +1,240 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8"/>
-        <title>Søknad om utbetaling av Omsorgspenger</title>
-        {{#block 'style' }}
-        {{/block}}
-    </head>
-    <body>
-        <div id="header">
-            <img class="navlogo" src="{{ image "Navlogo.png" }}"/>
-            <h1 class="title">Søknad om utbetaling av Omsorgspenger</h1>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Søknad om utbetaling av Omsorgspenger</title>
+    {{#block 'style' }}
+    {{/block}}
+
+    {{#*inline "jaNeiCheckbox"}}
+        {{#if parameter}}
+            <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
+            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
+        {{else}}
+            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
+            <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
+        {{/if}}
+    {{/inline}}
+</head>
+<body>
+<div id="header">
+    <img class="navlogo" src="{{ image "Navlogo.png" }}"/>
+    <h1 class="title">Søknad om utbetaling av Omsorgspenger</h1>
+</div>
+<div class="container">
+    <div id="container_top">
+        <div class="nokkeldata">
+            <br/><br/>
+            <p>
+                <span class="nokkeldata__overskrift">Sendt til NAV</span><br/>
+                {{mottaksUkedag}} {{#tidspunkt søknad.mottatt}}{{/tidspunkt}}
+            </p>
+            <p>
+                <span class="nokkeldata__overskrift">Språk</span><br/>
+                {{språk}}
+            </p>
         </div>
-        <div class="container">
-            <div id="container_top">
-                <div class="nokkeldata">
-                    <br/><br/>
-                    <p>
-                        <span class="nokkeldata__overskrift">Sendt til NAV</span><br/>
-                        {{mottaksUkedag}} {{#tidspunkt søknad.mottatt}}{{/tidspunkt}}
-                    </p>
-                    <p>
-                        <span class="nokkeldata__overskrift">Språk</span><br/>
-                        {{språk}}
-                    </p>
-                </div>
-                <div class="personinfo">
-                    <div class="persontekst">
-                        <div class="persontekst__sidetopp">
-                            <img class="ikon" src="{{ image "Personikon.png" }}"/>
-                            <div class="persontekst__personalia">
-                                <p class="navn">
-                                    {{ søker.formatertNavn }}
-                                </p>
-                                <p class="id">
-                                    {{ søknad.søker.fødselsnummer }}<br/>
-                                </p>
-                            </div>
-                            <br/>
-                        </div>
+        <div class="personinfo">
+            <div class="persontekst">
+                <div class="persontekst__sidetopp">
+                    <img class="ikon" src="{{ image "Personikon.png" }}"/>
+                    <div class="persontekst__personalia">
+                        <p class="navn">
+                            {{ søker.formatertNavn }}
+                        </p>
+                        <p class="id">
+                            {{ søknad.søker.fødselsnummer }}<br/>
+                        </p>
                     </div>
+                    <br/>
                 </div>
             </div>
-            <br/>
-            <!-- UTBETALINGSPERIODER -->
-            <h2><span>Utbetalingsperioder</span></h2>
-            <ul>
-                {{# each søknad.utbetalingsperioder as |u|}}
-                    <li>
-                        Periode: {{#dato u.fraOgMed}}{{/dato}} - {{#dato u.tilOgMed}}{{/dato}}
-                        {{#if u.lengde}}
-                            <br/>Lengde: {{#varighet u.lengde}}{{/varighet}}
+        </div>
+    </div>
+    <br/>
+    <!-- UTBETALINGSPERIODER -->
+    <h2><span>Utbetalingsperioder</span></h2>
+    <ul>
+        {{# each søknad.utbetalingsperioder as |u|}}
+            <li>
+                Periode: {{#dato u.fraOgMed}}{{/dato}} - {{#dato u.tilOgMed}}{{/dato}}
+                {{#if u.lengde}}
+                    <br/>Lengde: {{#varighet u.lengde}}{{/varighet}}
+                {{/if}}
+                <br/><br/>
+            </li>
+        {{/each}}
+    </ul>
+
+    <!-- SPØRSMÅL -->
+    <h2><span>Spørsmål</span></h2>
+    {{# each søknad.spørsmål as |s|}}
+        <p class="sporsmalstekst">{{s.spørsmål}}</p>
+        {{#eq s.svar "Ja"}}
+            <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
+            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
+            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Vet Ikke
+        {{/eq}}
+
+        {{#eq s.svar "Nei"}}
+            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
+            <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
+            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Vet Ikke
+        {{/eq}}
+
+        {{#eq s.svar "VetIkke"}}
+            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
+            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
+            <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Vet Ikke
+        {{/eq}}
+
+        {{#if s.fritekst }}
+            <div class="fritekst">
+                <p class="sporsmalstekst"><img class="lite_ikon" src="{{ image "Fritekst.png" }}"/>
+                    Tilleggsopplysninger:</p>
+                <p class="fritekst_textarea">{{s.fritekst}}</p>
+            </div>
+        {{/if}}
+
+        <hr/>
+    {{/each}}
+
+    <!-- MEDLEMSKAP -->
+    <h2><span>Medlemskap</span></h2>
+
+    <p class="sporsmalstekst">Bodd i utlandet siste 12 månedene?</p>
+    {{#if medlemskap.siste12}}
+        <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
+        <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
+    {{else}}
+        <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
+        <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
+    {{/if}}
+    <hr/>
+
+    <p class="sporsmalstekst">Skal bo i utlandet neste 12 månedene?</p>
+    {{#if medlemskap.neste12}}
+        <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
+        <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
+    {{else}}
+        <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
+        <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
+    {{/if}}
+    <hr/>
+
+    <ul>
+        {{# each søknad.bosteder as |b|}}
+            <li>
+                {{b.landnavn}} ({{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}})
+            </li>
+        {{/each}}
+    </ul>
+
+    <!-- UTENLANDSOPPHOLD -->
+    <h2><span>Utenlandsopphold</span></h2>
+    <ul>
+        {{# each søknad.opphold as |o|}}
+            <li>
+                {{o.landnavn}} ({{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}})
+            </li>
+        {{/each}}
+    </ul>
+
+    <!-- FRILANS -->
+    {{# if frilans }}
+        <h2><span>Frilans</span></h2>
+        <p class="sporsmalstekst">Har du jobbet og hatt inntekt som frilanser de siste 10 månedene?</p>
+        {{>jaNeiCheckbox parameter=frilans}}
+        <br/>
+        <p>Når startet du som frilanser? {{frilans.startdato}}</p>
+        <p class="sporsmalstekst">Jobber du fortsatt som frilanser?</p>
+        {{>jaNeiCheckbox parameter=frilans.jobberFortsattSomFrilans}}
+    {{/if}}
+
+    <!-- SELVSTENDIG NÆRINGSDRIVENDE -->
+    {{#if selvstendigVirksomheter.virksomhet}}
+        <h2><span>Selvstendig næringsdrivende</span></h2>
+        {{# each selvstendigVirksomheter.virksomhet as |virksomhet|~}}
+                <h3>{{virksomhet.navnPaVirksomheten}} ({{virksomhet.fraOgMed}} -
+                    {{#if virksomhet.tilOgMed}}
+                        {{virksomhet.tilOgMed}})
+                    {{else}}
+                        pågående)
+                    {{/if}}</h3>
+                <p>Næringstype:
+                    {{# each virksomhet.naringstype as |naringstype|~}}
+                        {{#if @first}}
+                            {{naringstype.typeDetaljert}}
+                        {{else}}
+                            , {{naringstype.typeDetaljert}}
                         {{/if}}
-                        <br/><br/>
-                    </li>
-                {{/each}}
-            </ul>
-
-            <!-- SPØRSMÅL -->
-            <h2><span>Spørsmål</span></h2>
-            {{# each søknad.spørsmål as |s|}}
-                <p class="sporsmalstekst">{{s.spørsmål}}</p>
-                {{#eq s.svar "Ja"}}
-                    <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
-                    <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
-                    <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Vet Ikke
-                {{/eq}}
-
-                {{#eq s.svar "Nei"}}
-                    <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
-                    <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
-                    <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Vet Ikke
-                {{/eq}}
-
-                {{#eq s.svar "VetIkke"}}
-                    <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
-                    <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
-                    <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Vet Ikke
-                {{/eq}}
-
-                {{#if s.fritekst }}
-                    <div class="fritekst">
-                        <p class="sporsmalstekst"><img class="lite_ikon" src="{{ image "Fritekst.png" }}"/> Tilleggsopplysninger:</p>
-                        <p class="fritekst_textarea">{{s.fritekst}}</p>
-                    </div>
+                        {{#eq naringstype.typeDetaljert "FISKE"}}
+                            {{#if virksomhet.fiskerErPåBladB}}
+                                (blad B)
+                            {{else}}
+                                (ikke blad B)
+                            {{/if}}
+                        {{/eq}}
+                    {{/each}}</p>
+                {{#if virksomhet.naringsinntekt}}
+                    <p>Næringsinntekt: {{virksomhet.naringsinntekt}},-</p>
+                {{/if}}
+                {{#if virksomhet.registrertINorge}}
+                    <p>Registrert i Norge</p>
+                    <p>Organisasjonsnummeret: {{virksomhet.organisasjonsnummer}}</p>
+                {{else}}
+                    <p>Registrert i land: {{virksomhet.registrertILand}}</p>
                 {{/if}}
 
-                <hr/>
-            {{/each}}
+                {{#if virksomhet.yrkesaktivSisteTreFerdigliknedeArene}}
+                    <p>Oppgi dato for når du ble
+                        yrkesaktiv: {{virksomhet.yrkesaktivSisteTreFerdigliknedeArene}}</p>
+                {{/if}}
+                {{#if virksomhet.harVarigEndringAvInntektSiste4Kalenderar}}
+                    <h3>Varig endring</h3>
+                    <ul>
+                        <p>Dato for endring: {{virksomhet.varigEndring.dato}}</p>
+                        <p>Næringsinntekten etter endringen: {{virksomhet.varigEndring.inntektEtterEndring}}</p>
+                        <div class="fritekst">
+                            <p class="sporsmalstekst"><img class="lite_ikon" src="{{ image "Fritekst.png" }}"/>Søkers
+                                forklaring:</p>
+                            <p class="fritekst_textarea">{{virksomhet.varigEndring.forklaring}}</p>
+                        </div>
+                    </ul>
+                {{/if}}
+                {{#if virksomhet.harRegnskapsforer}}
+                    <h3>Regnskapsfører:</h3>
+                    <ul>
+                        <p>Navn: {{virksomhet.regnskapsforer.navn}}</p>
+                        <p>Telefon: {{virksomhet.regnskapsforer.telefon}}</p>
+                    </ul>
+                {{else}}
+                    {{#if virksomhet.harRevisor}}
+                        <h3>Revisor:</h3>
+                        <ul>
+                            <p>Navn: {{virksomhet.revisor.navn}}</p>
+                            <p>Telefon: {{virksomhet.revisor.telefon}}</p>
+                            <p class="sporsmalstekst">Gir du NAV fullmakt til å innhente opplysninger direkte
+                                fra
+                                revisor?</p>
+                            {{>jaNeiCheckbox parameter=virksomhet.revisor.kanInnhenteOpplysninger}}
+                        </ul>
+                    {{/if}}
+                {{/if}}
+                {{#if @last}}
+                    <!--Setter ikke <hr/> på siste linje -->
+                {{else}}
+                    <hr/>
+                {{/if}}
+        {{/each}}
+    {{/if}}
 
-            <!-- MEDLEMSKAP -->
-            <h2><span>Medlemskap</span></h2>
+</div>
 
-            <p class="sporsmalstekst">Bodd i utlandet siste 12 månedene?</p>
-            {{#if medlemskap.siste12}}
-                <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
-                <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
-            {{else}}
-                <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
-                <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
-            {{/if}}
-            <hr/>
-
-            <p class="sporsmalstekst">Skal bo i utlandet neste 12 månedene?</p>
-            {{#if medlemskap.neste12}}
-                <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
-                <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
-            {{else}}
-                <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
-                <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
-            {{/if}}
-            <hr/>
-
-            <ul>
-                {{# each søknad.bosteder as |b|}}
-                    <li>
-                        {{b.landnavn}} ({{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}})
-                    </li>
-                {{/each}}
-            </ul>
-
-            <!-- UTENLANDSOPPHOLD -->
-            <h2><span>Utenlandsopphold</span></h2>
-            <ul>
-                {{# each søknad.opphold as |o|}}
-                    <li>
-                        {{o.landnavn}} ({{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}})
-                    </li>
-                {{/each}}
-            </ul>
-        </div>
-
-        <!-- FOOTER -->
-        <div id="footer">
-            <span class="soknadsid">{{ søknad.søknadId }}</span>
-            <span class="sidetall">side <span id="pagenumber"></span> av <span id="pagecount"></span></span>
-        </div>
-    </body>
+<!-- FOOTER -->
+<div id="footer">
+    <span class="soknadsid">{{ søknad.søknadId }}</span>
+    <span class="sidetall">side <span id="pagenumber"></span> av <span id="pagecount"></span></span>
+</div>
+</body>
 </html>

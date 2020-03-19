@@ -7,6 +7,7 @@ import com.github.jknack.handlebars.Handlebars
 import com.github.jknack.handlebars.Helper
 import com.github.jknack.handlebars.context.MapValueResolver
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader
+import com.google.errorprone.annotations.Var
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import no.nav.helse.dusseldorf.ktor.core.fromResources
@@ -100,6 +101,10 @@ internal class PdfV1Generator {
                             "neste12" to melding.bosteder.any {
                                 it.fraOgMed.isEqual(mottatt) || it.fraOgMed.isAfter(mottatt)
                             }
+                        ),
+                        "frilans" to melding.toFrilansMap(),
+                        "selvstendigVirksomheter" to mapOf(
+                            "virksomhet" to melding.selvstendigVirksomheter?.somMapVirksomheter()
                         )
                     )
                 )
@@ -145,11 +150,77 @@ internal class PdfV1Generator {
                 false
             )
 
+    private fun List<Virksomhet>.somMapVirksomheter(): List<Map<String, Any?>> {
+        return map {
+            mapOf(
+                "navnPaVirksomheten" to it.navnPaVirksomheten,
+                "naringstype" to it.naringstype.somMapNaringstype(),
+                "fiskerErPåBladB" to it.fiskerErPåBladB,
+                "fraOgMed" to it.fraOgMed,
+                "tilOgMed" to it.tilOgMed,
+                "erPagaende" to it.erPagaende,
+                "naringsinntekt" to it.naringsinntekt,
+                "registrertINorge" to it.registrertINorge,
+                "organisasjonsnummer" to it.organisasjonsnummer,
+                "registrertILand" to it.registrertILand,
+                "harBlittYrkesaktivSisteTreFerdigliknendeArene" to it.harBlittYrkesaktivSisteTreFerdigliknendeArene,
+                "yrkesaktivSisteTreFerdigliknedeArene" to it.yrkesaktivSisteTreFerdigliknedeArene?.oppstartsdato,
+                "harVarigEndringAvInntektSiste4Kalenderar" to it.harVarigEndringAvInntektSiste4Kalenderar,
+                "varigEndring" to it.varigEndring?.varigEndringSomMap(),
+                "harRegnskapsforer" to it.harRegnskapsforer,
+                "harRevisor" to it.harRevisor,
+                "regnskapsforer" to it.regnskapsforer?.regnskapsførerSomMap(),
+                "revisor" to it.revisor?.revisorSomMap()
+            )
+        }
+    }
+
+    private fun Revisor.revisorSomMap() =
+        mapOf(
+            "navn" to this.navn,
+            "telefon" to this.telefon,
+            "kanInnhenteOpplysninger" to this.kanInnhenteOpplysninger
+        )
+
+    private fun Regnskapsforer.regnskapsførerSomMap(): Map<String, String> =
+        mapOf(
+            "navn" to this.navn,
+            "telefon" to this.telefon
+        )
+
+    private fun VarigEndring.varigEndringSomMap(): Map<String, Any?>? =
+        mapOf(
+            "dato" to this.dato,
+            "inntektEtterEndring" to this.inntektEtterEndring,
+            "forklaring" to this.forklaring
+        )
+
+
+    private fun List<Naringstype>.somMapNaringstype(): List<Map<String, Any?>> {
+        return map {
+            mapOf(
+                "typeDetaljert" to it.detaljert
+            )
+        }
+    }
+
     private fun MeldingV1.somMap() = mapper.convertValue(
         this,
         object :
             TypeReference<MutableMap<String, Any?>>() {})
 
+}
+
+private fun MeldingV1.toFrilansMap(): Map<String, Any>? {
+    return when (frilans) {
+        null -> null
+        else -> {
+            mapOf(
+                "startdato" to frilans.startdato,
+                "jobberFortsattSomFrilans" to frilans.jobberFortsattSomFrilans
+            )
+        }
+    }
 }
 
 private fun Duration.tilString() = "${this.toHoursPart()} timer og ${this.toMinutesPart()} minutter"

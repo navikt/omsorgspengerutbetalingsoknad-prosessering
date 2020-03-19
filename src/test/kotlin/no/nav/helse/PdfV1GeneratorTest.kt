@@ -63,11 +63,11 @@ class PdfV1GeneratorTest {
             ),
             spørsmål = listOf(
                 SpørsmålOgSvar(
-                    spørsmål = "HarForståttRettigheterOgPlikter?",
+                    spørsmål = "Har forstått rettigheter og plikter?",
                     svar = Svar.Ja
                 ),
                 SpørsmålOgSvar(
-                    spørsmål = "HarBekreftetOpplysninger?",
+                    spørsmål = "Har bekreftet opplysninger?",
                     svar = Svar.Ja
                 ),
                 SpørsmålOgSvar(
@@ -100,6 +100,52 @@ class PdfV1GeneratorTest {
                 URI("http://localhost:8080/vedlegg/1"),
                 URI("http://localhost:8080/vedlegg/2"),
                 URI("http://localhost:8080/vedlegg/3")
+            ),
+            frilans = Frilans(
+                startdato = LocalDate.now().minusYears(3),
+                jobberFortsattSomFrilans = true
+            ),
+            selvstendigVirksomheter = listOf(
+                Virksomhet(
+                    naringstype = listOf(Naringstype.ANNET),
+                    fraOgMed = LocalDate.now(),
+                    tilOgMed = LocalDate.now().plusDays(10),
+                    erPagaende = false,
+                    navnPaVirksomheten = "Kjells Møbelsnekkeri",
+                    registrertINorge = true,
+                    organisasjonsnummer = "111111",
+                    harVarigEndringAvInntektSiste4Kalenderar = false,
+                    harRegnskapsforer = false,
+                    harRevisor = true,
+                    revisor = Revisor(
+                        navn = "Kjell Revisor",
+                        telefon = "9999",
+                        kanInnhenteOpplysninger = true
+                    )
+                ),
+                Virksomhet(
+                    naringstype = listOf(Naringstype.JORDBRUK, Naringstype.DAGMAMMA, Naringstype.FISKER),
+                    fiskerErPåBladB = true,
+                    fraOgMed = LocalDate.now(),
+                    erPagaende = true,
+                    naringsinntekt = 1111,
+                    navnPaVirksomheten = "Tull Og Tøys",
+                    registrertINorge = false,
+                    registrertILand = "Bahamas",
+                    harBlittYrkesaktivSisteTreFerdigliknendeArene = true,
+                    yrkesaktivSisteTreFerdigliknedeArene = YrkesaktivSisteTreFerdigliknedeArene(LocalDate.now()),
+                    harVarigEndringAvInntektSiste4Kalenderar = true,
+                    varigEndring = VarigEndring(
+                        dato = LocalDate.now().minusDays(20),
+                        inntektEtterEndring = 234543,
+                        forklaring = "Forklaring som handler om varig endring"
+                    ),
+                    harRegnskapsforer = true,
+                    regnskapsforer = Regnskapsforer(
+                        navn = "Bjarne Regnskap",
+                        telefon = "65484578"
+                    )
+                )
             )
         )
     }
@@ -121,7 +167,7 @@ class PdfV1GeneratorTest {
     }
 
     @Test
-    @Ignore
+    //@Ignore
     fun `opprett lesbar oppsummerings-PDF`() {
         genererOppsummeringsPdfer(true)
     }
