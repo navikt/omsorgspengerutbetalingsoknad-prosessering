@@ -7,7 +7,6 @@ Leser søknader fra Kafka topic `privat-omsorgspengerutbetaling-mottatt` som leg
 ## Prosessering
 - Genererer Søknad-PDF
 - Oppretter Journalpost
-- Oppretter Gosys Oppgave
 - Sletter mellomlagrede dokumenter
 
 ## Feil i prosessering
@@ -17,4 +16,4 @@ Når tjenenesten restarter vil den forsøke å prosessere søknaden på ny og fo
 ## Henvendelser
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub.
 
-Interne henvendelser kan sendes via Slack i kanalen #team-düsseldorf.
+Interne henvendelser kan sendes via Slack i kanalen #sykdom-i-familien.
