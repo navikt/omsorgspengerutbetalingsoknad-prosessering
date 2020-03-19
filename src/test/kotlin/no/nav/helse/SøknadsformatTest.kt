@@ -93,7 +93,9 @@ class SøknadsformatTest {
                 "http://localhost:8080/vedlegg/1",
                 "http://localhost:8080/vedlegg/2",
                 "http://localhost:8080/vedlegg/3"
-            ]
+            ],
+            "frilans": null,
+            "selvstendigVirksomheter": null
         }
         """.trimIndent(), String(json), true
         )
