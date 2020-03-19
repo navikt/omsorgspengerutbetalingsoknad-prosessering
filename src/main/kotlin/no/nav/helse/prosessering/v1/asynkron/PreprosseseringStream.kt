@@ -37,7 +37,7 @@ internal class PreprosseseringStream(
             val tilPreprossesert = Topics.PREPROSSESERT
 
             builder
-                .stream<String, TopicEntry<MeldingV1>>(
+                .stream(
                     fromMottatt.name,
                     Consumed.with(fromMottatt.keySerde, fromMottatt.valueSerde)
                 )
