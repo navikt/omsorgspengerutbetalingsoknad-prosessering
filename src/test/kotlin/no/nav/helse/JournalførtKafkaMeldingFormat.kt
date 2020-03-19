@@ -12,6 +12,8 @@ internal fun String.assertJournalførtFormat() {
     assertNotNull(metadata.getString("correlationId"))
 
     val data = assertNotNull(rawJson.getJSONObject("data"))
+
+    assertNotNull(data.getString("journalpostId"))
     val søknad = assertNotNull(data.getJSONObject("søknad"))
 
     val rekonstruertSøknad = OmsorgspengerUtbetalingSøknad
