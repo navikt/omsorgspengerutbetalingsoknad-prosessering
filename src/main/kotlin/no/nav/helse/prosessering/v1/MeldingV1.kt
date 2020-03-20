@@ -29,7 +29,6 @@ data class Frilans(
 
 data class Virksomhet(
     val naringstype: List<Naringstype>,
-    @JsonProperty("fisker_er_pa_blad_b")
     val fiskerErPåBladB: Boolean? = null,
     @JsonFormat(pattern = "yyyy-MM-dd")
     val fraOgMed: LocalDate,
@@ -38,13 +37,10 @@ data class Virksomhet(
     val naringsinntekt: Int? = null,
     val navnPaVirksomheten: String,
     val organisasjonsnummer: String? = null,
-    @JsonProperty("registrert_i_norge")
     val registrertINorge: Boolean,
-    @JsonProperty("registrert_i_land")
     val registrertILand: String? = null,
     val harBlittYrkesaktivSisteTreFerdigliknendeArene: Boolean? = null,
     val yrkesaktivSisteTreFerdigliknedeArene: YrkesaktivSisteTreFerdigliknedeArene? = null,
-    @JsonProperty("har_varig_endring_av_inntekt_siste_4_kalenderar")
     val harVarigEndringAvInntektSiste4Kalenderar: Boolean? = null,
     val varigEndring: VarigEndring? = null,
     val harRegnskapsforer: Boolean,
