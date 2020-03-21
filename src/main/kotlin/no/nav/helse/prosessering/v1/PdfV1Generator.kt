@@ -180,8 +180,7 @@ internal class PdfV1Generator {
     private fun Regnskapsfører.regnskapsførerSomMap(): Map<String, Any> =
         mapOf(
             "navn" to this.navn,
-            "telefon" to this.telefon,
-            "erNærVennFamilie" to this.erNærVennFamilie
+            "telefon" to this.telefon
         )
 
     private fun VarigEndring.varigEndringSomMap(): Map<String, Any?>? =

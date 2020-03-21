@@ -91,14 +91,12 @@ data class VarigEndring(
 data class Revisor(
     val navn: String,
     val telefon: String,
-    val erNærVennFamilie: JaNei,
     val kanInnhenteOpplysninger: JaNei
 )
 
 data class Regnskapsfører(
     val navn: String,
-    val telefon: String,
-    val erNærVennFamilie: JaNei
+    val telefon: String
 )
 
 data class Søker(

@@ -111,8 +111,7 @@ class PdfV1GeneratorTest {
                     revisor = Revisor(
                         navn = "Kjell Revisor",
                         telefon = "9999",
-                        kanInnhenteOpplysninger = JaNei.Ja,
-                        erNærVennFamilie = JaNei.Ja
+                        kanInnhenteOpplysninger = JaNei.Ja
                     )
                 ),
                 Virksomhet(
@@ -131,8 +130,7 @@ class PdfV1GeneratorTest {
                     ),
                     regnskapsfører = Regnskapsfører(
                         navn = "Bjarne Regnskap",
-                        telefon = "65484578",
-                        erNærVennFamilie = JaNei.Nei
+                        telefon = "65484578"
                     )
                 )
             ),
