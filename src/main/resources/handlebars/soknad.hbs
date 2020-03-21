@@ -107,7 +107,8 @@
     <!-- FRILANS -->
     {{# if frilans }}
         <h2><span>Frilans</span></h2>
-        <p class="sporsmalstekst">Når startet du som frilanser?</p> <p>{{frilans.startdato}}</p>  <br/> <br/>
+        <p class="sporsmalstekst">Når startet du som frilanser?</p>
+        <p>{{frilans.startdato}}</p>  <br/> <br/>
 
         <p class="sporsmalstekst">Har du jobbet og hatt inntekt som frilanser de siste 10 månedene?</p>
         {{>jaNeiCheckbox parameter=frilans}}  <br/> <br/>
@@ -173,7 +174,8 @@
                 <ul>
                     <p>Navn: {{virksomhet.regnskapsfører.navn}}</p>
                     <p>Telefon: {{virksomhet.regnskapsfører.telefon}}</p>
-                    <p>Nær venn eller familie: {{>jaNeiCheckbox parameter=virksomhet.regnskapsfører.erNærVennFamilie}}</p>
+                    <p>Nær venn eller
+                        familie: {{>jaNeiCheckbox parameter=virksomhet.regnskapsfører.erNærVennFamilie}}</p>
                 </ul>
             {{else}}
                 {{#if virksomhet.revisor}}
@@ -199,7 +201,7 @@
     <h2><span>Samtykker</span></h2>
     <p class="sporsmalstekst">Har forstått rettigheter og plikter?</p>
     {{>jaNeiCheckbox parameter=bekreftelser.harBekreftetOpplysninger}}
-    <hr/>
+    <br/><br/>
 
     <p class="sporsmalstekst">Har bekreftet opplysninger?</p>
     {{>jaNeiCheckbox parameter=bekreftelser.harForståttRettigheterOgPlikter}}
