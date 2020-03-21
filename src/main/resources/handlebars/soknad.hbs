@@ -66,39 +66,9 @@
         {{/each}}
     </ul>
 
-    <!-- SPØRSMÅL -->
-    <h2><span>Spørsmål</span></h2>
-    {{# each søknad.spørsmål as |s|}}
-        <p class="sporsmalstekst">{{s.spørsmål}}</p>
-        {{>jaNeiCheckbox parameter=s.svar}}
-
-        <hr/>
-    {{/each}}
-
-    <!-- MEDLEMSKAP -->
-    <h2><span>Medlemskap</span></h2>
-
-    <p class="sporsmalstekst">Bodd i utlandet siste 12 månedene?</p>
-    {{>jaNeiCheckbox parameter=medlemskap.siste12}}
-
     <hr/>
-
-    <p class="sporsmalstekst">Skal bo i utlandet neste 12 månedene?</p>
-    {{>jaNeiCheckbox parameter=medlemskap.neste12}}
-
-
-    <hr/>
-
-    <ul>
-        {{# each søknad.bosteder as |b|}}
-            <li>
-                {{b.landnavn}} ({{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}})
-            </li>
-        {{/each}}
-    </ul>
-
-    <!-- UTENLANDSOPPHOLD -->
-    <h2><span>Utenlandsopphold</span></h2>
+    <!-- UTENLANDSOPPHOLD i Perioden -->
+    <h3>Utenlandsophold i perioden</h3>
     <ul>
         {{# each søknad.opphold as |o|}}
             <li>
@@ -107,17 +77,46 @@
         {{/each}}
     </ul>
 
+    <!-- MEDLEMSKAP -->
+    <h2><span>Medlemskap</span></h2>
+
+    <p class="sporsmalstekst">Bodd i utlandet siste 12 månedene?</p>
+    {{>jaNeiCheckbox parameter=medlemskap.siste12}}
+
+    <br/><br/>
+
+    <p class="sporsmalstekst">Skal bo i utlandet neste 12 månedene?</p>
+    {{>jaNeiCheckbox parameter=medlemskap.neste12}}
+
+    <hr/>
+    <ul>
+        {{# each søknad.bosteder as |b|}}
+            <li>
+                {{b.landnavn}} ({{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}})
+            </li>
+        {{/each}}
+    </ul>
+
+    <!-- SPØRSMÅL -->
+    <h2><span>Spørsmål</span></h2>
+    {{# each søknad.spørsmål as |s|}}
+        <p class="sporsmalstekst">{{s.spørsmål}}</p>
+        {{>jaNeiCheckbox parameter=s.svar}} <br/><br/>
+    {{/each}}
+
     <!-- FRILANS -->
     {{# if frilans }}
         <h2><span>Frilans</span></h2>
+        <p class="sporsmalstekst">Når startet du som frilanser?</p> <p>{{frilans.startdato}}</p>  <br/> <br/>
+
         <p class="sporsmalstekst">Har du jobbet og hatt inntekt som frilanser de siste 10 månedene?</p>
-        {{>jaNeiCheckbox parameter=frilans}}
-        <br/>
-        <p>Når startet du som frilanser? {{frilans.startdato}}</p>
+        {{>jaNeiCheckbox parameter=frilans}}  <br/> <br/>
+
         <p class="sporsmalstekst">Jobber du fortsatt som frilanser?</p>
         {{>jaNeiCheckbox parameter=frilans.jobberFortsattSomFrilans}}
     {{/if}}
 
+    <br/>
     <!-- SELVSTENDIG NÆRINGSDRIVENDE -->
     {{#if selvstendigVirksomheter.virksomhet}}
         <h2><span>Selvstendig næringsdrivende</span></h2>
