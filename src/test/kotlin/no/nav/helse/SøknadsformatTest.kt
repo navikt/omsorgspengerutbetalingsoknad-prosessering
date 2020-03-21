@@ -41,23 +41,27 @@ class SøknadsformatTest {
                 "fraOgMed": "2020-01-01",
                 "tilOgMed": "2020-01-06",
                 "landkode": "SWE",
-                "landnavn": "Sverige"
+                "landnavn": "Sverige",
+                "erEØSLand": true
             }, {
                 "fraOgMed": "2020-01-11",
                 "tilOgMed": "2020-01-11",
                 "landkode": "NOR",
-                "landnavn": "Norge"
+                "landnavn": "Norge",
+                "erEØSLand": true
             }],
             "opphold": [{
                 "fraOgMed": "2020-01-16",
                 "tilOgMed": "2020-01-21",
                 "landkode": "Eng",
-                "landnavn": "England"
+                "landnavn": "England",
+                "erEØSLand": true
             }, {
                 "fraOgMed": "2019-12-22",
                 "tilOgMed": "2019-12-27",
                 "landkode": "CRO",
-                "landnavn": "Kroatia"
+                "landnavn": "Kroatia",
+                "erEØSLand": true
             }],
             "spørsmål": [{
                 "spørsmål": "Har du vært hjemme?",
@@ -117,13 +121,15 @@ class SøknadsformatTest {
                 fraOgMed = start!!,
                 tilOgMed = start.plusDays(5),
                 landnavn = "Sverige",
-                landkode = "SWE"
+                landkode = "SWE",
+                erEØSLand = JaNei.Ja
             ),
             Bosted(
                 fraOgMed = start.plusDays(10),
                 tilOgMed = start.plusDays(10),
                 landnavn = "Norge",
-                landkode = "NOR"
+                landkode = "NOR",
+                erEØSLand = JaNei.Ja
             )
         ),
         opphold = listOf(
@@ -131,13 +137,15 @@ class SøknadsformatTest {
                 fraOgMed = start.plusDays(15),
                 tilOgMed = start.plusDays(20),
                 landnavn = "England",
-                landkode = "Eng"
+                landkode = "Eng",
+                erEØSLand = JaNei.Ja
             ),
             Bosted(
                 fraOgMed = start.minusDays(10),
                 tilOgMed = start.minusDays(5),
                 landnavn = "Kroatia",
-                landkode = "CRO"
+                landkode = "CRO",
+                erEØSLand = JaNei.Ja
             )
         ),
         spørsmål = listOf(

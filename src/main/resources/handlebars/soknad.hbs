@@ -71,8 +71,16 @@
     <h3>Utenlandsophold i perioden</h3>
     <ul>
         {{# each søknad.opphold as |o|}}
-            <li>
-                {{o.landnavn}} ({{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}})
+        <li>
+            {{# if o.erEØSLand}}
+                <li>
+                    {{o.landnavn}}: {{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}} <br/>
+                </li>
+            {{else}}
+                <li>
+                    {{o.landnavn}} (utenfor EØS): {{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}} <br/>
+                </li>
+            {{/if}}
             </li>
         {{/each}}
     </ul>
@@ -91,9 +99,15 @@
     <hr/>
     <ul>
         {{# each søknad.bosteder as |b|}}
-            <li>
-                {{b.landnavn}} ({{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}})
-            </li>
+            {{# if b.erEØSLand}}
+                <li>
+                    {{b.landnavn}}: {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
+                </li>
+            {{else}}
+                <li>
+                    {{b.landnavn}} (utenfor EØS): {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
+                </li>
+            {{/if}}
         {{/each}}
     </ul>
 

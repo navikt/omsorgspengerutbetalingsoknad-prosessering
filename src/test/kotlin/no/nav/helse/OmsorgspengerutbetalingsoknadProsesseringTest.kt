@@ -247,13 +247,15 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                 fraOgMed = start,
                 tilOgMed = start.plusDays(5),
                 landnavn = "Sverige",
-                landkode = "SWE"
+                landkode = "SWE",
+                erEØSLand = JaNei.Ja
             ),
             Bosted(
                 fraOgMed = start.plusDays(10),
                 tilOgMed = start.plusDays(10),
                 landnavn = "Norge",
-                landkode = "NOR"
+                landkode = "NOR",
+                erEØSLand = JaNei.Ja
             )
         ),
         opphold = listOf(
@@ -261,13 +263,15 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                 fraOgMed = start.plusDays(15),
                 tilOgMed = start.plusDays(20),
                 landnavn = "England",
-                landkode = "Eng"
+                landkode = "Eng",
+                erEØSLand = JaNei.Ja
             ),
             Bosted(
                 fraOgMed = start.minusDays(10),
                 tilOgMed = start.minusDays(5),
                 landnavn = "Kroatia",
-                landkode = "CRO"
+                landkode = "CRO",
+                erEØSLand = JaNei.Ja
             )
         ),
         spørsmål = listOf(

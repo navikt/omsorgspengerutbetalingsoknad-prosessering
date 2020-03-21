@@ -124,7 +124,8 @@ data class Bosted(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,
     val landkode: String,
-    val landnavn: String
+    val landnavn: String,
+    val erEØSLand: JaNei
 )
 
 typealias Opphold = Bosted
