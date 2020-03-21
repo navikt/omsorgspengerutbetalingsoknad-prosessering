@@ -6,7 +6,6 @@ import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
-import kotlin.test.Ignore
 import kotlin.test.Test
 
 class PdfV1GeneratorTest {
@@ -63,21 +62,12 @@ class PdfV1GeneratorTest {
             ),
             spørsmål = listOf(
                 SpørsmålOgSvar(
-                    spørsmål = "Har forstått rettigheter og plikter?",
-                    svar = Svar.Ja
-                ),
-                SpørsmålOgSvar(
-                    spørsmål = "Har bekreftet opplysninger?",
-                    svar = Svar.Ja
-                ),
-                SpørsmålOgSvar(
                     spørsmål = "Har du vært hjemme?",
-                    svar = Svar.Nei
+                    svar = JaNei.Ja
                 ),
                 SpørsmålOgSvar(
                     spørsmål = "Skal du være hjemme?",
-                    svar = Svar.VetIkke,
-                    fritekst = "Umulig å si"
+                    svar = JaNei.Ja
                 )
             ),
             utbetalingsperioder = listOf(
@@ -107,45 +97,44 @@ class PdfV1GeneratorTest {
             ),
             selvstendigVirksomheter = listOf(
                 Virksomhet(
-                    naringstype = listOf(Naringstype.ANNET),
+                    næringstyper = listOf(Næringstyper.ANNEN),
                     fraOgMed = LocalDate.now(),
                     tilOgMed = LocalDate.now().plusDays(10),
-                    erPagaende = false,
-                    navnPaVirksomheten = "Kjells Møbelsnekkeri",
-                    registrertINorge = true,
+                    navnPåVirksomheten = "Kjells Møbelsnekkeri",
+                    registrertINorge = JaNei.Ja,
                     organisasjonsnummer = "111111",
-                    harVarigEndringAvInntektSiste4Kalenderar = false,
-                    harRegnskapsforer = false,
-                    harRevisor = true,
+                    fiskerErPåBladB = JaNei.Nei,
                     revisor = Revisor(
                         navn = "Kjell Revisor",
                         telefon = "9999",
-                        kanInnhenteOpplysninger = true
+                        kanInnhenteOpplysninger = JaNei.Ja,
+                        erNærVennFamilie = JaNei.Ja
                     )
                 ),
                 Virksomhet(
-                    naringstype = listOf(Naringstype.JORDBRUK, Naringstype.DAGMAMMA, Naringstype.FISKER),
-                    fiskerErPåBladB = true,
+                    næringstyper = listOf(Næringstyper.JORDBRUK_SKOGBRUK, Næringstyper.DAGMAMMA, Næringstyper.FISKE),
+                    fiskerErPåBladB = JaNei.Ja,
                     fraOgMed = LocalDate.now(),
-                    erPagaende = true,
-                    naringsinntekt = 1111,
-                    navnPaVirksomheten = "Tull Og Tøys",
-                    registrertINorge = false,
+                    næringsinntekt = 1111,
+                    navnPåVirksomheten = "Tull Og Tøys",
+                    registrertINorge = JaNei.Nei,
                     registrertILand = "Bahamas",
-                    harBlittYrkesaktivSisteTreFerdigliknendeArene = true,
-                    yrkesaktivSisteTreFerdigliknedeArene = YrkesaktivSisteTreFerdigliknedeArene(LocalDate.now()),
-                    harVarigEndringAvInntektSiste4Kalenderar = true,
+                    yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeÅrene(LocalDate.now()),
                     varigEndring = VarigEndring(
                         dato = LocalDate.now().minusDays(20),
                         inntektEtterEndring = 234543,
                         forklaring = "Forklaring som handler om varig endring"
                     ),
-                    harRegnskapsforer = true,
-                    regnskapsforer = Regnskapsforer(
+                    regnskapsfører = Regnskapsfører(
                         navn = "Bjarne Regnskap",
-                        telefon = "65484578"
+                        telefon = "65484578",
+                        erNærVennFamilie = JaNei.Nei
                     )
                 )
+            ),
+            bekreftelser = Bekreftelser(
+                harBekreftetOpplysninger = JaNei.Ja,
+                harForståttRettigheterOgPlikter = JaNei.Ja
             )
         )
     }

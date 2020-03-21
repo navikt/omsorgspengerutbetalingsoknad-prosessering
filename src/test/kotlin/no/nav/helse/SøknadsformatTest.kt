@@ -60,21 +60,11 @@ class SøknadsformatTest {
                 "landnavn": "Kroatia"
             }],
             "spørsmål": [{
-                "spørsmål": "HarForståttRettigheterOgPlikter?",
-                "svar": "Ja",
-                "fritekst": null
-            }, {
-                "spørsmål": "HarBekreftetOpplysninger?",
-                "svar": "Ja",
-                "fritekst": null
-            }, {
                 "spørsmål": "Har du vært hjemme?",
-                "svar": "Nei",
-                "fritekst": null
+                "svar": false
             }, {
                 "spørsmål": "Skal du være hjemme?",
-                "svar": "VetIkke",
-                "fritekst": "Umulig å si"
+                "svar": true
             }],
             "utbetalingsperioder": [{
                 "fraOgMed": "2020-01-01",
@@ -95,8 +85,12 @@ class SøknadsformatTest {
                 "http://localhost:8080/vedlegg/3"
             ],
             "frilans": null,
-            "selvstendigVirksomheter": null
+            "selvstendigVirksomheter": null,
+            "bekreftelser": {
+            "harBekreftetOpplysninger": true,
+            "harForståttRettigheterOgPlikter": true
         }
+    }
         """.trimIndent(), String(json), true
         )
     }
@@ -148,21 +142,12 @@ class SøknadsformatTest {
         ),
         spørsmål = listOf(
             SpørsmålOgSvar(
-                spørsmål = "HarForståttRettigheterOgPlikter?",
-                svar = Svar.Ja
-            ),
-            SpørsmålOgSvar(
-                spørsmål = "HarBekreftetOpplysninger?",
-                svar = Svar.Ja
-            ),
-            SpørsmålOgSvar(
                 spørsmål = "Har du vært hjemme?",
-                svar = Svar.Nei
+                svar = JaNei.Nei
             ),
             SpørsmålOgSvar(
                 spørsmål = "Skal du være hjemme?",
-                svar = Svar.VetIkke,
-                fritekst = "Umulig å si"
+                svar = JaNei.Ja
             )
         ),
         utbetalingsperioder = listOf(
@@ -186,6 +171,10 @@ class SøknadsformatTest {
             URI("http://localhost:8080/vedlegg/1"),
             URI("http://localhost:8080/vedlegg/2"),
             URI("http://localhost:8080/vedlegg/3")
+        ),
+        bekreftelser = Bekreftelser(
+            harBekreftetOpplysninger = JaNei.Ja,
+            harForståttRettigheterOgPlikter = JaNei.Ja
         )
     )
 }

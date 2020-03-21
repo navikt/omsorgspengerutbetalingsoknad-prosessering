@@ -70,31 +70,7 @@
     <h2><span>Spørsmål</span></h2>
     {{# each søknad.spørsmål as |s|}}
         <p class="sporsmalstekst">{{s.spørsmål}}</p>
-        {{#eq s.svar "Ja"}}
-            <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
-            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
-            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Vet Ikke
-        {{/eq}}
-
-        {{#eq s.svar "Nei"}}
-            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
-            <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
-            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Vet Ikke
-        {{/eq}}
-
-        {{#eq s.svar "VetIkke"}}
-            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
-            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
-            <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Vet Ikke
-        {{/eq}}
-
-        {{#if s.fritekst }}
-            <div class="fritekst">
-                <p class="sporsmalstekst"><img class="lite_ikon" src="{{ image "Fritekst.png" }}"/>
-                    Tilleggsopplysninger:</p>
-                <p class="fritekst_textarea">{{s.fritekst}}</p>
-            </div>
-        {{/if}}
+        {{>jaNeiCheckbox parameter=s.svar}}
 
         <hr/>
     {{/each}}
@@ -103,23 +79,14 @@
     <h2><span>Medlemskap</span></h2>
 
     <p class="sporsmalstekst">Bodd i utlandet siste 12 månedene?</p>
-    {{#if medlemskap.siste12}}
-        <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
-        <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
-    {{else}}
-        <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
-        <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
-    {{/if}}
+    {{>jaNeiCheckbox parameter=medlemskap.siste12}}
+
     <hr/>
 
     <p class="sporsmalstekst">Skal bo i utlandet neste 12 månedene?</p>
-    {{#if medlemskap.neste12}}
-        <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
-        <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
-    {{else}}
-        <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
-        <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
-    {{/if}}
+    {{>jaNeiCheckbox parameter=medlemskap.neste12}}
+
+
     <hr/>
 
     <ul>
@@ -155,79 +122,88 @@
     {{#if selvstendigVirksomheter.virksomhet}}
         <h2><span>Selvstendig næringsdrivende</span></h2>
         {{# each selvstendigVirksomheter.virksomhet as |virksomhet|~}}
-                <h3>{{virksomhet.navnPaVirksomheten}} ({{virksomhet.fraOgMed}} -
-                    {{#if virksomhet.tilOgMed}}
-                        {{virksomhet.tilOgMed}})
+            <h3>{{virksomhet.navnPåVirksomheten}} ({{virksomhet.fraOgMed}} -
+                {{#if virksomhet.tilOgMed}}
+                    {{virksomhet.tilOgMed}})
+                {{else}}
+                    pågående)
+                {{/if}}</h3>
+            <p>Næringstype:
+                {{# each virksomhet.næringstype as |næringstype|~}}
+                    {{#if @first}}
+                        {{næringstype.typeDetaljert}}
                     {{else}}
-                        pågående)
-                    {{/if}}</h3>
-                <p>Næringstype:
-                    {{# each virksomhet.naringstype as |naringstype|~}}
-                        {{#if @first}}
-                            {{naringstype.typeDetaljert}}
-                        {{else}}
-                            , {{naringstype.typeDetaljert}}
-                        {{/if}}
-                        {{#eq naringstype.typeDetaljert "FISKE"}}
-                            {{#if virksomhet.fiskerErPåBladB}}
-                                (blad B)
-                            {{else}}
-                                (ikke blad B)
-                            {{/if}}
-                        {{/eq}}
-                    {{/each}}</p>
-                {{#if virksomhet.naringsinntekt}}
-                    <p>Næringsinntekt: {{virksomhet.naringsinntekt}},-</p>
-                {{/if}}
-                {{#if virksomhet.registrertINorge}}
-                    <p>Registrert i Norge</p>
-                    <p>Organisasjonsnummeret: {{virksomhet.organisasjonsnummer}}</p>
-                {{else}}
-                    <p>Registrert i land: {{virksomhet.registrertILand}}</p>
-                {{/if}}
-
-                {{#if virksomhet.yrkesaktivSisteTreFerdigliknedeArene}}
-                    <p>Oppgi dato for når du ble
-                        yrkesaktiv: {{virksomhet.yrkesaktivSisteTreFerdigliknedeArene}}</p>
-                {{/if}}
-                {{#if virksomhet.harVarigEndringAvInntektSiste4Kalenderar}}
-                    <h3>Varig endring</h3>
-                    <ul>
-                        <p>Dato for endring: {{virksomhet.varigEndring.dato}}</p>
-                        <p>Næringsinntekten etter endringen: {{virksomhet.varigEndring.inntektEtterEndring}}</p>
-                        <div class="fritekst">
-                            <p class="sporsmalstekst"><img class="lite_ikon" src="{{ image "Fritekst.png" }}"/>Søkers
-                                forklaring:</p>
-                            <p class="fritekst_textarea">{{virksomhet.varigEndring.forklaring}}</p>
-                        </div>
-                    </ul>
-                {{/if}}
-                {{#if virksomhet.harRegnskapsforer}}
-                    <h3>Regnskapsfører:</h3>
-                    <ul>
-                        <p>Navn: {{virksomhet.regnskapsforer.navn}}</p>
-                        <p>Telefon: {{virksomhet.regnskapsforer.telefon}}</p>
-                    </ul>
-                {{else}}
-                    {{#if virksomhet.harRevisor}}
-                        <h3>Revisor:</h3>
-                        <ul>
-                            <p>Navn: {{virksomhet.revisor.navn}}</p>
-                            <p>Telefon: {{virksomhet.revisor.telefon}}</p>
-                            <p class="sporsmalstekst">Gir du NAV fullmakt til å innhente opplysninger direkte
-                                fra
-                                revisor?</p>
-                            {{>jaNeiCheckbox parameter=virksomhet.revisor.kanInnhenteOpplysninger}}
-                        </ul>
+                        , {{næringstype.typeDetaljert}}
                     {{/if}}
+                    {{#eq næringstype.typeDetaljert "FISKE"}}
+                        {{#if virksomhet.fiskerErPåBladB}}
+                            (blad B)
+                        {{else}}
+                            (ikke blad B)
+                        {{/if}}
+                    {{/eq}}
+                {{/each}}</p>
+            {{#if virksomhet.næringsinntekt}}
+                <p>Næringsinntekt: {{virksomhet.næringsinntekt}},-</p>
+            {{/if}}
+            {{#if virksomhet.registrertINorge}}
+                <p>Registrert i Norge</p>
+                <p>Organisasjonsnummeret: {{virksomhet.organisasjonsnummer}}</p>
+            {{else}}
+                <p>Registrert i land: {{virksomhet.registrertILand}}</p>
+            {{/if}}
+
+            {{#if virksomhet.yrkesaktivSisteTreFerdigliknedeÅrene}}
+                <p>Oppgi dato for når du ble
+                    yrkesaktiv: {{virksomhet.yrkesaktivSisteTreFerdigliknedeÅrene}}</p>
+            {{/if}}
+            {{#if virksomhet.varigEndring}}
+                <h3>Varig endring</h3>
+                <ul>
+                    <p>Dato for endring: {{virksomhet.varigEndring.dato}}</p>
+                    <p>Næringsinntekten etter endringen: {{virksomhet.varigEndring.inntektEtterEndring}}</p>
+                    <div class="fritekst">
+                        <p class="sporsmalstekst"><img class="lite_ikon" src="{{ image "Fritekst.png" }}"/>Søkers
+                            forklaring:</p>
+                        <p class="fritekst_textarea">{{virksomhet.varigEndring.forklaring}}</p>
+                    </div>
+                </ul>
+            {{/if}}
+            {{#if virksomhet.regnskapsfører}}
+                <h3>Regnskapsfører:</h3>
+                <ul>
+                    <p>Navn: {{virksomhet.regnskapsfører.navn}}</p>
+                    <p>Telefon: {{virksomhet.regnskapsfører.telefon}}</p>
+                    <p>Nær venn eller familie: {{>jaNeiCheckbox parameter=virksomhet.regnskapsfører.erNærVennFamilie}}</p>
+                </ul>
+            {{else}}
+                {{#if virksomhet.revisor}}
+                    <h3>Revisor:</h3>
+                    <ul>
+                        <p>Navn: {{virksomhet.revisor.navn}}</p>
+                        <p>Telefon: {{virksomhet.revisor.telefon}}</p>
+                        <p class="sporsmalstekst">
+                            Gir du NAV fullmakt til å innhente opplysninger direkte fra revisor?
+                        </p>
+                        {{>jaNeiCheckbox parameter=virksomhet.revisor.kanInnhenteOpplysninger}}
+                    </ul>
                 {{/if}}
-                {{#if @last}}
-                    <!--Setter ikke <hr/> på siste linje -->
-                {{else}}
-                    <hr/>
-                {{/if}}
+            {{/if}}
+            {{#if @last}}
+                <!--Setter ikke <hr/> på siste linje -->
+            {{else}}
+                <hr/>
+            {{/if}}
         {{/each}}
     {{/if}}
+
+    <h2><span>Samtykker</span></h2>
+    <p class="sporsmalstekst">Har forstått rettigheter og plikter?</p>
+    {{>jaNeiCheckbox parameter=bekreftelser.harBekreftetOpplysninger}}
+    <hr/>
+
+    <p class="sporsmalstekst">Har bekreftet opplysninger?</p>
+    {{>jaNeiCheckbox parameter=bekreftelser.harForståttRettigheterOgPlikter}}
 
 </div>
 

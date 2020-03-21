@@ -272,21 +272,12 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         ),
         spørsmål = listOf(
             SpørsmålOgSvar(
-                spørsmål = "HarForståttRettigheterOgPlikter?",
-                svar = Svar.Ja
-            ),
-            SpørsmålOgSvar(
-                spørsmål = "HarBekreftetOpplysninger?",
-                svar = Svar.Ja
-            ),
-            SpørsmålOgSvar(
                 spørsmål = "Har du vært hjemme?",
-                svar = Svar.Nei
+                svar = JaNei.Ja
             ),
             SpørsmålOgSvar(
                 spørsmål = "Skal du være hjemme?",
-                svar = Svar.VetIkke,
-                fritekst = "Umulig å si"
+                svar = JaNei.Nei
             )
         ),
         utbetalingsperioder = listOf(
@@ -310,6 +301,10 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             URI("http://localhost:8080/vedlegg/1"),
             URI("http://localhost:8080/vedlegg/2"),
             URI("http://localhost:8080/vedlegg/3")
+        ),
+        bekreftelser = Bekreftelser(
+            harBekreftetOpplysninger = JaNei.Ja,
+            harForståttRettigheterOgPlikter = JaNei.Ja
         )
     )
 

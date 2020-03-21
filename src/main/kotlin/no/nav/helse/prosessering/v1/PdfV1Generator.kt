@@ -7,7 +7,6 @@ import com.github.jknack.handlebars.Handlebars
 import com.github.jknack.handlebars.Helper
 import com.github.jknack.handlebars.context.MapValueResolver
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader
-import com.google.errorprone.annotations.Var
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import no.nav.helse.dusseldorf.ktor.core.fromResources
@@ -105,7 +104,8 @@ internal class PdfV1Generator {
                         "frilans" to melding.toFrilansMap(),
                         "selvstendigVirksomheter" to mapOf(
                             "virksomhet" to melding.selvstendigVirksomheter?.somMapVirksomheter()
-                        )
+                        ),
+                        "bekreftelser" to melding.bekreftelser.bekreftelserSomMap()
                     )
                 )
                 .resolver(MapValueResolver.INSTANCE)
@@ -153,23 +153,18 @@ internal class PdfV1Generator {
     private fun List<Virksomhet>.somMapVirksomheter(): List<Map<String, Any?>> {
         return map {
             mapOf(
-                "navnPaVirksomheten" to it.navnPaVirksomheten,
-                "naringstype" to it.naringstype.somMapNaringstype(),
+                "navnPåVirksomheten" to it.navnPåVirksomheten,
+                "næringstype" to it.næringstyper.somMapNæringstyper(),
                 "fiskerErPåBladB" to it.fiskerErPåBladB,
                 "fraOgMed" to it.fraOgMed,
                 "tilOgMed" to it.tilOgMed,
-                "erPagaende" to it.erPagaende,
-                "naringsinntekt" to it.naringsinntekt,
+                "næringsinntekt" to it.næringsinntekt,
                 "registrertINorge" to it.registrertINorge,
                 "organisasjonsnummer" to it.organisasjonsnummer,
                 "registrertILand" to it.registrertILand,
-                "harBlittYrkesaktivSisteTreFerdigliknendeArene" to it.harBlittYrkesaktivSisteTreFerdigliknendeArene,
-                "yrkesaktivSisteTreFerdigliknedeArene" to it.yrkesaktivSisteTreFerdigliknedeArene?.oppstartsdato,
-                "harVarigEndringAvInntektSiste4Kalenderar" to it.harVarigEndringAvInntektSiste4Kalenderar,
+                "yrkesaktivSisteTreFerdigliknedeÅrene" to it.yrkesaktivSisteTreFerdigliknedeÅrene?.oppstartsdato,
                 "varigEndring" to it.varigEndring?.varigEndringSomMap(),
-                "harRegnskapsforer" to it.harRegnskapsforer,
-                "harRevisor" to it.harRevisor,
-                "regnskapsforer" to it.regnskapsforer?.regnskapsførerSomMap(),
+                "regnskapsfører" to it.regnskapsfører?.regnskapsførerSomMap(),
                 "revisor" to it.revisor?.revisorSomMap()
             )
         }
@@ -182,10 +177,11 @@ internal class PdfV1Generator {
             "kanInnhenteOpplysninger" to this.kanInnhenteOpplysninger
         )
 
-    private fun Regnskapsforer.regnskapsførerSomMap(): Map<String, String> =
+    private fun Regnskapsfører.regnskapsførerSomMap(): Map<String, Any> =
         mapOf(
             "navn" to this.navn,
-            "telefon" to this.telefon
+            "telefon" to this.telefon,
+            "erNærVennFamilie" to this.erNærVennFamilie
         )
 
     private fun VarigEndring.varigEndringSomMap(): Map<String, Any?>? =
@@ -196,10 +192,10 @@ internal class PdfV1Generator {
         )
 
 
-    private fun List<Naringstype>.somMapNaringstype(): List<Map<String, Any?>> {
+    private fun List<Næringstyper>.somMapNæringstyper(): List<Map<String, Any?>> {
         return map {
             mapOf(
-                "typeDetaljert" to it.detaljert
+                "typeDetaljert" to it.name
             )
         }
     }
@@ -209,6 +205,13 @@ internal class PdfV1Generator {
         object :
             TypeReference<MutableMap<String, Any?>>() {})
 
+}
+
+private fun Bekreftelser.bekreftelserSomMap(): Map<String, Boolean> {
+    return mapOf(
+        "harBekreftetOpplysninger" to harBekreftetOpplysninger.boolean,
+        "harForståttRettigheterOgPlikter" to harForståttRettigheterOgPlikter.boolean
+    )
 }
 
 private fun MeldingV1.toFrilansMap(): Map<String, Any>? {

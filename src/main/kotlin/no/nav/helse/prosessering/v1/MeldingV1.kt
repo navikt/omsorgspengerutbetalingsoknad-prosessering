@@ -1,7 +1,8 @@
 package no.nav.helse.prosessering.v1
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonValue
 import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
@@ -18,7 +19,13 @@ data class MeldingV1(
     val utbetalingsperioder: List<Utbetalingsperiode>,
     val vedlegg: List<URI>,
     val frilans: Frilans? = null,
-    val selvstendigVirksomheter: List<Virksomhet>? = null
+    val selvstendigVirksomheter: List<Virksomhet>? = null,
+    val bekreftelser: Bekreftelser
+)
+
+data class Bekreftelser(
+    val harBekreftetOpplysninger: JaNei,
+    val harForståttRettigheterOgPlikter: JaNei
 )
 
 data class Frilans(
@@ -28,53 +35,70 @@ data class Frilans(
 )
 
 data class Virksomhet(
-    val naringstype: List<Naringstype>,
-    val fiskerErPåBladB: Boolean? = null,
+    val næringstyper: List<Næringstyper> = listOf(),
+    val fiskerErPåBladB: JaNei?,
     @JsonFormat(pattern = "yyyy-MM-dd")
     val fraOgMed: LocalDate,
+    @JsonFormat(pattern = "yyyy-MM-dd")
     val tilOgMed: LocalDate? = null,
-    val erPagaende: Boolean,
-    val naringsinntekt: Int? = null,
-    val navnPaVirksomheten: String,
+    val næringsinntekt: Int? = null,
+    val navnPåVirksomheten: String,
     val organisasjonsnummer: String? = null,
-    val registrertINorge: Boolean,
+    val registrertINorge: JaNei,
     val registrertILand: String? = null,
-    val harBlittYrkesaktivSisteTreFerdigliknendeArene: Boolean? = null,
-    val yrkesaktivSisteTreFerdigliknedeArene: YrkesaktivSisteTreFerdigliknedeArene? = null,
-    val harVarigEndringAvInntektSiste4Kalenderar: Boolean? = null,
+    val yrkesaktivSisteTreFerdigliknedeÅrene: YrkesaktivSisteTreFerdigliknedeÅrene? = null,
     val varigEndring: VarigEndring? = null,
-    val harRegnskapsforer: Boolean,
-    val regnskapsforer: Regnskapsforer? = null,
-    val harRevisor: Boolean? = null,
+    val regnskapsfører: Regnskapsfører? = null,
     val revisor: Revisor? = null
+)
+
+/**
+ * Unngå `Boolean` default-verdi null -> false
+ */
+enum class JaNei (@get:JsonValue val boolean: Boolean) {
+    Ja(true),
+    Nei(false);
+
+    companion object {
+        @JsonCreator
+        @JvmStatic
+        fun fraBoolean(boolean: Boolean?) = when(boolean) {
+            true -> Ja
+            false -> Nei
+            else -> throw IllegalStateException("Kan ikke være null")
+        }
+    }
+}
+
+data class YrkesaktivSisteTreFerdigliknedeÅrene(
+    val oppstartsdato: LocalDate
+)
+
+enum class Næringstyper {
+    FISKE,
+    JORDBRUK_SKOGBRUK,
+    DAGMAMMA,
+    ANNEN
+}
+
+data class VarigEndring(
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    val dato: LocalDate,
+    val inntektEtterEndring: Int,
+    val forklaring: String
 )
 
 data class Revisor(
     val navn: String,
     val telefon: String,
-    val kanInnhenteOpplysninger: Boolean?
+    val erNærVennFamilie: JaNei,
+    val kanInnhenteOpplysninger: JaNei
 )
 
-data class Regnskapsforer(
+data class Regnskapsfører(
     val navn: String,
-    val telefon: String
-)
-
-data class VarigEndring(
-    val dato: LocalDate? = null,
-    val inntektEtterEndring: Int? = null,
-    val forklaring: String? = null
-)
-
-enum class Naringstype(val detaljert: String) {
-    @JsonProperty("FISKE") FISKER("FISKE"),
-    @JsonProperty("JORDBRUK_SKOGBRUK") JORDBRUK("JORDBRUK_SKOGBRUK"),
-    @JsonProperty("ANNEN") ANNET("ANNEN"),
-    DAGMAMMA("DAGMAMMA")
-}
-
-data class YrkesaktivSisteTreFerdigliknedeArene(
-    val oppstartsdato: LocalDate?
+    val telefon: String,
+    val erNærVennFamilie: JaNei
 )
 
 data class Søker(
@@ -107,16 +131,9 @@ typealias Opphold = Bosted
 
 data class SpørsmålOgSvar(
     val spørsmål: Spørsmål,
-    val svar: Svar,
-    val fritekst: Fritekst? = null
+    val svar: JaNei
 )
 
 typealias Spørsmål = String
-typealias Fritekst = String
 
-enum class Svar {
-    Ja,
-    Nei,
-    VetIkke
-}
 
