@@ -52,6 +52,7 @@
         </div>
     </div>
     <br/>
+
     <!-- UTBETALINGSPERIODER -->
     <h2><span>Utbetalingsperioder</span></h2>
     <ul>
@@ -66,7 +67,6 @@
         {{/each}}
     </ul>
 
-    <hr/>
     <!-- UTENLANDSOPPHOLD i Perioden -->
     <h3>Utenlandsophold i perioden</h3>
     <ul>
@@ -95,8 +95,9 @@
 
     <p class="sporsmalstekst">Skal bo i utlandet neste 12 månedene?</p>
     {{>jaNeiCheckbox parameter=medlemskap.neste12}}
+    <br/><br/>
 
-    <hr/>
+    <h3>Utenlandsopphold i medlemsperioden</h3>
     <ul>
         {{# each søknad.bosteder as |b|}}
             {{# if b.erEØSLand}}
