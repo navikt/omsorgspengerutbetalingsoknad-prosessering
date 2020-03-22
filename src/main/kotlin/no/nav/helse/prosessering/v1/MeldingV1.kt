@@ -74,7 +74,7 @@ data class YrkesaktivSisteTreFerdigliknedeÅrene(
     val oppstartsdato: LocalDate
 )
 
-enum class Næringstyper(@JsonValue val beskrivelse: String) {
+enum class Næringstyper(val beskrivelse: String) {
     FISKE("Fiske"),
     JORDBRUK_SKOGBRUK("Jordbruk/skogbruk"),
     DAGMAMMA("Dagmamma"),
