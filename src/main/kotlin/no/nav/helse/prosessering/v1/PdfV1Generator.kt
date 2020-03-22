@@ -190,11 +190,10 @@ internal class PdfV1Generator {
             "forklaring" to this.forklaring
         )
 
-
     private fun List<Næringstyper>.somMapNæringstyper(): List<Map<String, Any?>> {
         return map {
             mapOf(
-                "typeDetaljert" to it.name
+                "typeDetaljert" to it.beskrivelse
             )
         }
     }
@@ -225,7 +224,10 @@ private fun MeldingV1.toFrilansMap(): Map<String, Any>? {
     }
 }
 
-private fun Duration.tilString() = "${this.toHoursPart()} timer og ${this.toMinutesPart()} minutter"
+private fun Duration.tilString(): String = when(this.toMinutesPart()) {
+    0 -> "${this.toHoursPart()} timer"
+    else -> "${this.toHoursPart()} timer og ${this.toMinutesPart()} minutter"
+}
 private fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
 private fun String.sprakTilTekst() = when (this.toLowerCase()) {
     "nb" -> "Bokmål"

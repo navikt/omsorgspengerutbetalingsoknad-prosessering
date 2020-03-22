@@ -78,7 +78,7 @@ class PdfV1GeneratorTest {
                 Utbetalingsperiode(
                     fraOgMed = start,
                     tilOgMed = start.plusDays(10),
-                    lengde = Duration.ofHours(5).plusMinutes(30)
+                    lengde = Duration.ofHours(5).plusMinutes(0)
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(20),
