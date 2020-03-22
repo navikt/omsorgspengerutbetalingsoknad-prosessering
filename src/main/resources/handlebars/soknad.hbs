@@ -85,6 +85,13 @@
         {{/each}}
     </ul>
 
+    <!-- SPØRSMÅL -->
+    <h2><span>Spørsmål</span></h2>
+    {{# each søknad.spørsmål as |s|}}
+        <p class="sporsmalstekst">{{s.spørsmål}}</p>
+        {{>jaNeiCheckbox parameter=s.svar}} <br/><br/>
+    {{/each}}
+
     <!-- MEDLEMSKAP -->
     <h2><span>Medlemskap</span></h2>
 
@@ -111,13 +118,6 @@
             {{/if}}
         {{/each}}
     </ul>
-
-    <!-- SPØRSMÅL -->
-    <h2><span>Spørsmål</span></h2>
-    {{# each søknad.spørsmål as |s|}}
-        <p class="sporsmalstekst">{{s.spørsmål}}</p>
-        {{>jaNeiCheckbox parameter=s.svar}} <br/><br/>
-    {{/each}}
 
     <!-- FRILANS -->
     {{# if frilans }}
