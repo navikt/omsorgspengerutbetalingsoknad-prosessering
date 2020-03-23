@@ -10,6 +10,7 @@ import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
 import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
 import no.nav.helse.prosessering.v1.PreprossesertSøker
+import no.nav.k9.søknad.felles.Barn
 import no.nav.k9.søknad.felles.NorskIdentitetsnummer
 import no.nav.k9.søknad.felles.Søker
 import no.nav.k9.søknad.felles.SøknadId
@@ -92,7 +93,11 @@ private fun PreprossesertMeldingV1.tilKOmsorgspengerUtbetalingSøknad() = Omsorg
     .søknadId(SøknadId.of(soknadId))
     .mottattDato(mottatt)
     .søker(søker.tilK9Søker())
+    .barn(tilK9Barn())
     .build()
+
+// TODO: Når det er en liste med fosterbarn i søknaden må det mappes inn i K9-Format-søknaden her.
+private fun PreprossesertMeldingV1.tilK9Barn() = listOf<Barn>()
 
 private fun PreprossesertSøker.tilK9Søker() = Søker.builder()
     .norskIdentitetsnummer(NorskIdentitetsnummer.of(fødselsnummer))
