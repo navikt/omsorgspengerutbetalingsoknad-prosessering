@@ -105,7 +105,7 @@ fun List<Utbetalingsperiode>.tilAntallDelDager(): Double {
     var antallDelDager = 0L
     filter { it.lengde !== null }
     map {
-        antallDelDager += TimeUnit.HOURS.toDays(it.lengde!!.toHours())
+        antallDelDager += TimeUnit.HOURS.toDays(it.lengde?.toHours()?: 0)
     }
     return antallDelDager.toDouble()
 }
