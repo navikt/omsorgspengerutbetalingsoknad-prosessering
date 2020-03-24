@@ -37,6 +37,9 @@
         <div class="personinfo">
             <div class="persontekst">
                 <div class="persontekst__sidetopp">
+                    <p>
+                        Søker
+                    </p>
                     <img class="ikon" src="{{ image "Personikon.png" }}"/>
                     <div class="persontekst__personalia">
                         <p class="navn">
@@ -47,6 +50,23 @@
                         </p>
                     </div>
                     <br/>
+
+                    <p>
+                        Fosterbarn
+                    </p>
+                    {{# each søknad.fosterbarn as |barn|}}
+                        <img class="ikon" src="{{ image "Personikon.png" }}"/>
+                        <div class="persontekst__personalia">
+                            <p class="navn">
+                                {{ barn.fornavn }} {{barn.etternavn}}
+                            </p>
+                            <p class="id">
+                                {{ barn.fødselsnummer }}
+                            </p>
+                        </div>
+                        <br/>
+                    {{/each}}
+
                 </div>
             </div>
         </div>

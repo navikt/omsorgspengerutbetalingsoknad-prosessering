@@ -13,12 +13,16 @@ class PdfV1GeneratorTest {
     private companion object {
         private val generator = PdfV1Generator()
         private val fødselsdato = LocalDate.now()
+
+        private val gyldigFodselsnummerA = "02119970078"
+        private val gyldigFodselsnummerB = "19066672169"
+        private val gyldigFodselsnummerC = "20037473937"
     }
 
     private fun fullGyldigMelding(
         start: LocalDate = LocalDate.parse("2020-01-01"),
         søknadId: String,
-        fødselsnummerSoker: String = "02119970078"
+        fødselsnummerSoker: String = gyldigFodselsnummerA
     ): MeldingV1 {
         return MeldingV1(
             søknadId = søknadId,
@@ -132,6 +136,18 @@ class PdfV1GeneratorTest {
                         navn = "Bjarne Regnskap",
                         telefon = "65484578"
                     )
+                )
+            ),
+            fosterbarn = listOf(
+                FosterBarn(
+                    fødselsnummer = gyldigFodselsnummerB,
+                    fornavn = "Jarle",
+                    etternavn = "Nordmann"
+                ),
+                FosterBarn(
+                    fødselsnummer = gyldigFodselsnummerC,
+                    fornavn = "Sara",
+                    etternavn = "Nordmann"
                 )
             ),
             bekreftelser = Bekreftelser(

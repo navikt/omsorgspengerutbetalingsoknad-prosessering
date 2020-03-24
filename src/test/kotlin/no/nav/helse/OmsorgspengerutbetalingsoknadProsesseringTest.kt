@@ -301,6 +301,13 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                 lengde = Duration.ofHours(5).plusMinutes(30)
             )
         ),
+        fosterbarn = listOf(
+            FosterBarn(
+                fødselsnummer = "02119970078",
+                fornavn = "fornavn",
+                etternavn = "etternavn"
+            )
+        ),
         vedlegg = listOf(
             URI("http://localhost:8080/vedlegg/1"),
             URI("http://localhost:8080/vedlegg/2"),

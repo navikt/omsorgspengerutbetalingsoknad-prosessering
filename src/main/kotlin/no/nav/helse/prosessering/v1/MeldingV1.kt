@@ -17,6 +17,7 @@ data class MeldingV1(
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
     val utbetalingsperioder: List<Utbetalingsperiode>,
+    val fosterbarn: List<FosterBarn>? = listOf(),
     val vedlegg: List<URI>,
     val frilans: Frilans? = null,
     val selvstendigVirksomheter: List<Virksomhet>? = null,
@@ -69,6 +70,13 @@ enum class JaNei (@get:JsonValue val boolean: Boolean) {
         }
     }
 }
+
+data class FosterBarn(
+    val fødselsnummer: String,
+    val fornavn: String,
+    val etternavn: String
+)
+
 
 data class YrkesaktivSisteTreFerdigliknedeÅrene(
     val oppstartsdato: LocalDate
