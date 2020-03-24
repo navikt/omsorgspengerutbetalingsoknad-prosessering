@@ -105,13 +105,18 @@ class PdfV1GeneratorTest {
             ),
             selvstendigVirksomheter = listOf(
                 Virksomhet(
-                    næringstyper = listOf(Næringstyper.ANNEN),
+                    næringstyper = listOf(Næringstyper.ANNEN, Næringstyper.FISKE),
                     fraOgMed = LocalDate.now(),
                     tilOgMed = LocalDate.now().plusDays(10),
                     navnPåVirksomheten = "Kjells Møbelsnekkeri",
                     registrertINorge = JaNei.Ja,
                     organisasjonsnummer = "111111",
-                    fiskerErPåBladB = JaNei.Nei,
+                    fiskerErPåBladB = JaNei.Ja,
+                    varigEndring = VarigEndring(
+                        dato = LocalDate.now().minusDays(20),
+                        inntektEtterEndring = 234543,
+                        forklaring = "Forklaring som handler om varig endring"
+                    ),
                     revisor = Revisor(
                         navn = "Kjell Revisor",
                         telefon = "9999",
