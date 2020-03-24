@@ -103,7 +103,6 @@ internal class PdfV1Generator {
                         ),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
-                        "frilans" to melding.toFrilansMap(),
                         "selvstendigVirksomheter" to mapOf(
                             "virksomhet" to melding.selvstendigVirksomheter?.somMapVirksomheter()
                         ),
@@ -165,38 +164,16 @@ internal class PdfV1Generator {
                 "organisasjonsnummer" to it.organisasjonsnummer,
                 "registrertILand" to it.registrertILand,
                 "yrkesaktivSisteTreFerdigliknedeÅrene" to it.yrkesaktivSisteTreFerdigliknedeÅrene?.oppstartsdato,
-                "varigEndring" to it.varigEndring?.varigEndringSomMap(),
-                "regnskapsfører" to it.regnskapsfører?.regnskapsførerSomMap(),
-                "revisor" to it.revisor?.revisorSomMap()
+                "varigEndring" to it.varigEndring,
+                "regnskapsfører" to it.regnskapsfører,
+                "revisor" to it.revisor
             )
         }
     }
 
-    private fun Revisor.revisorSomMap() =
-        mapOf(
-            "navn" to this.navn,
-            "telefon" to this.telefon,
-            "kanInnhenteOpplysninger" to this.kanInnhenteOpplysninger
-        )
-
-    private fun Regnskapsfører.regnskapsførerSomMap(): Map<String, Any> =
-        mapOf(
-            "navn" to this.navn,
-            "telefon" to this.telefon
-        )
-
-    private fun VarigEndring.varigEndringSomMap(): Map<String, Any?>? =
-        mapOf(
-            "dato" to this.dato,
-            "inntektEtterEndring" to this.inntektEtterEndring,
-            "forklaring" to this.forklaring
-        )
-
-    private fun List<Næringstyper>.somMapNæringstyper(): List<Map<String, Any?>> {
-        return map {
-            mapOf(
-                "typeDetaljert" to it.beskrivelse
-            )
+    private fun List<Næringstyper>.somMapNæringstyper() {
+        map {
+            mapOf("detaljer" to it.beskrivelse)
         }
     }
 
@@ -214,22 +191,11 @@ private fun Bekreftelser.bekreftelserSomMap(): Map<String, Boolean> {
     )
 }
 
-private fun MeldingV1.toFrilansMap(): Map<String, Any>? {
-    return when (frilans) {
-        null -> null
-        else -> {
-            mapOf(
-                "startdato" to frilans.startdato,
-                "jobberFortsattSomFrilans" to frilans.jobberFortsattSomFrilans
-            )
-        }
-    }
-}
-
-private fun Duration.tilString(): String = when(this.toMinutesPart()) {
+private fun Duration.tilString(): String = when (this.toMinutesPart()) {
     0 -> "${this.toHoursPart()} timer"
     else -> "${this.toHoursPart()} timer og ${this.toMinutesPart()} minutter"
 }
+
 private fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
 private fun String.sprakTilTekst() = when (this.toLowerCase()) {
     "nb" -> "Bokmål"
