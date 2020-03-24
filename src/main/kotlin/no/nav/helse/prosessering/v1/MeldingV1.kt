@@ -37,7 +37,7 @@ data class Frilans(
 
 data class Virksomhet(
     val næringstyper: List<Næringstyper> = listOf(),
-    val fiskerErPåBladB: JaNei = JaNei.Nei,
+    val fiskerErPåBladB: JaNei? = JaNei.Nei,
     @JsonFormat(pattern = "yyyy-MM-dd")
     val fraOgMed: LocalDate,
     @JsonFormat(pattern = "yyyy-MM-dd")

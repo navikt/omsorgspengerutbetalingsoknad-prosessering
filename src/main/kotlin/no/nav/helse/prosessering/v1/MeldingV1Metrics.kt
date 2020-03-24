@@ -73,7 +73,7 @@ internal fun MeldingV1.reportMetrics() {
             selvstendigNæringsdrivendeCounter
                 .labels(
                     næringsTypeSomString,
-                    it.fiskerErPåBladB.boolean.tilJaEllerNei(),
+                    it.fiskerErPåBladB?.boolean?.tilJaEllerNei()?: "Nei",
                     it.registrertINorge.boolean.tilJaEllerNei(),
                     if (it.regnskapsfører == null) "Nei" else "Ja",
                     if (it.revisor == null) "Nei" else "Ja",
