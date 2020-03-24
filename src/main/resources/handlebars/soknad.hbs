@@ -159,24 +159,24 @@
 
     <br/>
     <!-- SELVSTENDIG NÆRINGSDRIVENDE -->
-    {{#if selvstendigVirksomheter}}
+    {{#if søknad.selvstendigVirksomheter}}
         <h2><span>Selvstendig næringsdrivende</span></h2>
-        {{# each selvstendigVirksomheter.virksomhet as |virksomhet|~}}
+        {{# each søknad.selvstendigVirksomheter as |virksomhet|~}}
 
-            <h3>{{virksomhet.navnPåVirksomheten}} ({{ virksomhet.fraOgMed}} -
+            <h3>{{virksomhet.navnPåVirksomheten}} ({{#dato virksomhet.fraOgMed}}{{/dato}} -
                 {{#if virksomhet.tilOgMed}}
-                    {{ virksomhet.tilOgMed}})
+                    {{#dato virksomhet.tilOgMed}}{{/dato}})
                 {{else}}
                     pågående)
                 {{/if}}</h3>
             <p>Næringstype:
-                {{# each virksomhet.næringstype as |næringstype|~}}
+                {{# each virksomhet.næringstyper as |næringstype|~}}
                     {{#if @first}}
-                        {{næringstype.detaljer}}
+                        {{ næringstype}}
                     {{else}}
                         , {{næringstype.detaljer}}
                     {{/if}}
-                    {{#eq næringstype.detaljer "FISKE"}}
+                    {{#eq næringstype.detaljer "Fiske"}}
                         {{#if virksomhet.fiskerErPåBladB}}
                             (blad B)
                         {{else}}
@@ -196,12 +196,12 @@
 
             {{#if virksomhet.yrkesaktivSisteTreFerdigliknedeÅrene}}
                 <p>Oppgi dato for når du ble
-                    yrkesaktiv: {{virksomhet.yrkesaktivSisteTreFerdigliknedeÅrene}}</p>
+                    yrkesaktiv: {{#dato virksomhet.yrkesaktivSisteTreFerdigliknedeÅrene.oppstartsdato}}{{/dato}}</p>
             {{/if}}
             {{#if virksomhet.varigEndring}}
                 <h3>Varig endring</h3>
                 <ul>
-                    <p>Dato for endring: {{ virksomhet.varigEndring.dato}}</p>
+                    <p>Dato for endring: {{#dato virksomhet.varigEndring.dato}}{{/dato}}</p>
                     <p>Næringsinntekten etter endringen: {{virksomhet.varigEndring.inntektEtterEndring}}</p>
                     <div class="fritekst">
                         <p class="sporsmalstekst"><img class="lite_ikon" src="{{ image "Fritekst.png" }}"/>Søkers

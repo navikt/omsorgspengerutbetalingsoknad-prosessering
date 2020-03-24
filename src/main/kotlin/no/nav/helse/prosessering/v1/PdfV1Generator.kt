@@ -103,9 +103,6 @@ internal class PdfV1Generator {
                         ),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
-                        "selvstendigVirksomheter" to mapOf(
-                            "virksomhet" to melding.selvstendigVirksomheter?.somMapVirksomheter()
-                        ),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap()
                     )
                 )
