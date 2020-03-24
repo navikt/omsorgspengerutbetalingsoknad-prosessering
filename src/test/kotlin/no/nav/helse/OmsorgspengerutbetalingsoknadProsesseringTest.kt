@@ -316,6 +316,45 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         bekreftelser = Bekreftelser(
             harBekreftetOpplysninger = JaNei.Ja,
             harForståttRettigheterOgPlikter = JaNei.Ja
+        ),
+        selvstendigVirksomheter = listOf(
+            Virksomhet(
+                næringstyper = listOf(Næringstyper.ANNEN, Næringstyper.FISKE),
+                fraOgMed = LocalDate.now(),
+                tilOgMed = LocalDate.now().plusDays(10),
+                navnPåVirksomheten = "Kjells Møbelsnekkeri",
+                registrertINorge = JaNei.Ja,
+                organisasjonsnummer = "111111",
+                varigEndring = VarigEndring(
+                    dato = LocalDate.now().minusDays(20),
+                    inntektEtterEndring = 234543,
+                    forklaring = "Forklaring som handler om varig endring"
+                ),
+                revisor = Revisor(
+                    navn = "Kjell Revisor",
+                    telefon = "9999",
+                    kanInnhenteOpplysninger = JaNei.Ja
+                )
+            ),
+            Virksomhet(
+                næringstyper = listOf(Næringstyper.JORDBRUK_SKOGBRUK, Næringstyper.DAGMAMMA, Næringstyper.FISKE),
+                fiskerErPåBladB = JaNei.Ja,
+                fraOgMed = LocalDate.now(),
+                næringsinntekt = 1111,
+                navnPåVirksomheten = "Tull Og Tøys",
+                registrertINorge = JaNei.Nei,
+                registrertILand = "Bahamas",
+                yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeÅrene(LocalDate.now()),
+                varigEndring = VarigEndring(
+                    dato = LocalDate.now().minusDays(20),
+                    inntektEtterEndring = 234543,
+                    forklaring = "Forklaring som handler om varig endring"
+                ),
+                regnskapsfører = Regnskapsfører(
+                    navn = "Bjarne Regnskap",
+                    telefon = "65484578"
+                )
+            )
         )
     )
 
