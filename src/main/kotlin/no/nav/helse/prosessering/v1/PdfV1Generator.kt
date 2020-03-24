@@ -101,6 +101,8 @@ internal class PdfV1Generator {
                                 it.fraOgMed.isEqual(mottatt) || it.fraOgMed.isAfter(mottatt)
                             }
                         ),
+                        "harOpphold" to melding.opphold.isNotEmpty(),
+                        "harBosteder" to melding.bosteder.isNotEmpty(),
                         "frilans" to melding.toFrilansMap(),
                         "selvstendigVirksomheter" to mapOf(
                             "virksomhet" to melding.selvstendigVirksomheter?.somMapVirksomheter()

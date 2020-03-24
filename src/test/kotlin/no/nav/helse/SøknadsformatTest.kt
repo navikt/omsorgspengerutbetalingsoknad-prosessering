@@ -90,6 +90,11 @@ class SøknadsformatTest {
             ],
             "frilans": null,
             "selvstendigVirksomheter": null,
+            "fosterbarn": [{
+                "fødselsnummer": "02119970078",
+                "fornavn": "fornavn",
+                "etternavn": "etternavn"
+            }],
             "bekreftelser": {
             "harBekreftetOpplysninger": true,
             "harForståttRettigheterOgPlikter": true
@@ -173,6 +178,13 @@ class SøknadsformatTest {
                 fraOgMed = start.plusDays(30),
                 tilOgMed = start.plusDays(35),
                 lengde = Duration.ofHours(5).plusMinutes(30)
+            )
+        ),
+        fosterbarn = listOf(
+            FosterBarn(
+                fødselsnummer = "02119970078",
+                fornavn = "fornavn",
+                etternavn = "etternavn"
             )
         ),
         vedlegg = listOf(

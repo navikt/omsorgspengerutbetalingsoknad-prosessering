@@ -8,6 +8,7 @@ import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
+import no.nav.helse.prosessering.v1.FosterBarn
 import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
 import no.nav.helse.prosessering.v1.PreprossesertSøker
 import no.nav.k9.søknad.felles.Barn
@@ -89,15 +90,24 @@ internal class JournalforingsStream(
     internal fun stop() = stream.stop(becauseOfError = false)
 }
 
-private fun PreprossesertMeldingV1.tilKOmsorgspengerUtbetalingSøknad() = OmsorgspengerUtbetalingSøknad.builder()
-    .søknadId(SøknadId.of(soknadId))
-    .mottattDato(mottatt)
-    .søker(søker.tilK9Søker())
-    .barn(tilK9Barn())
-    .build()
+private fun PreprossesertMeldingV1.tilKOmsorgspengerUtbetalingSøknad(): OmsorgspengerUtbetalingSøknad {
+    val builder = OmsorgspengerUtbetalingSøknad.builder()
+        .søknadId(SøknadId.of(soknadId))
+        .mottattDato(mottatt)
+        .søker(søker.tilK9Søker())
 
-// TODO: Når det er en liste med fosterbarn i søknaden må det mappes inn i K9-Format-søknaden her.
-private fun PreprossesertMeldingV1.tilK9Barn() = listOf<Barn>()
+    fosterbarn?.let { builder.barn(it.tilK9Barn()) }
+
+    return builder.build()
+}
+
+private fun List<FosterBarn>.tilK9Barn(): List<Barn> {
+    return map {
+        Barn.builder()
+            .norskIdentitetsnummer(NorskIdentitetsnummer.of(it.fødselsnummer))
+            .build()
+    }
+}
 
 private fun PreprossesertSøker.tilK9Søker() = Søker.builder()
     .norskIdentitetsnummer(NorskIdentitetsnummer.of(fødselsnummer))
