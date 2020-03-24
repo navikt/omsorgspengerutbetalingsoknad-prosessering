@@ -172,11 +172,11 @@
             <p>Næringstype:
                 {{# each virksomhet.næringstyper as |næringstype|~}}
                     {{#if @first}}
-                        {{ næringstype}}
+                        {{#enumNæringstyper næringstype}}{{/enumNæringstyper}}
                     {{else}}
-                        , {{næringstype.detaljer}}
+                        , {{#enumNæringstyper næringstype}}{{/enumNæringstyper}}
                     {{/if}}
-                    {{#eq næringstype.detaljer "Fiske"}}
+                    {{#eq næringstype "FISKE"}}
                         {{#if virksomhet.fiskerErPåBladB}}
                             (blad B)
                         {{else}}

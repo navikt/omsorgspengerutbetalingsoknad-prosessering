@@ -36,6 +36,9 @@ internal class PdfV1Generator {
             registerHelper("eq", Helper<String> { context, options ->
                 if (context == options.param(0)) options.fn() else options.inverse()
             })
+            registerHelper("enumNæringstyper", Helper<String> { context, options ->
+                Næringstyper.valueOf(context).beskrivelse
+            })
             registerHelper("fritekst", Helper<String> { context, _ ->
                 if (context == null) "" else {
                     val text = Handlebars.Utils.escapeExpression(context)
@@ -152,7 +155,9 @@ internal class PdfV1Generator {
         return map {
             mapOf(
                 "navnPåVirksomheten" to it.navnPåVirksomheten,
-                "næringstype" to it.næringstyper.somMapNæringstyper(),
+                "næringstype" to it.næringstyper.map {
+                    mapOf("detaljer" to it.beskrivelse)
+                },
                 "fiskerErPåBladB" to it.fiskerErPåBladB,
                 "fraOgMed" to it.fraOgMed,
                 "tilOgMed" to it.tilOgMed,
@@ -177,7 +182,8 @@ internal class PdfV1Generator {
     private fun MeldingV1.somMap() = mapper.convertValue(
         this,
         object :
-            TypeReference<MutableMap<String, Any?>>() {})
+            TypeReference<MutableMap<String, Any?>>() {}
+    )
 
 }
 
