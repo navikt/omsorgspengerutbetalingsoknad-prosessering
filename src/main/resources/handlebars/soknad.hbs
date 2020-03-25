@@ -51,9 +51,11 @@
                     </div>
                     <br/>
 
-                    <p>
-                        Fosterbarn
-                    </p>
+                    {{#if harFosterbarn}}
+                        <p>
+                            Fosterbarn
+                        </p>
+                    {{/if}}
                     {{# each søknad.fosterbarn as |barn|}}
                         <img class="ikon" src="{{ image "Personikon.png" }}"/>
                         <div class="persontekst__personalia">
