@@ -81,8 +81,7 @@ class PdfV1GeneratorTest {
             utbetalingsperioder = listOf(
                 Utbetalingsperiode(
                     fraOgMed = start,
-                    tilOgMed = start.plusDays(10),
-                    lengde = Duration.ofHours(5).plusMinutes(0)
+                    tilOgMed = start.plusDays(10)
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(20),
@@ -90,8 +89,22 @@ class PdfV1GeneratorTest {
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(30),
-                    tilOgMed = start.plusDays(35),
+                    tilOgMed = start.plusDays(35)
+                ),
+                Utbetalingsperiode(
+                    fraOgMed = start.plusDays(1),
+                    tilOgMed = start.plusDays(1),
+                    lengde = Duration.ofHours(5).plusMinutes(0)
+                ),
+                Utbetalingsperiode(
+                    fraOgMed = start.plusDays(2),
+                    tilOgMed = start.plusDays(2),
                     lengde = Duration.ofHours(5).plusMinutes(30)
+                ),
+                Utbetalingsperiode(
+                    fraOgMed = start.plusDays(3),
+                    tilOgMed = start.plusDays(3),
+                    lengde = Duration.ofHours(4).plusMinutes(30)
                 )
             ),
             vedlegg = listOf(
