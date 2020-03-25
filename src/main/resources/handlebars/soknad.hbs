@@ -110,7 +110,7 @@
     </ul>
 
     <!-- SPØRSMÅL -->
-    <h2><span>Spørsmål</span></h2>U{{# each søknad.spørsmål as |s|}}
+    <h2><span>Spørsmål</span></h2>{{# each søknad.spørsmål as |s|}}
         <p class="sporsmalstekst">{{s.spørsmål}}</p>
         {{>jaNeiCheckbox parameter=s.svar}} <br/><br/>
     {{/each}}

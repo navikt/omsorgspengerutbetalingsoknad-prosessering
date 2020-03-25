@@ -85,7 +85,7 @@ data class YrkesaktivSisteTreFerdigliknedeÅrene(
 enum class Næringstyper(val beskrivelse: String) {
     FISKE("Fiske"),
     JORDBRUK_SKOGBRUK("Jordbruk/skogbruk"),
-    DAGMAMMA("Dagmamma"),
+    DAGMAMMA("Dagmamma eller familiebarnehage i eget hjem"),
     ANNEN("Annen");
 }
 
