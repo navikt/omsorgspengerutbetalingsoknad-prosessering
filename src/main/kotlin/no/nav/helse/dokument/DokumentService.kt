@@ -33,7 +33,7 @@ class DokumentService(
             dokument = DokumentGateway.Dokument(
                 content = pdf,
                 contentType = "application/pdf",
-                title = "Søknad om omsorgspengerutbetaling"
+                title = "Søknad om utbetaling av omsorgspenger"
             ),
             aktørId = aktørId,
             correlationId = correlationId
@@ -49,7 +49,7 @@ class DokumentService(
             dokument = DokumentGateway.Dokument(
                 content = Søknadsformat.somJson(melding),
                 contentType = "application/json",
-                title = "Søknad om omsorgspengerutbetaling som JSON"
+                title = "Søknad om utbetaling av omsorgspenger som JSON"
             ),
             aktørId = aktørId,
             correlationId = correlationId
