@@ -12,6 +12,14 @@
         {
           "member": "srvomsut-prs",
           "role": "CONSUMER"
+        },
+        {
+          "member": "E157419",
+          "role": "MANAGER"
+        },
+        {
+          "member": "F154868",
+          "role": "MANAGER"
         }
       ],
       "numPartitions": 3,
@@ -29,6 +37,14 @@
         {
           "member": "srvomsut-prs",
           "role": "CONSUMER"
+        },
+        {
+          "member": "E157419",
+          "role": "MANAGER"
+        },
+        {
+          "member": "F154868",
+          "role": "MANAGER"
         }
       ],
       "numPartitions": 3,
@@ -46,6 +62,14 @@
         {
           "member": "srvomsut-prs",
           "role": "CONSUMER"
+        },
+        {
+          "member": "E157419",
+          "role": "MANAGER"
+        },
+        {
+          "member": "F154868",
+          "role": "MANAGER"
         }
       ],
       "numPartitions": 3,
@@ -63,10 +87,118 @@
         {
           "member": "srvk9-fordel",
           "role": "CONSUMER"
+        },
+        {
+          "member": "E157419",
+          "role": "MANAGER"
+        },
+        {
+          "member": "F154868",
+          "role": "MANAGER"
         }
       ],
       "numPartitions": 3,
       "topicName": "privat-omsorgspengerutbetalingsoknad-journalfort"
+    },
+    {
+      "configEntries": {
+        "retention.ms": -1
+      },
+      "members": [
+        {
+          "member": "srvomsut-mottak",
+          "role": "PRODUCER"
+        },
+        {
+          "member": "srvomsut-prs",
+          "role": "CONSUMER"
+        },
+        {
+          "member": "E157419",
+          "role": "MANAGER"
+        },
+        {
+          "member": "F154868",
+          "role": "MANAGER"
+        }
+      ],
+      "numPartitions": 3,
+      "topicName": "privat-omsorgspengerutbetalingsoknad-arbeidstaker-mottatt"
+    },
+    {
+      "configEntries": {
+        "retention.ms": -1
+      },
+      "members": [
+        {
+          "member": "srvomsut-prs",
+          "role": "PRODUCER"
+        },
+        {
+          "member": "srvomsut-prs",
+          "role": "CONSUMER"
+        },
+        {
+          "member": "E157419",
+          "role": "MANAGER"
+        },
+        {
+          "member": "F154868",
+          "role": "MANAGER"
+        }
+      ],
+      "numPartitions": 3,
+      "topicName": "privat-omsorgspengerutbetalingsoknad-arbeidstaker-preprossesert"
+    },
+    {
+      "configEntries": {
+        "retention.ms": -1
+      },
+      "members": [
+        {
+          "member": "srvomsut-prs",
+          "role": "PRODUCER"
+        },
+        {
+          "member": "srvomsut-prs",
+          "role": "CONSUMER"
+        },
+        {
+          "member": "E157419",
+          "role": "MANAGER"
+        },
+        {
+          "member": "F154868",
+          "role": "MANAGER"
+        }
+      ],
+      "numPartitions": 3,
+      "topicName": "privat-omsorgspengerutbetalingsoknad-arbeidstaker-cleanup"
+    },
+    {
+      "configEntries": {
+        "retention.ms": -1
+      },
+      "members": [
+        {
+          "member": "srvomsut-prs",
+          "role": "PRODUCER"
+        },
+        {
+          "member": "srvk9-fordel",
+          "role": "CONSUMER"
+        },
+        {
+          "member": "E157419",
+          "role": "MANAGER"
+        },
+        {
+          "member": "F154868",
+          "role": "MANAGER"
+        }
+      ],
+      "numPartitions": 3,
+      "topicName": "privat-omsorgspengerutbetalingsoknad-arbeidstaker-journalfort"
     }
   ]
 }
