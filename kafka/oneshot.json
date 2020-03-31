@@ -123,7 +123,7 @@
         }
       ],
       "numPartitions": 3,
-      "topicName": "privat-omsorgspengerutbetalingsoknad-arbeidstaker-mottatt"
+      "topicName": "privat-oms-ubetalingsoknad-arbeidstaker-mottatt"
     },
     {
       "configEntries": {
@@ -148,7 +148,7 @@
         }
       ],
       "numPartitions": 3,
-      "topicName": "privat-omsorgspengerutbetalingsoknad-arbeidstaker-preprossesert"
+      "topicName": "privat-oms-utbetalingsoknad-arbeidstaker-preprossesert"
     },
     {
       "configEntries": {
@@ -173,7 +173,7 @@
         }
       ],
       "numPartitions": 3,
-      "topicName": "privat-omsorgspengerutbetalingsoknad-arbeidstaker-cleanup"
+      "topicName": "privat-oms-utbetalingsoknad-arbeidstaker-cleanup"
     },
     {
       "configEntries": {
@@ -198,7 +198,7 @@
         }
       ],
       "numPartitions": 3,
-      "topicName": "privat-omsorgspengerutbetalingsoknad-arbeidstaker-journalfort"
+      "topicName": "privat-oms-utbetalingsoknad-arbeidstaker-journalfort"
     }
   ]
 }
