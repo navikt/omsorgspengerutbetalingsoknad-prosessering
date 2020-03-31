@@ -1,4 +1,4 @@
-package no.nav.helse.prosessering.v1.asynkron
+package no.nav.helse.prosessering.v1.asynkron.arbeidstaker
 
 import no.nav.helse.CorrelationId
 import no.nav.helse.aktoer.AktørId
@@ -12,18 +12,22 @@ import no.nav.helse.kafka.ManagedStreamReady
 import no.nav.helse.prosessering.v1.FosterBarn
 import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
 import no.nav.helse.prosessering.v1.PreprossesertSøker
+import no.nav.helse.prosessering.v1.asynkron.*
+import no.nav.helse.prosessering.v1.asynkron.Topic
+import no.nav.helse.prosessering.v1.asynkron.Topics
 import no.nav.k9.søknad.felles.Barn
 import no.nav.k9.søknad.felles.NorskIdentitetsnummer
 import no.nav.k9.søknad.felles.Søker
 import no.nav.k9.søknad.felles.SøknadId
 import no.nav.k9.søknad.omsorgspenger.utbetaling.OmsorgspengerUtbetalingSøknad
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.PreprosessertArbeidstakerutbetalingMelding
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.Produced
 import org.slf4j.LoggerFactory
 
-internal class JournalforingsStream(
+internal class ArbeidstakerutbetalingJournalforingsStream(
     joarkGateway: JoarkGateway,
     kafkaConfig: KafkaConfig
 ) {
@@ -39,19 +43,16 @@ internal class JournalforingsStream(
     internal val healthy = ManagedStreamHealthy(stream)
 
     private companion object {
-        private const val NAME = "JournalforingV1"
+        private const val NAME = "ArbeidstakerutbetalingJournalforingV1"
         private val logger = LoggerFactory.getLogger("no.nav.$NAME.topology")
 
         private fun topology(joarkGateway: JoarkGateway): Topology {
             val builder = StreamsBuilder()
-            val fraPreprossesert: Topic<TopicEntry<PreprossesertMeldingV1>> = Topics.PREPROSSESERT
-            val tilCleanup: Topic<TopicEntry<Cleanup>> = Topics.CLEANUP
+            val fraPreprossesert = Topics.ARBEIDSTAKERUTBETALING_PREPROSSESERT
+            val tilCleanup = Topics.ARBEIDSTAKERUTBETALING_CLEANUP
 
             val mapValues = builder
-                .stream(
-                    fraPreprossesert.name,
-                    Consumed.with(fraPreprossesert.keySerde, fraPreprossesert.valueSerde)
-                )
+                .stream(fraPreprossesert.name, Consumed.with(fraPreprossesert.keySerde, fraPreprossesert.valueSerde))
                 .filter { _, entry -> 1 == entry.metadata.version }
                 .mapValues { soknadId, entry ->
                     process(NAME, soknadId, entry) {
@@ -69,14 +70,14 @@ internal class JournalforingsStream(
                             ),
                             correlationId = CorrelationId(entry.metadata.correlationId),
                             dokumenter = dokumenter,
-                            arbeidstype = Arbeidstype.SELVSTENDIG_NÆRINGSDRIVENDE_OG_FRILANS
+                            arbeidstype = Arbeidstype.ARBEIDSTAKER
                         )
                         logger.info("Dokumenter journalført med ID = ${journaPostId.journalpostId}.")
-                        val journalfort = Journalfort(
+                        val journalfort = ArbeidstakerutbetalingJournalfort(
                             journalpostId = journaPostId.journalpostId,
                             søknad = entry.data.tilKOmsorgspengerUtbetalingSøknad()
                         )
-                        Cleanup(
+                        ArbeidstakerutbetalingCleanup(
                             metadata = entry.metadata,
                             melding = entry.data,
                             journalførtMelding = journalfort
@@ -92,7 +93,7 @@ internal class JournalforingsStream(
     internal fun stop() = stream.stop(becauseOfError = false)
 }
 
-private fun PreprossesertMeldingV1.tilKOmsorgspengerUtbetalingSøknad(): OmsorgspengerUtbetalingSøknad {
+private fun PreprosessertArbeidstakerutbetalingMelding.tilKOmsorgspengerUtbetalingSøknad(): OmsorgspengerUtbetalingSøknad {
     val builder = OmsorgspengerUtbetalingSøknad.builder()
         .søknadId(SøknadId.of(soknadId))
         .mottattDato(mottatt)

@@ -3,6 +3,7 @@ package no.nav.helse.dokument
 import no.nav.helse.CorrelationId
 import no.nav.helse.aktoer.AktørId
 import no.nav.helse.prosessering.v1.MeldingV1
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.net.URI
@@ -25,15 +26,16 @@ class DokumentService(
     }
 
     internal suspend fun lagreSoknadsOppsummeringPdf(
-        pdf : ByteArray,
+        pdf: ByteArray,
         aktørId: AktørId,
-        correlationId: CorrelationId
+        correlationId: CorrelationId,
+        dokumentbeskrivelse: String
     ) : URI {
         return lagreDokument(
             dokument = DokumentGateway.Dokument(
                 content = pdf,
                 contentType = "application/pdf",
-                title = "Søknad om utbetaling av omsorgspenger"
+                title = dokumentbeskrivelse
             ),
             aktørId = aktørId,
             correlationId = correlationId
@@ -43,13 +45,31 @@ class DokumentService(
     internal suspend fun lagreSoknadsMelding(
         melding: MeldingV1,
         aktørId: AktørId,
-        correlationId: CorrelationId
+        correlationId: CorrelationId,
+        dokumentbeskrivelse: String
     ) : URI {
         return lagreDokument(
             dokument = DokumentGateway.Dokument(
                 content = Søknadsformat.somJson(melding),
                 contentType = "application/json",
-                title = "Søknad om utbetaling av omsorgspenger som JSON"
+                title = dokumentbeskrivelse
+            ),
+            aktørId = aktørId,
+            correlationId = correlationId
+        )
+    }
+
+    internal suspend fun lagreSoknadsMelding(
+        melding: ArbeidstakerutbetalingMelding,
+        aktørId: AktørId,
+        correlationId: CorrelationId,
+        dokumentbeskrivelse: String
+    ) : URI {
+        return lagreDokument(
+            dokument = DokumentGateway.Dokument(
+                content = Søknadsformat.somJson(melding),
+                contentType = "application/json",
+                title = dokumentbeskrivelse
             ),
             aktørId = aktørId,
             correlationId = correlationId

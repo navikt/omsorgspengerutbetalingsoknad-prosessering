@@ -9,6 +9,8 @@ import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.v1.MeldingV1
 import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
 import no.nav.k9.søknad.omsorgspenger.utbetaling.OmsorgspengerUtbetalingSøknad
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.PreprosessertArbeidstakerutbetalingMelding
 import org.apache.kafka.common.serialization.Deserializer
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.serialization.Serializer
@@ -17,6 +19,9 @@ import org.apache.kafka.common.serialization.StringSerializer
 data class TopicEntry<V>(val metadata: Metadata, val data: V)
 data class Cleanup(val metadata: Metadata, val melding: PreprossesertMeldingV1, val journalførtMelding: Journalfort)
 data class Journalfort(val journalpostId: String, val søknad: OmsorgspengerUtbetalingSøknad)
+
+data class ArbeidstakerutbetalingCleanup(val metadata: Metadata, val melding: PreprosessertArbeidstakerutbetalingMelding, val journalførtMelding: ArbeidstakerutbetalingJournalfort)
+data class ArbeidstakerutbetalingJournalfort(val journalpostId: String, val søknad: OmsorgspengerUtbetalingSøknad)
 
 internal data class Topic<V>(
     val name: String,
@@ -43,6 +48,22 @@ internal object Topics {
     val JOURNALFORT = Topic(
         name = "privat-omsorgspengerutbetalingsoknad-journalfort",
         serDes = JournalfortSerDes()
+    )
+    val ARBEIDSTAKERUTBETALING_MOTTATT = Topic(
+        name = "privat-oms-utbetalingsoknad-arbeidstaker-mottatt",
+        serDes = ArbeidstakerutbetalingMottattSoknadSerDes()
+    )
+    val ARBEIDSTAKERUTBETALING_PREPROSSESERT = Topic(
+        name = "privat-oms-utbetalingsoknad-arbeidstaker-preprossesert",
+        serDes = ArbeidstakerutbetalingPreprossesertSerDes()
+    )
+    val ARBEIDSTAKERUTBETALING_CLEANUP = Topic(
+        name = "privat-oms-utbetalingsoknad-arbeidstaker-cleanup",
+        serDes = ArbeidstakerutbetalingCleanupSerDes()
+    )
+    val ARBEIDSTAKERUTBETALING_JOURNALFORT = Topic(
+        name = "privat-oms-utbetalingsoknad-arbeidstaker-journalfort",
+        serDes = ArbeidstakerutbetalingJournalfortSerDes()
     )
 }
 
@@ -82,6 +103,35 @@ private class CleanupSerDes: SerDes<TopicEntry<Cleanup>>() {
 }
 private class JournalfortSerDes: SerDes<TopicEntry<Journalfort>>() {
     override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<Journalfort>? {
+        return data?.let {
+            objectMapper.readValue(it)
+        }
+    }
+}
+
+private class ArbeidstakerutbetalingMottattSoknadSerDes: SerDes<TopicEntry<ArbeidstakerutbetalingMelding>>() {
+    override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<ArbeidstakerutbetalingMelding>? {
+        return data?.let {
+            objectMapper.readValue<TopicEntry<ArbeidstakerutbetalingMelding>>(it)
+        }
+    }
+}
+private class ArbeidstakerutbetalingPreprossesertSerDes: SerDes<TopicEntry<PreprosessertArbeidstakerutbetalingMelding>>() {
+    override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<PreprosessertArbeidstakerutbetalingMelding>? {
+        return data?.let {
+            objectMapper.readValue(it)
+        }
+    }
+}
+private class ArbeidstakerutbetalingCleanupSerDes: SerDes<TopicEntry<ArbeidstakerutbetalingCleanup>>() {
+    override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<ArbeidstakerutbetalingCleanup>? {
+        return data?.let {
+            objectMapper.readValue(it)
+        }
+    }
+}
+private class ArbeidstakerutbetalingJournalfortSerDes: SerDes<TopicEntry<ArbeidstakerutbetalingJournalfort>>() {
+    override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<ArbeidstakerutbetalingJournalfort>? {
         return data?.let {
             objectMapper.readValue(it)
         }

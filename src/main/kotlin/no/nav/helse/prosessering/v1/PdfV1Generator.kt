@@ -11,6 +11,7 @@ import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import no.nav.helse.dusseldorf.ktor.core.fromResources
 import no.nav.helse.omsorgspengerKonfiguert
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.time.*
@@ -134,6 +135,53 @@ internal class PdfV1Generator {
         }
     }
 
+    internal fun generateSoknadOppsummeringPdf(
+        melding: ArbeidstakerutbetalingMelding
+    ): ByteArray {
+        val mottatt = melding.mottatt.toLocalDate()
+        soknadTemplate.apply(
+            Context
+                .newBuilder(
+                    mapOf(
+                        "søknad" to melding.somMap(),
+                        "språk" to melding.språk.sprakTilTekst(),
+                        "mottaksUkedag" to melding.mottatt.withZoneSameInstant(ZONE_ID).norskDag(),
+                        "søker" to mapOf(
+                            "formatertNavn" to melding.søker.formatertNavn()
+                        ),
+                        "medlemskap" to mapOf(
+                            "siste12" to melding.bosteder.any {
+                                it.fraOgMed.isBefore(mottatt) || it.tilOgMed.isEqual(mottatt)
+                            },
+                            "neste12" to melding.bosteder.any {
+                                it.fraOgMed.isEqual(mottatt) || it.fraOgMed.isAfter(mottatt)
+                            }
+                        ),
+                        "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
+                        "harOpphold" to melding.opphold.isNotEmpty(),
+                        "harBosteder" to melding.bosteder.isNotEmpty(),
+                        "bekreftelser" to melding.bekreftelser.bekreftelserSomMap()
+                    )
+                )
+                .resolver(MapValueResolver.INSTANCE)
+                .build()
+        ).let { html ->
+            val outputStream = ByteArrayOutputStream()
+
+            PdfRendererBuilder()
+                .useFastMode()
+                .withHtmlContent(html, "")
+                .medFonter()
+                .toStream(outputStream)
+                .buildPdfRenderer()
+                .createPDF()
+
+            return outputStream.use {
+                it.toByteArray()
+            }
+        }
+    }
+
     private fun PdfRendererBuilder.medFonter() =
         useFont(
             { ByteArrayInputStream(REGULAR_FONT) },
@@ -158,6 +206,12 @@ internal class PdfV1Generator {
             )
 
     private fun MeldingV1.somMap() = mapper.convertValue(
+        this,
+        object :
+            TypeReference<MutableMap<String, Any?>>() {}
+    )
+
+    private fun ArbeidstakerutbetalingMelding.somMap() = mapper.convertValue(
         this,
         object :
             TypeReference<MutableMap<String, Any?>>() {}

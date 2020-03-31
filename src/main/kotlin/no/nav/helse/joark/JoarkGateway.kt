@@ -21,6 +21,8 @@ import no.nav.helse.dusseldorf.ktor.health.UnHealthy
 import no.nav.helse.dusseldorf.ktor.metrics.Operation
 import no.nav.helse.dusseldorf.oauth2.client.AccessTokenClient
 import no.nav.helse.dusseldorf.oauth2.client.CachedAccessTokenClient
+import no.nav.helse.joark.Arbeidstype.ARBEIDSTAKER
+import no.nav.helse.joark.Arbeidstype.SELVSTENDIG_NÆRINGSDRIVENDE_OG_FRILANS
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
@@ -37,10 +39,16 @@ class JoarkGateway(
         private val logger: Logger = LoggerFactory.getLogger(JoarkGateway::class.java)
     }
 
-    private val completeUrl = Url.buildURL(
+    private val selvstendigNæringsdrivendeUrl = Url.buildURL(
         baseUrl = baseUrl,
         pathParts = listOf("v1", "omsorgspengeutbetaling", "journalforing"),
         queryParameters = mapOf("arbeidstype" to listOf("frilanser", "selvstendig næringsdrivende"))
+    ).toString()
+
+    private val arbeidstakerUrl = Url.buildURL(
+        baseUrl = baseUrl,
+        pathParts = listOf("v1", "omsorgspengeutbetaling", "journalforing"),
+        queryParameters = mapOf("arbeidstype" to listOf("arbeidstaker"))
     ).toString()
 
     private val objectMapper = configuredObjectMapper()
@@ -63,7 +71,8 @@ class JoarkGateway(
         navn: JoarkNavn,
         mottatt: ZonedDateTime,
         dokumenter: List<List<URI>>,
-        correlationId: CorrelationId
+        correlationId: CorrelationId,
+        arbeidstype: Arbeidstype
     ): JournalPostId {
 
         val authorizationHeader = cachedAccessTokenClient.getAccessToken(journalforeScopes).asAuthoriationHeader()
@@ -79,15 +88,26 @@ class JoarkGateway(
         val body = objectMapper.writeValueAsBytes(joarkRequest)
         val contentStream = { ByteArrayInputStream(body) }
 
-        val httpRequest = completeUrl
-            .httpPost()
-            .body(contentStream)
-            .header(
-                HttpHeaders.XCorrelationId to correlationId.value,
-                HttpHeaders.Authorization to authorizationHeader,
-                HttpHeaders.ContentType to "application/json",
-                HttpHeaders.Accept to "application/json"
-            )
+        val httpRequest = when (arbeidstype) {
+            SELVSTENDIG_NÆRINGSDRIVENDE_OG_FRILANS -> selvstendigNæringsdrivendeUrl
+                .httpPost()
+                .body(contentStream)
+                .header(
+                    HttpHeaders.XCorrelationId to correlationId.value,
+                    HttpHeaders.Authorization to authorizationHeader,
+                    HttpHeaders.ContentType to "application/json",
+                    HttpHeaders.Accept to "application/json"
+                )
+            ARBEIDSTAKER -> arbeidstakerUrl
+                .httpPost()
+                .body(contentStream)
+                .header(
+                    HttpHeaders.XCorrelationId to correlationId.value,
+                    HttpHeaders.Authorization to authorizationHeader,
+                    HttpHeaders.ContentType to "application/json",
+                    HttpHeaders.Accept to "application/json"
+                )
+        }
 
         val (request, response, result) = Operation.monitored(
             app = "omsorgspengerutbetalingsoknad-prosessering",
@@ -111,6 +131,11 @@ class JoarkGateway(
         objectMapper.registerModule(JavaTimeModule())
         return objectMapper
     }
+}
+
+enum class Arbeidstype {
+    SELVSTENDIG_NÆRINGSDRIVENDE_OG_FRILANS,
+    ARBEIDSTAKER
 }
 
 private data class JoarkRequest(

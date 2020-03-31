@@ -5,6 +5,8 @@ import no.nav.helse.aktoer.AktørId
 import no.nav.helse.dokument.DokumentService
 import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.SoknadId
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.PreprosessertArbeidstakerutbetalingMelding
 import org.slf4j.LoggerFactory
 
 internal class PreprosseseringV1Service(
@@ -37,8 +39,9 @@ internal class PreprosseseringV1Service(
         logger.info("Mellomlagrer Oppsummerings-PDF.")
         val soknadOppsummeringPdfUrl = dokumentService.lagreSoknadsOppsummeringPdf(
             pdf = soknadOppsummeringPdf,
+            aktørId = søkerAktørId,
             correlationId = correlationId,
-            aktørId = søkerAktørId
+            dokumentbeskrivelse = "Søknad om utbetaling av omsorgspenger - Selvstendig næringsdrivene og Frilanser"
         )
         logger.info("Mellomlagring av Oppsummerings-PDF OK")
 
@@ -47,7 +50,8 @@ internal class PreprosseseringV1Service(
         val soknadJsonUrl = dokumentService.lagreSoknadsMelding(
             melding = melding,
             aktørId = søkerAktørId,
-            correlationId = correlationId
+            correlationId = correlationId,
+            dokumentbeskrivelse = "Søknad om utbetaling av omsorgspenger - selvstendig næringsdrivende og frilanser som JSON"
         )
         logger.info("Mellomlagrer Oppsummerings-JSON OK.")
 
@@ -72,6 +76,61 @@ internal class PreprosseseringV1Service(
         melding.reportMetrics()
         preprossesertMeldingV1.reportMetrics()
         return preprossesertMeldingV1
+    }
+
+    internal suspend fun preprosseser(
+        melding: ArbeidstakerutbetalingMelding,
+        metadata: Metadata
+    ): PreprosessertArbeidstakerutbetalingMelding {
+        val søknadId = SoknadId(melding.søknadId)
+        logger.info("Preprosseserer $søknadId")
+
+        val correlationId = CorrelationId(metadata.correlationId)
+
+        val søkerAktørId = AktørId(melding.søker.aktørId)
+
+        logger.info("Søkerens AktørID = $søkerAktørId")
+
+        logger.info("Genererer Oppsummerings-PDF av søknaden.")
+        val soknadOppsummeringPdf = pdfV1Generator.generateSoknadOppsummeringPdf(melding)
+
+        logger.info("Generering av Oppsummerings-PDF OK.")
+
+        logger.info("Mellomlagrer Oppsummerings-PDF.")
+        val soknadOppsummeringPdfUrl = dokumentService.lagreSoknadsOppsummeringPdf(
+            pdf = soknadOppsummeringPdf,
+            aktørId = søkerAktørId,
+            correlationId = correlationId,
+            dokumentbeskrivelse = "Søknad om utbetaling av omsorgspenger - Arbeidstagere"
+        )
+        logger.info("Mellomlagring av Oppsummerings-PDF OK")
+
+        logger.info("Mellomlagrer Oppsummerings-JSON")
+
+        val soknadJsonUrl = dokumentService.lagreSoknadsMelding(
+            melding = melding,
+            aktørId = søkerAktørId,
+            correlationId = correlationId,
+            dokumentbeskrivelse = "Søknad om utbetaling av omsorgspenger - arbeidstager som JSON"
+        )
+        logger.info("Mellomlagrer Oppsummerings-JSON OK.")
+
+        val komplettDokumentUrls = mutableListOf(
+            listOf(
+                soknadOppsummeringPdfUrl,
+                soknadJsonUrl
+            )
+        )
+
+
+        val preprosessertArbeidstakerutbetalingMelding = PreprosessertArbeidstakerutbetalingMelding(
+            melding = melding,
+            dokumentUrls = komplettDokumentUrls.toList(),
+            søkerAktørId = søkerAktørId
+        )
+        //melding.reportMetrics()
+        //preprossesertMeldingV1.reportMetrics()
+        return preprosessertArbeidstakerutbetalingMelding
     }
 
 }

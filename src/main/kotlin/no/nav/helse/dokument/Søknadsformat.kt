@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.helse.dusseldorf.ktor.jackson.dusseldorfConfigured
 import no.nav.helse.prosessering.v1.MeldingV1
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
 
 class Søknadsformat {
     companion object {
@@ -20,6 +21,13 @@ class Søknadsformat {
             val node = objectMapper.valueToTree<ObjectNode>(meldingV1)
             node.remove("legeerklæring")
             node.remove("samværsavtale")
+            return objectMapper.writeValueAsBytes(node)
+        }
+
+        internal fun somJson(
+            melding: ArbeidstakerutbetalingMelding
+        ): ByteArray {
+            val node = objectMapper.valueToTree<ObjectNode>(melding)
             return objectMapper.writeValueAsBytes(node)
         }
     }
