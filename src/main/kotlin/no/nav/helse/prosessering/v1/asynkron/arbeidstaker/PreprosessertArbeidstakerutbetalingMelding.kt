@@ -2,7 +2,6 @@ package no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling
 
 import no.nav.helse.aktoer.AktørId
 import no.nav.helse.prosessering.v1.*
-import no.nav.k9.søknad.felles.Språk
 import java.net.URI
 import java.time.ZonedDateTime
 

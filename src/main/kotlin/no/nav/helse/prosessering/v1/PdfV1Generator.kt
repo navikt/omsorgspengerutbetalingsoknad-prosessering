@@ -24,6 +24,7 @@ internal class PdfV1Generator {
 
         private const val ROOT = "handlebars"
         private const val SOKNAD = "soknad"
+        private const val ARBEIDSTAKER_UTBETALING = "arbeidstakerutbetalingSoknad"
 
         private val REGULAR_FONT = "$ROOT/fonts/SourceSansPro-Regular.ttf".fromResources().readBytes()
         private val BOLD_FONT = "$ROOT/fonts/SourceSansPro-Bold.ttf".fromResources().readBytes()
@@ -65,6 +66,7 @@ internal class PdfV1Generator {
         }
 
         private val soknadTemplate = handlebars.compile(SOKNAD)
+        private val arbeidstakerutbetalingSoknadTemplateLoader = handlebars.compile(ARBEIDSTAKER_UTBETALING)
 
         private val ZONE_ID = ZoneId.of("Europe/Oslo")
         private val DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(ZONE_ID)
@@ -139,7 +141,7 @@ internal class PdfV1Generator {
         melding: ArbeidstakerutbetalingMelding
     ): ByteArray {
         val mottatt = melding.mottatt.toLocalDate()
-        soknadTemplate.apply(
+        arbeidstakerutbetalingSoknadTemplateLoader.apply(
             Context
                 .newBuilder(
                     mapOf(
@@ -157,6 +159,7 @@ internal class PdfV1Generator {
                                 it.fraOgMed.isEqual(mottatt) || it.fraOgMed.isAfter(mottatt)
                             }
                         ),
+                        "harArbeidsgivere" to melding.arbeidsgivere.organisasjoner.isNotEmpty(),
                         "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
