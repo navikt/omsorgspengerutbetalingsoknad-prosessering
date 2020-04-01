@@ -17,7 +17,7 @@ internal object ArbeidstakerutbetalingSøknadUtils {
     private val start = LocalDate.parse("2020-01-01")
     private const val GYLDIG_ORGNR = "917755736"
 
-    internal val defaultSøknad = ArbeidstakerutbetalingMelding(
+    internal val defaultArbeidstakerutbetalingMelding = ArbeidstakerutbetalingMelding(
         søknadId = UUID.randomUUID().toString(),
         språk = "nb",
         mottatt = ZonedDateTime.now(),
@@ -101,7 +101,7 @@ internal object ArbeidstakerutbetalingSøknadUtils {
 
     internal val defaultKomplettSøknad = PreprosessertArbeidstakerutbetalingMelding(
         søkerAktørId = AktørId("123456"),
-        melding = defaultSøknad,
+        melding = defaultArbeidstakerutbetalingMelding,
         dokumentUrls = listOf(
             listOf(URI("http://localhost:8080/vedlegg/1"), URI("http://localhost:8080/vedlegg/2")),
             listOf(URI("http://localhost:8080/vedlegg/3"), URI("http://localhost:8080/vedlegg/4"))

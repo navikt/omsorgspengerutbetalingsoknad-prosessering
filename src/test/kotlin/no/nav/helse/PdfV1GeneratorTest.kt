@@ -181,7 +181,7 @@ class PdfV1GeneratorTest {
 
         id = "2-full-søknad-arbeidstaker"
         pdf = generator.generateSoknadOppsummeringPdf(
-            melding =ArbeidstakerutbetalingSøknadUtils.defaultSøknad.copy(søknadId = id)
+            melding =ArbeidstakerutbetalingSøknadUtils.defaultArbeidstakerutbetalingMelding.copy(søknadId = id)
         )
         if (writeBytes) File(pdfPath(soknadId = id)).writeBytes(pdf)
 

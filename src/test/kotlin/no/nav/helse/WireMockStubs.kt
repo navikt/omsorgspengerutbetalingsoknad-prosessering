@@ -31,25 +31,49 @@ internal fun WireMockServer.stubSlettDokument(): WireMockServer {
     return this
 }
 
-internal fun WireMockServer.stubJournalfor(responseCode: Int = 201): WireMockServer {
+internal fun WireMockServer.stubJournalforFrilansSelvstendingNæringsdrivende(responseCode: Int = 201): WireMockServer {
     WireMock.stubFor(
         WireMock.post(
-                WireMock
-                .urlPathMatching(".*$k9JoarkBasePath/v1/omsorgspengeutbetaling/journalforing"))
-                .withQueryParam("arbeidstype", equalTo("frilanser"))
-                .withQueryParam("arbeidstype", equalTo("selvstendig næringsdrivende"))
-                .willReturn(
-                    WireMock.aResponse()
-                        .withHeader("Content-Type", "application/json")
-                        .withBody(
-                            """
+            WireMock
+                .urlPathMatching(".*$k9JoarkBasePath/v1/omsorgspengeutbetaling/journalforing")
+        )
+            .withQueryParam("arbeidstype", equalTo("frilanser"))
+            .withQueryParam("arbeidstype", equalTo("selvstendig næringsdrivende"))
+            .willReturn(
+                WireMock.aResponse()
+                    .withHeader("Content-Type", "application/json")
+                    .withBody(
+                        """
                             {
                                 "journal_post_id" : "9101112"
                             }
                             """.trimIndent()
-                        )
-                        .withStatus(responseCode)
+                    )
+                    .withStatus(responseCode)
+            )
+    )
+    return this
+}
+
+internal fun WireMockServer.stubJournalforArbeidstaker(responseCode: Int = 201): WireMockServer {
+    WireMock.stubFor(
+        WireMock.post(
+            WireMock
+                .urlPathMatching(".*$k9JoarkBasePath/v1/omsorgspengeutbetaling/journalforing")
         )
+            .withQueryParam("arbeidstype", equalTo("arbeidstaker"))
+            .willReturn(
+                WireMock.aResponse()
+                    .withHeader("Content-Type", "application/json")
+                    .withBody(
+                        """
+                            {
+                                "journal_post_id" : "9101112"
+                            }
+                            """.trimIndent()
+                    )
+                    .withStatus(responseCode)
+            )
     )
     return this
 }

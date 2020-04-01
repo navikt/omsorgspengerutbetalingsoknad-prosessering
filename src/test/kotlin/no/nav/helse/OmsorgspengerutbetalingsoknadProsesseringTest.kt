@@ -44,7 +44,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             .build()
             .stubK9DokumentHealth()
             .stubK9JoarkHealth()
-            .stubJournalfor()
+            .stubJournalforFrilansSelvstendingNæringsdrivende()
             .stubLagreDokument()
             .stubSlettDokument()
 
@@ -143,13 +143,13 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             fødselsnummerSoker = gyldigFodselsnummerA
         )
 
-        wireMockServer.stubJournalfor(500) // Simulerer feil ved journalføring
+        wireMockServer.stubJournalforFrilansSelvstendingNæringsdrivende(500) // Simulerer feil ved journalføring
 
         kafkaTestProducer.leggTilMottak(melding)
         ventPaaAtRetryMekanismeIStreamProsessering()
         readyGir200HealthGir503()
 
-        wireMockServer.stubJournalfor(201) // Simulerer journalføring fungerer igjen
+        wireMockServer.stubJournalforFrilansSelvstendingNæringsdrivende(201) // Simulerer journalføring fungerer igjen
         restartEngine()
         journalføringsKonsumer
             .hentJournalførtMelding(melding.søknadId)

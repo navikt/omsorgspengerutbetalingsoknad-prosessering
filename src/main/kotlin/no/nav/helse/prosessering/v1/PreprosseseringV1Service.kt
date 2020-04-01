@@ -5,6 +5,7 @@ import no.nav.helse.aktoer.AktørId
 import no.nav.helse.dokument.DokumentService
 import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.SoknadId
+import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.reportMetrics
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.PreprosessertArbeidstakerutbetalingMelding
 import org.slf4j.LoggerFactory
@@ -62,7 +63,6 @@ internal class PreprosseseringV1Service(
             )
         )
 
-
         melding.vedlegg.forEach { komplettDokumentUrls.add(listOf(it)) }
 
         logger.info("Totalt ${komplettDokumentUrls.size} dokumentbolker.")
@@ -115,6 +115,7 @@ internal class PreprosseseringV1Service(
         )
         logger.info("Mellomlagrer Oppsummerings-JSON OK.")
 
+
         val komplettDokumentUrls = mutableListOf(
             listOf(
                 soknadOppsummeringPdfUrl,
@@ -122,15 +123,14 @@ internal class PreprosseseringV1Service(
             )
         )
 
+        logger.info("Totalt ${komplettDokumentUrls.size} dokumentbolker.")
 
         val preprosessertArbeidstakerutbetalingMelding = PreprosessertArbeidstakerutbetalingMelding(
             melding = melding,
             dokumentUrls = komplettDokumentUrls.toList(),
             søkerAktørId = søkerAktørId
         )
-        //melding.reportMetrics()
-        //preprossesertMeldingV1.reportMetrics()
+        melding.reportMetrics()
         return preprosessertArbeidstakerutbetalingMelding
     }
-
 }
