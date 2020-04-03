@@ -159,14 +159,10 @@ class PdfV1GeneratorTest {
             ),
             fosterbarn = listOf(
                 FosterBarn(
-                    fødselsnummer = gyldigFodselsnummerB,
-                    fornavn = "Jarle",
-                    etternavn = "Nordmann"
+                    fødselsnummer = gyldigFodselsnummerB
                 ),
                 FosterBarn(
-                    fødselsnummer = gyldigFodselsnummerC,
-                    fornavn = "Sara",
-                    etternavn = "Nordmann"
+                    fødselsnummer = gyldigFodselsnummerC
                 )
             ),
             bekreftelser = Bekreftelser(

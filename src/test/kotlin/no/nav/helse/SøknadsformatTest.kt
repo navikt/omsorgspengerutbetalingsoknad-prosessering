@@ -92,9 +92,7 @@ class SøknadsformatTest {
             "frilans": null,
             "selvstendigVirksomheter": null,
             "fosterbarn": [{
-                "fødselsnummer": "02119970078",
-                "fornavn": "fornavn",
-                "etternavn": "etternavn"
+                "fødselsnummer": "02119970078"
             }],
             "bekreftelser": {
             "harBekreftetOpplysninger": true,
@@ -184,9 +182,7 @@ class SøknadsformatTest {
         andreUtbetalinger = listOf("dagpenger", "sykepenger"),
         fosterbarn = listOf(
             FosterBarn(
-                fødselsnummer = "02119970078",
-                fornavn = "fornavn",
-                etternavn = "etternavn"
+                fødselsnummer = "02119970078"
             )
         ),
         vedlegg = listOf(

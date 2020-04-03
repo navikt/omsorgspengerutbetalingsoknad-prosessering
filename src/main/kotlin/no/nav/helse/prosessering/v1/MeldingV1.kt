@@ -73,9 +73,7 @@ enum class JaNei (@get:JsonValue val boolean: Boolean) {
 }
 
 data class FosterBarn(
-    val fødselsnummer: String,
-    val fornavn: String,
-    val etternavn: String
+    val fødselsnummer: String
 )
 
 
