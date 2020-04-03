@@ -83,6 +83,7 @@ class SøknadsformatTest {
                 "tilOgMed": "2020-02-05",
                 "lengde": "PT5H30M"
             }],
+            "andreUtbetalinger": ["dagpenger", "sykepenger"],
             "vedlegg": [
                 "http://localhost:8080/vedlegg/1",
                 "http://localhost:8080/vedlegg/2",
@@ -180,6 +181,7 @@ class SøknadsformatTest {
                 lengde = Duration.ofHours(5).plusMinutes(30)
             )
         ),
+        andreUtbetalinger = listOf("dagpenger", "sykepenger"),
         fosterbarn = listOf(
             FosterBarn(
                 fødselsnummer = "02119970078",

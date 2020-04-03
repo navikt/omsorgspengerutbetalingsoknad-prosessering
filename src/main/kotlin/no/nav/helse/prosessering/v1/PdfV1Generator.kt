@@ -50,6 +50,9 @@ internal class PdfV1Generator {
             registerHelper("dato", Helper<String> { context, _ ->
                 DATE_FORMATTER.format(LocalDate.parse(context))
             })
+            registerHelper("storForbokstav", Helper<String> { context, _ ->
+                context.capitalize()
+            })
             registerHelper("tidspunkt", Helper<String> { context, _ ->
                 DATE_TIME_FORMATTER.format(ZonedDateTime.parse(context))
             })
@@ -106,6 +109,7 @@ internal class PdfV1Generator {
                         ),
                         "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
+                        "harSøktAndreYtelser" to melding.andreUtbetalinger?.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap()
                     )

@@ -14,6 +14,7 @@ data class PreprossesertMeldingV1(
     val spørsmål: List<SpørsmålOgSvar>,
     val dokumentUrls: List<List<URI>>,
     val utbetalingsperioder: List<Utbetalingsperiode>,
+    val andreUtbetalinger: List<String>?, //TODO: Fjern ? når dette er prodsatt.
     val fosterbarn: List<FosterBarn>? = listOf(),
     val frilans: Frilans? = null,
     val selvstendigVirksomheter: List<Virksomhet>? = null,
@@ -33,6 +34,7 @@ data class PreprossesertMeldingV1(
         spørsmål = melding.spørsmål,
         dokumentUrls = dokumentUrls,
         utbetalingsperioder = melding.utbetalingsperioder,
+        andreUtbetalinger = melding.andreUtbetalinger,
         fosterbarn = melding.fosterbarn,
         frilans = melding.frilans,
         selvstendigVirksomheter = melding.selvstendigVirksomheter,

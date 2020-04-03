@@ -301,6 +301,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                 lengde = Duration.ofHours(5).plusMinutes(30)
             )
         ),
+        andreUtbetalinger = listOf("dagpenger", "sykepenger"),
         fosterbarn = listOf(
             FosterBarn(
                 fødselsnummer = "02119970078",

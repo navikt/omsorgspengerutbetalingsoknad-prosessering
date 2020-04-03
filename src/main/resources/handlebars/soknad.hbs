@@ -109,11 +109,23 @@
         {{/each}}
     </ul>
 
+    <!-- Bekreftet andre utbetalinger -->
+    {{#if harSøktAndreYtelser}}
+        <h3>Søkt om andre ytelser</h3>
+    {{/if}}
+    <ul>
+        {{# each søknad.andreUtbetalinger as |utbetaling|}}
+            <li>
+                {{#storForbokstav utbetaling}}{{/storForbokstav}} <br/>
+            </li>
+        {{/each}}
+    </ul>
+
     <!-- SPØRSMÅL -->
     <h2><span>Spørsmål</span></h2>{{# each søknad.spørsmål as |s|}}
-        <p class="sporsmalstekst">{{s.spørsmål}}</p>
-        {{>jaNeiCheckbox parameter=s.svar}} <br/><br/>
-    {{/each}}
+    <p class="sporsmalstekst">{{s.spørsmål}}</p>
+    {{>jaNeiCheckbox parameter=s.svar}} <br/><br/>
+{{/each}}
 
     <!-- MEDLEMSKAP -->
     <h2><span>Medlemskap</span></h2>
