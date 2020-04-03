@@ -107,6 +107,7 @@ class PdfV1GeneratorTest {
                     lengde = Duration.ofHours(4).plusMinutes(30)
                 )
             ),
+            andreUtbetalinger = listOf("dagpenger", "sykepenger"),
             vedlegg = listOf(
                 URI("http://localhost:8080/vedlegg/1"),
                 URI("http://localhost:8080/vedlegg/2"),
@@ -158,14 +159,10 @@ class PdfV1GeneratorTest {
             ),
             fosterbarn = listOf(
                 FosterBarn(
-                    fødselsnummer = gyldigFodselsnummerB,
-                    fornavn = "Jarle",
-                    etternavn = "Nordmann"
+                    fødselsnummer = gyldigFodselsnummerB
                 ),
                 FosterBarn(
-                    fødselsnummer = gyldigFodselsnummerC,
-                    fornavn = "Sara",
-                    etternavn = "Nordmann"
+                    fødselsnummer = gyldigFodselsnummerC
                 )
             ),
             bekreftelser = Bekreftelser(
