@@ -109,6 +109,33 @@
         {{/each}}
     </ul>
 
+    <h2><span>Nåværende Arbeidssituasjon</span></h2>
+    <p class="sporsmalstekst">Hvor lenge har du jobbet hos den nåværende arbeidsgiveren din?</p>
+    {{#eqJaNei søknad.jobbHosNåværendeArbeidsgiver.merEnn4Uker "Ja"}}
+        <p>Søker oppgir at han/hun har jobbet mer enn 4 uker hos nåværende arbeidsgiver.</p><br/>
+    {{/eqJaNei}}
+
+    {{#eqJaNei søknad.jobbHosNåværendeArbeidsgiver.merEnn4Uker "Nei"}}
+        {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "ANNET_ARBEIDSFORHOLD"}}
+            <p>Søker oppgir at han/hun har jobbet mindre enn 4 uker hos nåværende arbeidsgiver, grunnet annet
+                arbeidsforhold.</p><br/>
+        {{/eq}}
+
+        {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "ANDRE_YTELSER"}}
+            <p>Søker oppgir at han/hun har jobbet mindre enn 4 uker hos nåværende arbeidsgiver, grunnet støtte om andre
+                ytelser fra NAV.</p><br/>
+
+        {{/eq}}
+        {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "LOVBESTEMT_FERIE_ELLER_ULØNNET_PERMISJON"}}
+            <p>Søker oppgir at han/hun har jobbet mindre enn 4 uker hos nåværende arbeidsgiver, grunnet lovbestemt
+                ferie eller ulønnet permisjon etter foreldrepenger.</p><br/>
+        {{/eq}}
+        {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "MILITÆRTJENESTE"}}
+            <p>Søker oppgir at han/hun har jobbet mindre enn 4 uker hos nåværende arbeidsgiver, grunnet
+                militærtjeneste.</p><br/>
+        {{/eq}}
+    {{/eqJaNei}}
+
     <h2><span>Arbeidsforhold</span></h2>
     <!-- ARBEIDSGIVERE -->
     {{# if harArbeidsgivere }}
@@ -120,7 +147,8 @@
                 <p class="sporsmalstekst">Har du hatt fravær hos gitt arbeidsgiver fordi du har brukt omsorgsdager?</p>
                 {{>jaNeiCheckbox parameter=org.harHattFraværHosArbeidsgiver}} <br/>
 
-                <p class="sporsmalstekst">Har arbeidsgiver utbetalt deg lønn for de dagene du har brukt omsorgsdager?</p>
+                <p class="sporsmalstekst">Har arbeidsgiver utbetalt deg lønn for de dagene du har brukt
+                    omsorgsdager?</p>
                 {{>jaNeiCheckbox parameter=org.arbeidsgiverHarUtbetaltLønn}} <br/><br/>
             </ul>
 

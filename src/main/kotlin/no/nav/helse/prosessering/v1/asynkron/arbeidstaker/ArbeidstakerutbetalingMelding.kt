@@ -1,6 +1,7 @@
 package no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling
 
 import no.nav.helse.prosessering.v1.*
+import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.JobbHosNåværendeArbeidsgiver
 import java.time.ZonedDateTime
 
 data class ArbeidstakerutbetalingMelding(
@@ -11,6 +12,7 @@ data class ArbeidstakerutbetalingMelding(
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
+    val jobbHosNåværendeArbeidsgiver: JobbHosNåværendeArbeidsgiver,
     val arbeidsgivere: ArbeidsgiverDetaljer,
     val bekreftelser: Bekreftelser,
     val utbetalingsperioder: List<Utbetalingsperiode>,

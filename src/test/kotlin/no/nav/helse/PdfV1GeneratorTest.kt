@@ -1,9 +1,9 @@
 package no.nav.helse
 
 import no.nav.helse.prosessering.v1.*
+import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.JobbHosNåværendeArbeidsgiver
 import org.junit.Ignore
 import java.io.File
-import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -182,6 +182,58 @@ class PdfV1GeneratorTest {
         id = "2-full-søknad-arbeidstaker"
         pdf = generator.generateSoknadOppsummeringPdf(
             melding =ArbeidstakerutbetalingSøknadUtils.defaultArbeidstakerutbetalingMelding.copy(søknadId = id)
+        )
+        if (writeBytes) File(pdfPath(soknadId = id)).writeBytes(pdf)
+
+
+        id = "3-full-søknad-arbeidstaker-annet-arbeidsforhold"
+        pdf = generator.generateSoknadOppsummeringPdf(
+            melding =ArbeidstakerutbetalingSøknadUtils.defaultArbeidstakerutbetalingMelding.copy(
+                søknadId = id,
+                jobbHosNåværendeArbeidsgiver = JobbHosNåværendeArbeidsgiver(
+                    merEnn4Uker = false,
+                    begrunnelse = JobbHosNåværendeArbeidsgiver.Begrunnelse.ANNET_ARBEIDSFORHOLD
+                )
+            )
+        )
+        if (writeBytes) File(pdfPath(soknadId = id)).writeBytes(pdf)
+
+
+        id = "4-full-søknad-arbeidstaker-andre-ytelser"
+        pdf = generator.generateSoknadOppsummeringPdf(
+            melding =ArbeidstakerutbetalingSøknadUtils.defaultArbeidstakerutbetalingMelding.copy(
+                søknadId = id,
+                jobbHosNåværendeArbeidsgiver = JobbHosNåværendeArbeidsgiver(
+                    merEnn4Uker = false,
+                    begrunnelse = JobbHosNåværendeArbeidsgiver.Begrunnelse.ANDRE_YTELSER
+                )
+            )
+        )
+        if (writeBytes) File(pdfPath(soknadId = id)).writeBytes(pdf)
+
+
+        id = "5-full-søknad-arbeidstaker-lovbestemt-ferie-eller-ulønnet-permisjon"
+        pdf = generator.generateSoknadOppsummeringPdf(
+            melding =ArbeidstakerutbetalingSøknadUtils.defaultArbeidstakerutbetalingMelding.copy(
+                søknadId = id,
+                jobbHosNåværendeArbeidsgiver = JobbHosNåværendeArbeidsgiver(
+                    merEnn4Uker = false,
+                    begrunnelse = JobbHosNåværendeArbeidsgiver.Begrunnelse.LOVBESTEMT_FERIE_ELLER_ULØNNET_PERMISJON
+                )
+            )
+        )
+        if (writeBytes) File(pdfPath(soknadId = id)).writeBytes(pdf)
+
+
+        id = "6-full-søknad-arbeidstaker-militærtjeneste"
+        pdf = generator.generateSoknadOppsummeringPdf(
+            melding =ArbeidstakerutbetalingSøknadUtils.defaultArbeidstakerutbetalingMelding.copy(
+                søknadId = id,
+                jobbHosNåværendeArbeidsgiver = JobbHosNåværendeArbeidsgiver(
+                    merEnn4Uker = false,
+                    begrunnelse = JobbHosNåværendeArbeidsgiver.Begrunnelse.MILITÆRTJENESTE
+                )
+            )
         )
         if (writeBytes) File(pdfPath(soknadId = id)).writeBytes(pdf)
 

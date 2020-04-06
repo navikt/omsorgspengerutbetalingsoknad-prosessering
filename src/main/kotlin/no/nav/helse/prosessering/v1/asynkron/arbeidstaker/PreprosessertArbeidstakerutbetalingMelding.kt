@@ -2,6 +2,7 @@ package no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling
 
 import no.nav.helse.aktoer.AktørId
 import no.nav.helse.prosessering.v1.*
+import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.JobbHosNåværendeArbeidsgiver
 import java.net.URI
 import java.time.ZonedDateTime
 
@@ -14,6 +15,7 @@ data class PreprosessertArbeidstakerutbetalingMelding(
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
+    val jobbHosNåværendeArbeidsgiver: JobbHosNåværendeArbeidsgiver,
     val utbetalingsperioder: List<Utbetalingsperiode>,
     val fosterbarn: List<FosterBarn>? = listOf(),
     val bekreftelser: Bekreftelser,
@@ -28,6 +30,7 @@ data class PreprosessertArbeidstakerutbetalingMelding(
         mottatt = melding.mottatt,
         språk = melding.språk,
         søker = PreprossesertSøker(melding.søker, søkerAktørId),
+        jobbHosNåværendeArbeidsgiver = melding.jobbHosNåværendeArbeidsgiver,
         arbeidsgivere = melding.arbeidsgivere,
         bosteder = melding.bosteder,
         opphold = melding.opphold,

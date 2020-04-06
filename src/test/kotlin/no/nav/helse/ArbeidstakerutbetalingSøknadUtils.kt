@@ -3,6 +3,7 @@ package no.nav.helse
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.helse.aktoer.AktørId
 import no.nav.helse.prosessering.v1.*
+import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.JobbHosNåværendeArbeidsgiver
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidsgiverDetaljer
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.OrganisasjonDetaljer
@@ -28,6 +29,10 @@ internal object ArbeidstakerutbetalingSøknadUtils {
             etternavn = "Nordmann",
             mellomnavn = null,
             fornavn = "Ola"
+        ),
+        jobbHosNåværendeArbeidsgiver = JobbHosNåværendeArbeidsgiver(
+            merEnn4Uker = true,
+            begrunnelse = JobbHosNåværendeArbeidsgiver.Begrunnelse.ANNET_ARBEIDSFORHOLD
         ),
         arbeidsgivere = ArbeidsgiverDetaljer(
             organisasjoner = listOf(

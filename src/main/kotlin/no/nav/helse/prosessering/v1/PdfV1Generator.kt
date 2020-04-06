@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.jknack.handlebars.Context
 import com.github.jknack.handlebars.Handlebars
 import com.github.jknack.handlebars.Helper
+import com.github.jknack.handlebars.Options
 import com.github.jknack.handlebars.context.MapValueResolver
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
@@ -37,6 +38,13 @@ internal class PdfV1Generator {
             })
             registerHelper("eq", Helper<String> { context, options ->
                 if (context == options.param(0)) options.fn() else options.inverse()
+            })
+            registerHelper("eqJaNei", { context: Boolean, options ->
+                val con = when(context) {
+                    true -> "Ja"
+                    false -> "Nei"
+                }
+                if (con == options.param(0)) options.fn() else options.inverse()
             })
             registerHelper("enumNæringstyper", Helper<String> { context, options ->
                 Næringstyper.valueOf(context).beskrivelse
