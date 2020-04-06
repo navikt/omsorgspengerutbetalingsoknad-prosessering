@@ -17,9 +17,9 @@ private val frilansCounter = Counter.build()
     .help("Teller for frilans")
     .register()
 
-private val selvstendigNæringsdrivendeCounter = Counter.build()
-    .name("selvstendigNaringsdrivendeCounter")
-    .help("Teller for selvstendig næringsdrivende")
+private val virksomhetsCounter = Counter.build()
+    .name("virksomhetsCounter")
+    .help("Teller for virksomheter pr. søknad.")
     .labelNames(
         "naringstyper",
         "fiskerErPaBladB",
@@ -29,6 +29,16 @@ private val selvstendigNæringsdrivendeCounter = Counter.build()
         "harVarigEndring",
         "nyligOppstartetVirksomhet"
     )
+    .register()
+
+private val frilansVsSelvstendingNæringsdrivende = Counter.build()
+    .name("selvstendigNaringsdrivendeOgFrilans")
+    .help("Teller for selvstending næringsdrivende og frilans")
+    .register()
+
+private val selvstendigVirksomhetCounter = Counter.build()
+    .name("selvstendigNaringsdrivendeCounter")
+    .help("Teller for selvstending næringsdrivende")
     .register()
 
 
@@ -54,34 +64,32 @@ internal fun MeldingV1.reportMetrics() {
     ).inc()
 
     antallUtbetalingsperioderCounter.labels(
-            this.utbetalingsperioder.size.toString(),
-            this.utbetalingsperioder.tilAntallHeleDager().toString(),
-            this.utbetalingsperioder.tilAntallDelDager().toString()
-        )
-        .inc()
+        this.utbetalingsperioder.size.toString(),
+        this.utbetalingsperioder.tilAntallHeleDager().toString(),
+        this.utbetalingsperioder.tilAntallDelDager().toString()
+    ).inc()
 
+    when {
+        frilans != null && selvstendigVirksomheter == null -> frilansCounter.inc()
+        selvstendigVirksomheter != null && frilans == null -> {
+            selvstendigVirksomhetCounter.inc()
 
-    frilans?.apply {
-        frilansCounter.inc()
-    }
-
-    selvstendigVirksomheter?.apply {
-
-        this.forEach {
-            val næringsTypeSomString = it.næringstyper.sortedDescending().joinToString(" , ")
-
-            selvstendigNæringsdrivendeCounter
-                .labels(
-                    næringsTypeSomString,
-                    it.fiskerErPåBladB?.boolean?.tilJaEllerNei()?: "Nei",
-                    it.registrertINorge.boolean.tilJaEllerNei(),
-                    if (it.regnskapsfører == null) "Nei" else "Ja",
-                    if (it.revisor == null) "Nei" else "Ja",
-                    if (it.varigEndring == null) "Nei" else "Ja",
-                    if (it.yrkesaktivSisteTreFerdigliknedeÅrene == null) "Nei" else "Ja"
-                )
-                .inc()
+            selvstendigVirksomheter.forEach {
+                val næringsTypeSomString = it.næringstyper.sortedDescending().joinToString(" , ")
+                virksomhetsCounter
+                    .labels(
+                        næringsTypeSomString,
+                        it.fiskerErPåBladB?.boolean?.tilJaEllerNei() ?: "Nei",
+                        it.registrertINorge.boolean.tilJaEllerNei(),
+                        if (it.regnskapsfører == null) "Nei" else "Ja",
+                        if (it.revisor == null) "Nei" else "Ja",
+                        if (it.varigEndring == null) "Nei" else "Ja",
+                        if (it.yrkesaktivSisteTreFerdigliknedeÅrene == null) "Nei" else "Ja"
+                    )
+                    .inc()
+            }
         }
+        else -> frilansVsSelvstendingNæringsdrivende.inc()
     }
 }
 
@@ -105,7 +113,7 @@ fun List<Utbetalingsperiode>.tilAntallDelDager(): Double {
     var antallDelDager = 0L
     filter { it.lengde !== null }
     map {
-        antallDelDager += TimeUnit.HOURS.toDays(it.lengde?.toHours()?: 0)
+        antallDelDager += TimeUnit.HOURS.toDays(it.lengde?.toHours() ?: 0)
     }
     return antallDelDager.toDouble()
 }
