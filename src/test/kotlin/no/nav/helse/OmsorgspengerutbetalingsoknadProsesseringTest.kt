@@ -354,7 +354,8 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                     telefon = "65484578"
                 )
             )
-        )
+        ),
+        erArbeidstakerOgså = true
     )
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }

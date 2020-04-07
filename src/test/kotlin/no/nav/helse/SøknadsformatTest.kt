@@ -91,6 +91,7 @@ class SøknadsformatTest {
             ],
             "frilans": null,
             "selvstendigVirksomheter": null,
+            "erArbeidstakerOgså": true,
             "fosterbarn": [{
                 "fødselsnummer": "02119970078"
             }],
@@ -193,6 +194,7 @@ class SøknadsformatTest {
         bekreftelser = Bekreftelser(
             harBekreftetOpplysninger = JaNei.Ja,
             harForståttRettigheterOgPlikter = JaNei.Ja
-        )
+        ),
+        erArbeidstakerOgså = true
     )
 }

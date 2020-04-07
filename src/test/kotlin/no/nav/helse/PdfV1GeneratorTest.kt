@@ -168,7 +168,8 @@ class PdfV1GeneratorTest {
             bekreftelser = Bekreftelser(
                 harBekreftetOpplysninger = JaNei.Ja,
                 harForståttRettigheterOgPlikter = JaNei.Ja
-            )
+            ),
+            erArbeidstakerOgså = true
         )
     }
 

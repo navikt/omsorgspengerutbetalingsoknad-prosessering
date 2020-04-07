@@ -31,9 +31,24 @@ private val virksomhetsCounter = Counter.build()
     )
     .register()
 
-private val frilansVsSelvstendingNæringsdrivende = Counter.build()
+private val selvstendigNæringsdrivendeOgFrilans = Counter.build()
     .name("selvstendigNaringsdrivendeOgFrilans")
     .help("Teller for selvstending næringsdrivende og frilans")
+    .register()
+
+private val selvstendigNæringsdrivendeFrilansOgArbeidstaker = Counter.build()
+    .name("selvstendigNaringsdrivendeFrilansOgArbeidstaker")
+    .help("Teller for selvstending næringsdrivende, frilans og arbeidstaker")
+    .register()
+
+private val selvstendingNæringsdrivendeOgArbeidstaker = Counter.build()
+    .name("selvstendigNaringsdrivendeOgArbeidstaker")
+    .help("Teller for selvstending næringsdrivende og arbeidstaker")
+    .register()
+
+private val frilansOgArbeidstaker = Counter.build()
+    .name("frilansOgArbeidstaker")
+    .help("Teller for frilans og arbeidstaker")
     .register()
 
 private val selvstendigVirksomhetCounter = Counter.build()
@@ -70,28 +85,57 @@ internal fun MeldingV1.reportMetrics() {
     ).inc()
 
     when {
-        frilans != null && selvstendigVirksomheter == null -> frilansCounter.inc()
-        selvstendigVirksomheter != null && frilans == null -> {
+        erFrilanser() -> frilansCounter.inc()
+        erSelvstendigNæringsdrivende() -> {
             selvstendigVirksomhetCounter.inc()
-
-            selvstendigVirksomheter.forEach {
-                val næringsTypeSomString = it.næringstyper.sortedDescending().joinToString(" , ")
-                virksomhetsCounter
-                    .labels(
-                        næringsTypeSomString,
-                        it.fiskerErPåBladB?.boolean?.tilJaEllerNei() ?: "Nei",
-                        it.registrertINorge.boolean.tilJaEllerNei(),
-                        if (it.regnskapsfører == null) "Nei" else "Ja",
-                        if (it.revisor == null) "Nei" else "Ja",
-                        if (it.varigEndring == null) "Nei" else "Ja",
-                        if (it.yrkesaktivSisteTreFerdigliknedeÅrene == null) "Nei" else "Ja"
-                    )
-                    .inc()
-            }
+            virksomheterMetric()
         }
-        else -> frilansVsSelvstendingNæringsdrivende.inc()
+        erFrilanserOgSelvstendigNæringsdrivende() -> selvstendigNæringsdrivendeOgFrilans.inc()
+        erFrilanserOgArbeidstaker() -> frilansOgArbeidstaker.inc()
+        erSelvstendingNæringsdrivendeOgArbeidstaker() -> {
+            selvstendingNæringsdrivendeOgArbeidstaker.inc()
+            virksomheterMetric()
+        }
+        erSelvstendingNæringsdrivendeFrilansOgArbeidstaker() -> {
+            selvstendigNæringsdrivendeFrilansOgArbeidstaker.inc()
+            virksomheterMetric()
+        }
     }
 }
+
+private fun MeldingV1.virksomheterMetric() {
+
+    selvstendigVirksomheter?.forEach {
+        val næringsTypeSomString = it.næringstyper.sortedDescending().joinToString(" , ")
+        virksomhetsCounter
+            .labels(
+                næringsTypeSomString,
+                it.fiskerErPåBladB?.boolean?.tilJaEllerNei() ?: "Nei",
+                it.registrertINorge.boolean.tilJaEllerNei(),
+                if (it.regnskapsfører == null) "Nei" else "Ja",
+                if (it.revisor == null) "Nei" else "Ja",
+                if (it.varigEndring == null) "Nei" else "Ja",
+                if (it.yrkesaktivSisteTreFerdigliknedeÅrene == null) "Nei" else "Ja"
+            )
+            .inc()
+    }
+}
+
+private fun MeldingV1.erFrilanser() = selvstendigVirksomheter == null && frilans != null && !erArbeidstakerOgså
+private fun MeldingV1.erSelvstendigNæringsdrivende() =
+    selvstendigVirksomheter != null && frilans == null && !erArbeidstakerOgså
+
+private fun MeldingV1.erFrilanserOgSelvstendigNæringsdrivende() =
+    selvstendigVirksomheter != null && frilans != null && !erArbeidstakerOgså
+
+private fun MeldingV1.erFrilanserOgArbeidstaker() =
+    selvstendigVirksomheter == null && frilans != null && erArbeidstakerOgså
+
+private fun MeldingV1.erSelvstendingNæringsdrivendeOgArbeidstaker() =
+    selvstendigVirksomheter != null && frilans == null && erArbeidstakerOgså
+
+private fun MeldingV1.erSelvstendingNæringsdrivendeFrilansOgArbeidstaker() =
+    selvstendigVirksomheter != null && frilans != null && erArbeidstakerOgså
 
 private fun List<Utbetalingsperiode>.søkerBareOmTimer(): String {
     val antallTimePerioder = filter { it.lengde !== null }

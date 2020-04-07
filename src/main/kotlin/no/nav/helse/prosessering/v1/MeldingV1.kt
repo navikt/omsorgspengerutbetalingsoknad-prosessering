@@ -22,6 +22,7 @@ data class MeldingV1(
     val vedlegg: List<URI>,
     val frilans: Frilans? = null,
     val selvstendigVirksomheter: List<Virksomhet>? = null,
+    val erArbeidstakerOgså: Boolean,
     val bekreftelser: Bekreftelser
 )
 
