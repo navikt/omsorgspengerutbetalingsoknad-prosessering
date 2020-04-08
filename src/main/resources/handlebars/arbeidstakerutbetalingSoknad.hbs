@@ -109,30 +109,26 @@
         {{/each}}
     </ul>
 
-    <h2><span>Nåværende Arbeidssituasjon</span></h2>
-    <p class="sporsmalstekst">Hvor lenge har du jobbet hos den nåværende arbeidsgiveren din?</p>
+    <h2><span>Arbeidssituasjon</span></h2>
+    <p class="sporsmalstekst">Hvor lenge har du jobbet hos arbeidsgiveren din?</p>
     {{#eqJaNei søknad.jobbHosNåværendeArbeidsgiver.merEnn4Uker "Ja"}}
-        <p>Søker oppgir at han/hun har jobbet mer enn 4 uker hos nåværende arbeidsgiver.</p><br/>
+        <p>Søker opplyser å ha jobbet mer enn 4 uker hos arbeidsgiver</p><br/>
     {{/eqJaNei}}
 
     {{#eqJaNei søknad.jobbHosNåværendeArbeidsgiver.merEnn4Uker "Nei"}}
         {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "ANNET_ARBEIDSFORHOLD"}}
-            <p>Søker oppgir at han/hun har jobbet mindre enn 4 uker hos nåværende arbeidsgiver, grunnet annet
-                arbeidsforhold.</p><br/>
+            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av bytte av arbeidsgiver.</p><br/>
         {{/eq}}
 
         {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "ANDRE_YTELSER"}}
-            <p>Søker oppgir at han/hun har jobbet mindre enn 4 uker hos nåværende arbeidsgiver, grunnet støtte om andre
-                ytelser fra NAV.</p><br/>
+            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av at han/hun har mottatt annen stønad fra NAV.</p><br/>
 
         {{/eq}}
         {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "LOVBESTEMT_FERIE_ELLER_ULØNNET_PERMISJON"}}
-            <p>Søker oppgir at han/hun har jobbet mindre enn 4 uker hos nåværende arbeidsgiver, grunnet lovbestemt
-                ferie eller ulønnet permisjon etter foreldrepenger.</p><br/>
+            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av lovbestemt ferie/ulønnet permisjon etter å ha mottatt Foreldrepenger.</p><br/>
         {{/eq}}
         {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "MILITÆRTJENESTE"}}
-            <p>Søker oppgir at han/hun har jobbet mindre enn 4 uker hos nåværende arbeidsgiver, grunnet
-                militærtjeneste.</p><br/>
+            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av at han/hun har vært i militærtjeneste.</p><br/>
         {{/eq}}
     {{/eqJaNei}}
 
