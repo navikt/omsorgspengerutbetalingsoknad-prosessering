@@ -18,6 +18,7 @@ data class PreprossesertMeldingV1(
     val fosterbarn: List<FosterBarn>? = listOf(),
     val frilans: Frilans? = null,
     val selvstendigVirksomheter: List<Virksomhet>? = null,
+    val hjemmePgaSmittevernhensyn: Boolean,
     val bekreftelser: Bekreftelser
 ) {
     internal constructor(
@@ -38,6 +39,7 @@ data class PreprossesertMeldingV1(
         fosterbarn = melding.fosterbarn,
         frilans = melding.frilans,
         selvstendigVirksomheter = melding.selvstendigVirksomheter,
+        hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn,
         bekreftelser = melding.bekreftelser
     )
 }

@@ -95,6 +95,7 @@ class SøknadsformatTest {
             "fosterbarn": [{
                 "fødselsnummer": "02119970078"
             }],
+            "hjemmePgaSmittevernhensyn": true,
             "bekreftelser": {
             "harBekreftetOpplysninger": true,
             "harForståttRettigheterOgPlikter": true
@@ -195,6 +196,7 @@ class SøknadsformatTest {
             harBekreftetOpplysninger = JaNei.Ja,
             harForståttRettigheterOgPlikter = JaNei.Ja
         ),
-        erArbeidstakerOgså = true
+        erArbeidstakerOgså = true,
+        hjemmePgaSmittevernhensyn = true
     )
 }

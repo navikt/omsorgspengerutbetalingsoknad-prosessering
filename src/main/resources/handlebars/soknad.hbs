@@ -72,6 +72,16 @@
     </div>
     <br/>
 
+    {{#if søknad.hjemmePgaSmittevernhensyn}}
+        <h2><span>Særlige Smittevernensyn</span></h2>
+        <ul>
+            <li><p class="sporsmalstekst">Søker opplyser å være hjemme med barn grunnet smittevernhensyn</p></li>
+            {{#if ikkeHarSendtInnVedlegg}}
+                <li><p class="sporsmalstekst">Vedlegg ikke lastet opp. Må ettersendes.</p></li>
+            {{/if}}
+        </ul>
+    {{/if}}
+
     <!-- UTBETALINGSPERIODER -->
     <h2><span>Utbetalingsperioder</span></h2>
     <ul>

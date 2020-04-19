@@ -23,6 +23,7 @@ data class MeldingV1(
     val frilans: Frilans? = null,
     val selvstendigVirksomheter: List<Virksomhet>? = null,
     val erArbeidstakerOgså: Boolean,
+    val hjemmePgaSmittevernhensyn: Boolean,
     val bekreftelser: Bekreftelser
 )
 

@@ -355,7 +355,8 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                 )
             )
         ),
-        erArbeidstakerOgså = true
+        erArbeidstakerOgså = true,
+        hjemmePgaSmittevernhensyn = true
     )
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }

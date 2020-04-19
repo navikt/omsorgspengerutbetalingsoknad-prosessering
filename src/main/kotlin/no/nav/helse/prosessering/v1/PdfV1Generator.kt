@@ -110,6 +110,7 @@ internal class PdfV1Generator {
                         "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harSøktAndreYtelser" to melding.andreUtbetalinger?.isNotEmpty(),
+                        "ikkeHarSendtInnVedlegg" to melding.vedlegg.isEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap()
                     )
@@ -155,34 +156,6 @@ internal class PdfV1Generator {
                 BaseRendererBuilder.FontStyle.ITALIC,
                 false
             )
-
-    private fun List<Virksomhet>.somMapVirksomheter(): List<Map<String, Any?>> {
-        return map {
-            mapOf(
-                "navnPåVirksomheten" to it.navnPåVirksomheten,
-                "næringstype" to it.næringstyper.map {
-                    mapOf("detaljer" to it.beskrivelse)
-                },
-                "fiskerErPåBladB" to it.fiskerErPåBladB,
-                "fraOgMed" to it.fraOgMed,
-                "tilOgMed" to it.tilOgMed,
-                "næringsinntekt" to it.næringsinntekt,
-                "registrertINorge" to it.registrertINorge,
-                "organisasjonsnummer" to it.organisasjonsnummer,
-                "registrertILand" to it.registrertILand,
-                "yrkesaktivSisteTreFerdigliknedeÅrene" to it.yrkesaktivSisteTreFerdigliknedeÅrene?.oppstartsdato,
-                "varigEndring" to it.varigEndring,
-                "regnskapsfører" to it.regnskapsfører,
-                "revisor" to it.revisor
-            )
-        }
-    }
-
-    private fun List<Næringstyper>.somMapNæringstyper() {
-        map {
-            mapOf("detaljer" to it.beskrivelse)
-        }
-    }
 
     private fun MeldingV1.somMap() = mapper.convertValue(
         this,

@@ -109,9 +109,6 @@ class PdfV1GeneratorTest {
             ),
             andreUtbetalinger = listOf("dagpenger", "sykepenger"),
             vedlegg = listOf(
-                URI("http://localhost:8080/vedlegg/1"),
-                URI("http://localhost:8080/vedlegg/2"),
-                URI("http://localhost:8080/vedlegg/3")
             ),
             frilans = Frilans(
                 startdato = LocalDate.now().minusYears(3),
@@ -169,7 +166,8 @@ class PdfV1GeneratorTest {
                 harBekreftetOpplysninger = JaNei.Ja,
                 harForståttRettigheterOgPlikter = JaNei.Ja
             ),
-            erArbeidstakerOgså = true
+            erArbeidstakerOgså = true,
+            hjemmePgaSmittevernhensyn = true
         )
     }
 

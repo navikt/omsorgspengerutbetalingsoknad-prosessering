@@ -85,17 +85,25 @@ internal fun MeldingV1.reportMetrics() {
     ).inc()
 
     when {
-        erFrilanser() -> frilansCounter.inc()
+        erFrilanser() ->
+            frilansCounter.inc()
+
         erSelvstendigNæringsdrivende() -> {
             selvstendigVirksomhetCounter.inc()
             virksomheterMetric()
         }
-        erFrilanserOgSelvstendigNæringsdrivende() -> selvstendigNæringsdrivendeOgFrilans.inc()
-        erFrilanserOgArbeidstaker() -> frilansOgArbeidstaker.inc()
+
+        erFrilanserOgSelvstendigNæringsdrivende() ->
+            selvstendigNæringsdrivendeOgFrilans.inc()
+
+        erFrilanserOgArbeidstaker() ->
+            frilansOgArbeidstaker.inc()
+
         erSelvstendingNæringsdrivendeOgArbeidstaker() -> {
             selvstendingNæringsdrivendeOgArbeidstaker.inc()
             virksomheterMetric()
         }
+
         erSelvstendingNæringsdrivendeFrilansOgArbeidstaker() -> {
             selvstendigNæringsdrivendeFrilansOgArbeidstaker.inc()
             virksomheterMetric()
@@ -121,15 +129,15 @@ private fun MeldingV1.virksomheterMetric() {
     }
 }
 
-private fun MeldingV1.erFrilanser() = selvstendigVirksomheter == null && frilans != null && !erArbeidstakerOgså
+private fun MeldingV1.erFrilanser() = selvstendigVirksomheter == null && frilans != null && erArbeidstakerOgså == false
 private fun MeldingV1.erSelvstendigNæringsdrivende() =
-    selvstendigVirksomheter != null && frilans == null && !erArbeidstakerOgså
+    selvstendigVirksomheter != null && frilans == null && erArbeidstakerOgså == false
 
 private fun MeldingV1.erFrilanserOgSelvstendigNæringsdrivende() =
-    selvstendigVirksomheter != null && frilans != null && !erArbeidstakerOgså
+    selvstendigVirksomheter != null && frilans != null && erArbeidstakerOgså == false
 
 private fun MeldingV1.erFrilanserOgArbeidstaker() =
-    selvstendigVirksomheter == null && frilans != null && erArbeidstakerOgså
+    selvstendigVirksomheter == null && frilans != null && erArbeidstakerOgså == true
 
 private fun MeldingV1.erSelvstendingNæringsdrivendeOgArbeidstaker() =
     selvstendigVirksomheter != null && frilans == null && erArbeidstakerOgså
