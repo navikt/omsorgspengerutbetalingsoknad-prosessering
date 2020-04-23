@@ -97,9 +97,7 @@ internal object ArbeidstakerutbetalingSøknadUtils {
         ),
         fosterbarn = listOf(
             FosterBarn(
-                fødselsnummer = "02119970078",
-                fornavn = "fornavn",
-                etternavn = "etternavn"
+                fødselsnummer = "02119970078"
             )
         ),
         titler = listOf(
