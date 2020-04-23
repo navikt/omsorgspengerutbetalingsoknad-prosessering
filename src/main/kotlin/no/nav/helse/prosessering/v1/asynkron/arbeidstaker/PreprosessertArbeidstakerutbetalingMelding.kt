@@ -19,7 +19,8 @@ data class PreprosessertArbeidstakerutbetalingMelding(
     val utbetalingsperioder: List<Utbetalingsperiode>,
     val fosterbarn: List<FosterBarn>? = listOf(),
     val bekreftelser: Bekreftelser,
-    val dokumentUrls: List<List<URI>>
+    val dokumentUrls: List<List<URI>>,
+    val titler: List<String>
 ) {
     internal constructor(
         melding: ArbeidstakerutbetalingMelding,
@@ -38,6 +39,7 @@ data class PreprosessertArbeidstakerutbetalingMelding(
         utbetalingsperioder = melding.utbetalingsperioder,
         fosterbarn = melding.fosterbarn,
         bekreftelser = melding.bekreftelser,
-        dokumentUrls = dokumentUrls
+        dokumentUrls = dokumentUrls,
+        titler = melding.titler
     )
 }

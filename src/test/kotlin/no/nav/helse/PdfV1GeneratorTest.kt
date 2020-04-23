@@ -4,6 +4,7 @@ import no.nav.helse.prosessering.v1.*
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.JobbHosNåværendeArbeidsgiver
 import org.junit.Ignore
 import java.io.File
+import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime

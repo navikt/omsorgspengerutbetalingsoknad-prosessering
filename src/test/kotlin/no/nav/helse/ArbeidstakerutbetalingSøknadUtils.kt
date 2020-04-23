@@ -101,7 +101,14 @@ internal object ArbeidstakerutbetalingSøknadUtils {
                 fornavn = "fornavn",
                 etternavn = "etternavn"
             )
+        ),
+        titler = listOf(
+            "vedlegg1"
+        ),
+        vedleggUrls = listOf(
+            URI("http://localhost.com/vedlegg1")
         )
+
     )
 
     internal val defaultKomplettSøknad = PreprosessertArbeidstakerutbetalingMelding(

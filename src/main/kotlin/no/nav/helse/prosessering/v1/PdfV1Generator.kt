@@ -15,6 +15,7 @@ import no.nav.helse.omsorgspengerKonfiguert
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.net.URI
 import java.time.*
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -171,7 +172,13 @@ internal class PdfV1Generator {
                         "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
-                        "bekreftelser" to melding.bekreftelser.bekreftelserSomMap()
+                        "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
+                        "titler" to mapOf(
+                            "vedlegg" to melding.titler?.somMapTitler()
+                        ),
+                        "vedleggUrls" to mapOf(
+                            "vedlegg" to melding.vedleggUrls.somMapVedleggUrls()
+                        )
                     )
                 )
                 .resolver(MapValueResolver.INSTANCE)
@@ -240,6 +247,22 @@ private fun Bekreftelser.bekreftelserSomMap(): Map<String, Boolean> {
 private fun Duration.tilString(): String = when (this.toMinutesPart()) {
     0 -> "${this.toHoursPart()} timer"
     else -> "${this.toHoursPart()} timer og ${this.toMinutesPart()} minutter"
+}
+
+private fun List<URI>.somMapVedleggUrls(): List<Map<String, Any?>> {
+    return map {
+        mapOf(
+            "navn" to it
+        )
+    }
+}
+
+private fun List<String>.somMapTitler(): List<Map<String, Any?>> {
+    return map {
+        mapOf(
+            "tittel" to it
+        )
+    }
 }
 
 private fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
