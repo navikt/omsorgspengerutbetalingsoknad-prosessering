@@ -323,7 +323,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                 tilOgMed = LocalDate.now().plusDays(10),
                 navnPåVirksomheten = "Kjells Møbelsnekkeri",
                 registrertINorge = JaNei.Ja,
-                organisasjonsnummer = "111111",
+                organisasjonsnummer = "922171920",
                 varigEndring = VarigEndring(
                     dato = LocalDate.now().minusDays(20),
                     inntektEtterEndring = 234543,

@@ -9,19 +9,16 @@ import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
-import no.nav.helse.prosessering.v1.FosterBarn
-import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
-import no.nav.helse.prosessering.v1.PreprossesertSøker
-import no.nav.k9.søknad.felles.Barn
-import no.nav.k9.søknad.felles.NorskIdentitetsnummer
+import no.nav.helse.prosessering.v1.*
+import no.nav.k9.søknad.felles.*
 import no.nav.k9.søknad.felles.Søker
-import no.nav.k9.søknad.felles.SøknadId
 import no.nav.k9.søknad.omsorgspenger.utbetaling.snf.OmsorgspengerUtbetalingSøknad
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.Produced
 import org.slf4j.LoggerFactory
+import java.math.BigDecimal
 
 internal class JournalforingsStream(
     joarkGateway: JoarkGateway,
@@ -100,8 +97,69 @@ private fun PreprossesertMeldingV1.tilKOmsorgspengerUtbetalingSøknad(): Omsorgs
 
     fosterbarn?.let { builder.fosterbarn(it.tilK9Barn()) }
 
+    frilans?.let { builder.frilanser(it.tilK9Frilanser()) }
+
+    selvstendigVirksomheter?.let { builder.selvstendigNæringsdrivende(it.tilK9SelvstendingNæringsdrivende()) }
+
     return builder.build()
 }
+
+private fun List<Virksomhet>.tilK9SelvstendingNæringsdrivende(): List<SelvstendigNæringsdrivende> = map {
+    val builder = SelvstendigNæringsdrivende.builder()
+        .virksomhetNavn(it.navnPåVirksomheten)
+        .periode(
+            Periode(it.fraOgMed, it.tilOgMed),
+            it.tilK9SelvstendingNæringsdrivendeInfo()
+        )
+
+    it.organisasjonsnummer?.let { builder.organisasjonsnummer(Organisasjonsnummer.of(it)) }
+
+    builder.build()
+}
+
+private fun Virksomhet.tilK9SelvstendingNæringsdrivendeInfo(): SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo {
+    val infoBuilder = SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
+    infoBuilder
+        .virksomhetstyper(næringstyper.tilK9Virksomhetstyper())
+        .erNyoppstartet(false)
+        .registrertIUtlandet(registrertINorge.boolean)
+
+    if (registrertINorge.boolean) infoBuilder.landkode(Landkode.NORGE)
+    else infoBuilder.landkode(Landkode.NORGE) //TODO: Send med riktig landkode, dersom virksomheten er registrert i utlandet.
+
+    næringsinntekt?.let { infoBuilder.bruttoInntekt(BigDecimal.valueOf(it.toLong())) }
+
+    yrkesaktivSisteTreFerdigliknedeÅrene?.let {
+        infoBuilder.erNyoppstartet(true)
+    }
+    regnskapsfører?.let {
+        infoBuilder
+            .regnskapsførerNavn(it.navn)
+            .regnskapsførerTelefon(it.telefon)
+    }
+    infoBuilder.erVarigEndring(false)
+    varigEndring?.let {
+        infoBuilder
+            .erVarigEndring(true)
+            .endringDato(it.dato)
+            .endringBegrunnelse(it.forklaring)
+    }
+    return infoBuilder.build()
+}
+
+private fun List<Næringstyper>.tilK9Virksomhetstyper(): List<VirksomhetType> = map {
+    when (it) {
+        Næringstyper.FISKE -> VirksomhetType.FISKE
+        Næringstyper.JORDBRUK_SKOGBRUK -> VirksomhetType.JORDBRUK_SKOGBRUK
+        Næringstyper.DAGMAMMA -> VirksomhetType.DAGMAMMA
+        Næringstyper.ANNEN -> VirksomhetType.ANNEN
+    }
+}
+
+private fun Frilans.tilK9Frilanser(): Frilanser = Frilanser.builder()
+    .startdato(startdato)
+    .jobberFortsattSomFrilans(jobberFortsattSomFrilans)
+    .build()
 
 private fun List<FosterBarn>.tilK9Barn(): List<Barn> {
     return map {
