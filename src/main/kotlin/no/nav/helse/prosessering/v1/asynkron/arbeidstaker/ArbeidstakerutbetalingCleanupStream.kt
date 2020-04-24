@@ -38,7 +38,7 @@ internal class ArbeidstakerutbetalingCleanupStream(
         private fun topology(dokumentService: DokumentService): Topology {
             val builder = StreamsBuilder()
             val fraCleanup = Topics.ARBEIDSTAKERUTBETALING_CLEANUP
-            val tilJournalfort = Topics.JOURNALFORT
+            val tilJournalfort = Topics.ARBEIDSTAKERUTBETALING_JOURNALFORT
 
             builder
                 .stream(
@@ -56,7 +56,7 @@ internal class ArbeidstakerutbetalingCleanupStream(
                         )
                         logger.info("Dokumenter slettet.")
                         logger.info("Videresender journalført melding")
-                        entry.data.journalførtMelding.tilJournalført()
+                        entry.data.journalførtMelding
                     }
                 }
                 .to(tilJournalfort.name, Produced.with(tilJournalfort.keySerde, tilJournalfort.valueSerde))
@@ -65,11 +65,4 @@ internal class ArbeidstakerutbetalingCleanupStream(
     }
 
     internal fun stop() = stream.stop(becauseOfError = false)
-}
-
-private fun ArbeidstakerutbetalingJournalfort.tilJournalført(): Journalfort {
-    return Journalfort(
-        journalpostId = journalpostId,
-        søknad = søknad
-    )
 }

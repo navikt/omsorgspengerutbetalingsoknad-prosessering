@@ -19,7 +19,7 @@ import no.nav.k9.søknad.felles.Barn
 import no.nav.k9.søknad.felles.NorskIdentitetsnummer
 import no.nav.k9.søknad.felles.Søker
 import no.nav.k9.søknad.felles.SøknadId
-import no.nav.k9.søknad.omsorgspenger.utbetaling.OmsorgspengerUtbetalingSøknad
+import no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.OmsorgspengerUtbetalingSøknad
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.PreprosessertArbeidstakerutbetalingMelding
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
@@ -99,7 +99,7 @@ private fun PreprosessertArbeidstakerutbetalingMelding.tilKOmsorgspengerUtbetali
         .mottattDato(mottatt)
         .søker(søker.tilK9Søker())
 
-    fosterbarn?.let { builder.barn(it.tilK9Barn()) }
+    fosterbarn?.let { builder.fosterbarn(it.tilK9Barn()) }
 
     return builder.build()
 }

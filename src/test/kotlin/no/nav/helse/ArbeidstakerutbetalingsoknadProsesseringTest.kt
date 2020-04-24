@@ -46,7 +46,7 @@ class ArbeidstakerutbetalingsoknadProsesseringTest {
 
         private val kafkaEnvironment = KafkaWrapper.bootstrap()
         private val kafkaProducer = kafkaEnvironment.arbeidstakerutbetalingMeldingProducer()
-        private val journalføringsKonsumer = kafkaEnvironment.journalføringsKonsumer()
+        private val journalføringsKonsumer = kafkaEnvironment.arbeidstakerutbetalingJournalføringsKonsumer()
 
         // Se https://github.com/navikt/dusseldorf-ktor#f%C3%B8dselsnummer
         private val gyldigFodselsnummerA = "02119970078"
@@ -134,8 +134,8 @@ class ArbeidstakerutbetalingsoknadProsesseringTest {
         wireMockServer.stubJournalforArbeidstaker(201) // Simulerer journalføring fungerer igjen
         restartEngine()
         journalføringsKonsumer
-            .hentJournalførtMelding(melding.søknadId)
-            .assertJournalførtFormat()
+            .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
+            .assertArbeidstakerutbetalingJournalførtFormat()
     }
 
     private fun readyGir200HealthGir503() {
@@ -158,8 +158,8 @@ class ArbeidstakerutbetalingsoknadProsesseringTest {
 
         kafkaProducer.leggTilMottak(melding)
         journalføringsKonsumer
-            .hentJournalførtMelding(melding.søknadId)
-            .assertJournalførtFormat()
+            .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
+            .assertArbeidstakerutbetalingJournalførtFormat()
     }
 
     @Test
@@ -171,8 +171,8 @@ class ArbeidstakerutbetalingsoknadProsesseringTest {
 
         kafkaProducer.leggTilMottak(melding)
         journalføringsKonsumer
-            .hentJournalførtMelding(melding.søknadId)
-            .assertJournalførtFormat()
+            .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
+            .assertArbeidstakerutbetalingJournalførtFormat()
     }
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }
