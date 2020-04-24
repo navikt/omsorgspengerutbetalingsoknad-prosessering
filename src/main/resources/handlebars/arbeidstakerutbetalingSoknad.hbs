@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8"/>
-    <title>Søknad om utbetaling av Omsorgspenger</title>
+    <title>Søknad om utbetaling av Omsorgspenger - Arbeidstaker</title>
     {{#block 'style' }}
     {{/block}}
 
@@ -19,7 +19,7 @@
 <body>
 <div id="header">
     <img class="navlogo" src="{{ image "Navlogo.png" }}"/>
-    <h1 class="title">Søknad om utbetaling av Omsorgspenger</h1>
+    <h1 class="title">Søknad om utbetaling av Omsorgspenger - Arbeidstaker</h1>
 </div>
 <div class="container">
     <div id="container_top">
@@ -117,18 +117,22 @@
 
     {{#eqJaNei søknad.jobbHosNåværendeArbeidsgiver.merEnn4Uker "Nei"}}
         {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "ANNET_ARBEIDSFORHOLD"}}
-            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av bytte av arbeidsgiver.</p><br/>
+            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av bytte av arbeidsgiver.</p>
+            <br/>
         {{/eq}}
 
         {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "ANDRE_YTELSER"}}
-            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av at han/hun har mottatt annen stønad fra NAV.</p><br/>
+            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av at han/hun har mottatt annen
+                stønad fra NAV.</p><br/>
 
         {{/eq}}
         {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "LOVBESTEMT_FERIE_ELLER_ULØNNET_PERMISJON"}}
-            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av lovbestemt ferie/ulønnet permisjon etter å ha mottatt Foreldrepenger.</p><br/>
+            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av lovbestemt ferie/ulønnet
+                permisjon etter å ha mottatt Foreldrepenger.</p><br/>
         {{/eq}}
         {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "MILITÆRTJENESTE"}}
-            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av at han/hun har vært i militærtjeneste.</p><br/>
+            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av at han/hun har vært i
+                militærtjeneste.</p><br/>
         {{/eq}}
     {{/eqJaNei}}
 
@@ -156,11 +160,14 @@
         </ul>
     {{/if}}
 
-    <!-- SPØRSMÅL -->
-    <h2><span>Spørsmål</span></h2>{{# each søknad.spørsmål as |s|}}
-    <p class="sporsmalstekst">{{s.spørsmål}}</p>
-    {{>jaNeiCheckbox parameter=s.svar}} <br/><br/>
-{{/each}}
+   {{#if harSpørsmål}}
+       <!-- SPØRSMÅL -->
+       <h2><span>Spørsmål</span></h2>
+       {{# each søknad.spørsmål as |s|}}
+           <p class="sporsmalstekst">{{s.spørsmål}}</p>
+           {{>jaNeiCheckbox parameter=s.svar}} <br/><br/>
+       {{/each}}
+   {{/if}}
 
     <!-- MEDLEMSKAP -->
     <h2><span>Medlemskap</span></h2>
