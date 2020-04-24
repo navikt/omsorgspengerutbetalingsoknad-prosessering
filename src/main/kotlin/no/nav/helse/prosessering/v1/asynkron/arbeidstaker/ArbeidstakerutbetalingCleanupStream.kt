@@ -7,6 +7,8 @@ import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
+import no.nav.helse.prosessering.v1.asynkron.ArbeidstakerutbetalingJournalfort
+import no.nav.helse.prosessering.v1.asynkron.Journalfort
 import no.nav.helse.prosessering.v1.asynkron.Topics
 import no.nav.helse.prosessering.v1.asynkron.process
 import org.apache.kafka.streams.StreamsBuilder
@@ -36,7 +38,7 @@ internal class ArbeidstakerutbetalingCleanupStream(
         private fun topology(dokumentService: DokumentService): Topology {
             val builder = StreamsBuilder()
             val fraCleanup = Topics.ARBEIDSTAKERUTBETALING_CLEANUP
-            val tilJournalfort = Topics.ARBEIDSTAKERUTBETALING_JOURNALFORT
+            val tilJournalfort = Topics.JOURNALFORT
 
             builder
                 .stream(
@@ -54,7 +56,7 @@ internal class ArbeidstakerutbetalingCleanupStream(
                         )
                         logger.info("Dokumenter slettet.")
                         logger.info("Videresender journalført melding")
-                        entry.data.journalførtMelding
+                        entry.data.journalførtMelding.tilJournalført()
                     }
                 }
                 .to(tilJournalfort.name, Produced.with(tilJournalfort.keySerde, tilJournalfort.valueSerde))
@@ -63,4 +65,11 @@ internal class ArbeidstakerutbetalingCleanupStream(
     }
 
     internal fun stop() = stream.stop(becauseOfError = false)
+}
+
+private fun ArbeidstakerutbetalingJournalfort.tilJournalført(): Journalfort {
+    return Journalfort(
+        journalpostId = journalpostId,
+        søknad = søknad
+    )
 }

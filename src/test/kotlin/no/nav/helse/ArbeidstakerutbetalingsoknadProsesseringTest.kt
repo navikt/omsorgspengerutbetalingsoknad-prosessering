@@ -46,7 +46,7 @@ class ArbeidstakerutbetalingsoknadProsesseringTest {
 
         private val kafkaEnvironment = KafkaWrapper.bootstrap()
         private val kafkaProducer = kafkaEnvironment.arbeidstakerutbetalingMeldingProducer()
-        private val journalføringsKonsumer = kafkaEnvironment.arbeidstakerutbetalingJournalføringsKonsumer()
+        private val journalføringsKonsumer = kafkaEnvironment.journalføringsKonsumer()
 
         // Se https://github.com/navikt/dusseldorf-ktor#f%C3%B8dselsnummer
         private val gyldigFodselsnummerA = "02119970078"
@@ -134,7 +134,7 @@ class ArbeidstakerutbetalingsoknadProsesseringTest {
         wireMockServer.stubJournalforArbeidstaker(201) // Simulerer journalføring fungerer igjen
         restartEngine()
         journalføringsKonsumer
-            .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
+            .hentJournalførtMelding(melding.søknadId)
             .assertJournalførtFormat()
     }
 
@@ -158,7 +158,7 @@ class ArbeidstakerutbetalingsoknadProsesseringTest {
 
         kafkaProducer.leggTilMottak(melding)
         journalføringsKonsumer
-            .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
+            .hentJournalførtMelding(melding.søknadId)
             .assertJournalførtFormat()
     }
 
@@ -171,7 +171,7 @@ class ArbeidstakerutbetalingsoknadProsesseringTest {
 
         kafkaProducer.leggTilMottak(melding)
         journalføringsKonsumer
-            .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
+            .hentJournalførtMelding(melding.søknadId)
             .assertJournalførtFormat()
     }
 
