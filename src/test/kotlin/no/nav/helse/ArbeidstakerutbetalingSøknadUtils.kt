@@ -104,7 +104,9 @@ internal object ArbeidstakerutbetalingSøknadUtils {
             "vedlegg1"
         ),
         vedleggUrls = listOf(
-            URI("http://localhost.com/vedlegg1")
+            URI("http://localhost:8080/vedlegg/1"),
+            URI("http://localhost:8080/vedlegg/2"),
+            URI("http://localhost:8080/vedlegg/3")
         )
 
     )

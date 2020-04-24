@@ -123,6 +123,11 @@ internal class PreprosseseringV1Service(
             )
         )
 
+        if (melding.vedleggUrls.isNotEmpty()) {
+            logger.trace("Legger til ${melding.vedleggUrls.size} vedlegg URL's fra meldingen som dokument.")
+            melding.vedleggUrls.forEach { komplettDokumentUrls.add(listOf(it)) }
+        }
+
         logger.info("Totalt ${komplettDokumentUrls.size} dokumentbolker.")
 
         val preprosessertArbeidstakerutbetalingMelding = PreprosessertArbeidstakerutbetalingMelding(
