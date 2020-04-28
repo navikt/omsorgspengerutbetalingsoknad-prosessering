@@ -1,6 +1,6 @@
 package no.nav.helse
 
-import no.nav.k9.søknad.omsorgspenger.utbetaling.OmsorgspengerUtbetalingSøknad
+import no.nav.k9.søknad.omsorgspenger.utbetaling.snf.OmsorgspengerUtbetalingSøknad
 import org.json.JSONObject
 import org.skyscreamer.jsonassert.JSONAssert
 import kotlin.test.assertNotNull

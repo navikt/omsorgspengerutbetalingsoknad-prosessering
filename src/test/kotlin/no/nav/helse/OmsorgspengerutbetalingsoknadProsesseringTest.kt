@@ -15,18 +15,20 @@ import io.prometheus.client.CollectorRegistry
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.time.delay
 import no.nav.common.KafkaEnvironment
+import no.nav.helse.SøknadUtils.defaultSøknad
 import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
-import no.nav.helse.prosessering.v1.*
+import no.nav.helse.prosessering.v1.JaNei
+import no.nav.helse.prosessering.v1.Næringstyper
+import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
+import no.nav.helse.prosessering.v1.Virksomhet
 import no.nav.helse.prosessering.v1.asynkron.TopicEntry
 import org.json.JSONObject
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
-import java.time.ZonedDateTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
@@ -130,8 +132,11 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
     @Test
     fun `Gylding melding blir prosessert av journalføringskonsumer`() {
-        val melding = gyldigMelding(
-            fødselsnummerSoker = gyldigFodselsnummerA
+        val melding = defaultSøknad.copy(
+            søknadId = UUID.randomUUID().toString(),
+            søker = defaultSøknad.søker.copy(
+                fødselsnummer = gyldigFodselsnummerA
+            )
         )
 
         kafkaTestProducer.leggTilMottak(melding)
@@ -142,8 +147,11 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
     @Test
     fun `En feilprosessert melding vil bli prosessert etter at tjenesten restartes`() {
-        val melding = gyldigMelding(
-            fødselsnummerSoker = gyldigFodselsnummerA
+        val melding = defaultSøknad.copy(
+            søknadId = UUID.randomUUID().toString(),
+            søker = defaultSøknad.søker.copy(
+                fødselsnummer = gyldigFodselsnummerA
+            )
         )
 
         wireMockServer.stubJournalfor(500) // Simulerer feil ved journalføring
@@ -172,8 +180,11 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
     @Test
     fun `Melding som gjeder søker med D-nummer`() {
-        val melding = gyldigMelding(
-            fødselsnummerSoker = dNummerA
+        val melding = defaultSøknad.copy(
+            søknadId = UUID.randomUUID().toString(),
+            søker = defaultSøknad.søker.copy(
+                fødselsnummer = dNummerA
+            )
         )
 
         kafkaTestProducer.leggTilMottak(melding)
@@ -184,19 +195,26 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
     @Test
     fun `Melding lagt til prosessering selv om sletting av vedlegg feiler`() {
-        val melding = gyldigMelding(
-            fødselsnummerSoker = gyldigFodselsnummerA
+        val melding = defaultSøknad.copy(
+            søknadId = UUID.randomUUID().toString(),
+            søker = defaultSøknad.søker.copy(
+                fødselsnummer = gyldigFodselsnummerA
+            )
         )
 
         kafkaTestProducer.leggTilMottak(melding)
         journalføringsKonsumer
             .hentJournalførtMelding(melding.søknadId)
-            .assertJournalførtFormat()    }
+            .assertJournalførtFormat()
+    }
 
     @Test
     fun `Melding lagt til prosessering selv om oppslag paa aktør ID for barn feiler`() {
-        val melding = gyldigMelding(
-            fødselsnummerSoker = gyldigFodselsnummerA
+        val melding = defaultSøknad.copy(
+            søknadId = UUID.randomUUID().toString(),
+            søker = defaultSøknad.søker.copy(
+                fødselsnummer = gyldigFodselsnummerA
+            )
         )
 
         kafkaTestProducer.leggTilMottak(melding)
@@ -206,8 +224,11 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
     @Test
     fun `Forvent 2 legeerklæringer og 2 samværsavtaler dersom den er satt i melding`() {
-        val melding = gyldigMelding(
-            fødselsnummerSoker = gyldigFodselsnummerA
+        val melding = defaultSøknad.copy(
+            søknadId = UUID.randomUUID().toString(),
+            søker = defaultSøknad.søker.copy(
+                fødselsnummer = gyldigFodselsnummerA
+            )
         )
 
         kafkaTestProducer.leggTilMottak(melding)
@@ -219,8 +240,11 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
     @Test
     fun `Forvent riktig format på journalført melding`() {
-        val melding = gyldigMelding(
-            fødselsnummerSoker = gyldigFodselsnummerA
+        val melding = defaultSøknad.copy(
+            søknadId = UUID.randomUUID().toString(),
+            søker = defaultSøknad.søker.copy(
+                fødselsnummer = gyldigFodselsnummerA
+            )
         )
 
         kafkaTestProducer.leggTilMottak(melding)
@@ -229,136 +253,30 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             .assertJournalførtFormat()
     }
 
-    private fun gyldigMelding(
-        start: LocalDate = LocalDate.parse("2020-01-01"),
-        fødselsnummerSoker: String,
-        sprak: String = "nb"
-    ): MeldingV1 = MeldingV1(
-        søknadId = UUID.randomUUID().toString(),
-        språk = sprak,
-        mottatt = ZonedDateTime.now(),
-        søker = Søker(
-            aktørId = "123456",
-            fødselsnummer = fødselsnummerSoker,
-            fødselsdato = LocalDate.now().minusDays(1000),
-            etternavn = "Nordmann",
-            mellomnavn = "Mellomnavn",
-            fornavn = "Ola"
-        ),
-        bosteder = listOf(
-            Bosted(
-                fraOgMed = start,
-                tilOgMed = start.plusDays(5),
-                landnavn = "Sverige",
-                landkode = "SWE",
-                erEØSLand = JaNei.Ja
+    @Test
+    fun `Tester virksomhet registrert i utlandet`() {
+        val melding = defaultSøknad.copy(
+            søknadId = UUID.randomUUID().toString(),
+            søker = defaultSøknad.søker.copy(
+                fødselsnummer = gyldigFodselsnummerA
             ),
-            Bosted(
-                fraOgMed = start.plusDays(10),
-                tilOgMed = start.plusDays(10),
-                landnavn = "Norge",
-                landkode = "NOR",
-                erEØSLand = JaNei.Ja
-            )
-        ),
-        opphold = listOf(
-            Bosted(
-                fraOgMed = start.plusDays(15),
-                tilOgMed = start.plusDays(20),
-                landnavn = "England",
-                landkode = "Eng",
-                erEØSLand = JaNei.Ja
-            ),
-            Bosted(
-                fraOgMed = start.minusDays(10),
-                tilOgMed = start.minusDays(5),
-                landnavn = "Kroatia",
-                landkode = "CRO",
-                erEØSLand = JaNei.Ja
-            )
-        ),
-        spørsmål = listOf(
-            SpørsmålOgSvar(
-                spørsmål = "Har du vært hjemme?",
-                svar = JaNei.Ja
-            ),
-            SpørsmålOgSvar(
-                spørsmål = "Skal du være hjemme?",
-                svar = JaNei.Nei
-            )
-        ),
-        utbetalingsperioder = listOf(
-            Utbetalingsperiode(
-                fraOgMed = start,
-                tilOgMed = start.plusDays(10),
-                antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
-                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
-            ),
-            Utbetalingsperiode(
-                fraOgMed = start.plusDays(20),
-                tilOgMed = start.plusDays(20),
-                antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
-                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
-            ),
-            Utbetalingsperiode(
-                fraOgMed = start.plusDays(30),
-                tilOgMed = start.plusDays(35),
-                antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
-                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
-            )
-        ),
-        andreUtbetalinger = listOf("dagpenger", "sykepenger"),
-        fosterbarn = listOf(
-            FosterBarn(
-                fødselsnummer = "02119970078"
-            )
-        ),
-        vedlegg = listOf(
-            URI("http://localhost:8080/vedlegg/1"),
-            URI("http://localhost:8080/vedlegg/2"),
-            URI("http://localhost:8080/vedlegg/3")
-        ),
-        bekreftelser = Bekreftelser(
-            harBekreftetOpplysninger = JaNei.Ja,
-            harForståttRettigheterOgPlikter = JaNei.Ja
-        ),
-        selvstendigVirksomheter = listOf(
-            Virksomhet(
-                næringstyper = listOf(Næringstyper.ANNEN, Næringstyper.FISKE),
-                fraOgMed = LocalDate.now(),
-                tilOgMed = LocalDate.now().plusDays(10),
-                navnPåVirksomheten = "Kjells Møbelsnekkeri",
-                registrertINorge = JaNei.Ja,
-                organisasjonsnummer = "111111",
-                varigEndring = VarigEndring(
-                    dato = LocalDate.now().minusDays(20),
-                    inntektEtterEndring = 234543,
-                    forklaring = "Forklaring som handler om varig endring"
-                )
-            ),
-            Virksomhet(
-                næringstyper = listOf(Næringstyper.JORDBRUK_SKOGBRUK, Næringstyper.DAGMAMMA, Næringstyper.FISKE),
-                fiskerErPåBladB = JaNei.Ja,
-                fraOgMed = LocalDate.now(),
-                næringsinntekt = 1111,
-                navnPåVirksomheten = "Tull Og Tøys",
-                registrertINorge = JaNei.Nei,
-                registrertILand = "Bahamas",
-                yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeÅrene(LocalDate.now()),
-                varigEndring = VarigEndring(
-                    dato = LocalDate.now().minusDays(20),
-                    inntektEtterEndring = 234543,
-                    forklaring = "Forklaring som handler om varig endring"
-                ),
-                regnskapsfører = Regnskapsfører(
-                    navn = "Bjarne Regnskap",
-                    telefon = "65484578"
+            selvstendigVirksomheter = listOf(
+                Virksomhet(
+                    navnPåVirksomheten = "Danks Rederi",
+                    næringstyper = listOf(Næringstyper.ANNEN),
+                    fiskerErPåBladB = JaNei.Nei,
+                    registrertINorge = JaNei.Nei,
+                    registrertILand = "dk",
+                    fraOgMed = LocalDate.now().minusYears(2)
                 )
             )
-        ),
-        erArbeidstakerOgså = true,
-        hjemmePgaSmittevernhensyn = true
-    )
+        )
+
+        kafkaTestProducer.leggTilMottak(melding)
+        journalføringsKonsumer
+            .hentJournalførtMelding(melding.søknadId)
+            .assertJournalførtFormat()
+    }
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }
 }
