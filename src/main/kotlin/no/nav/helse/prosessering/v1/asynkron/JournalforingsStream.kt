@@ -127,7 +127,8 @@ private fun Virksomhet.tilK9SelvstendingNæringsdrivendeInfo(): SelvstendigNæri
         .registrertIUtlandet(registrertINorge.boolean)
 
     if (registrertINorge.boolean) infoBuilder.landkode(Landkode.NORGE)
-    else infoBuilder.landkode(Landkode.NORGE) //TODO: Send med riktig landkode, dersom virksomheten er registrert i utlandet.
+    else if (registrertIUtlandet != null) infoBuilder.landkode(Landkode.of(registrertIUtlandet.landkode))
+    else infoBuilder.landkode(Landkode.NORGE) //TODO: Når frontend har vært prodsatt i mer enn 24t, kan dette fjernes.
 
     næringsinntekt?.let { infoBuilder.bruttoInntekt(BigDecimal.valueOf(it.toLong())) }
 
