@@ -147,5 +147,3 @@ data class SpørsmålOgSvar(
 )
 
 typealias Spørsmål = String
-
-
