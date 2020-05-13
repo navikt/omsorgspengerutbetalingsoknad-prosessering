@@ -151,15 +151,9 @@
     {{/if}}
     <ul>
         {{# each søknad.bosteder as |b|}}
-            {{# if b.erEØSLand}}
-                <li>
-                    {{b.landnavn}}: {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
-                </li>
-            {{else}}
-                <li>
-                    {{b.landnavn}} (utenfor EØS): {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
-                </li>
-            {{/if}}
+            <li>
+                {{b.landnavn}}: {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
+            </li>
         {{/each}}
     </ul>
 
