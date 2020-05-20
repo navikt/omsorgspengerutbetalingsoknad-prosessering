@@ -108,7 +108,7 @@ class PdfV1GeneratorTest {
                     lengde = Duration.ofHours(4).plusMinutes(30)
                 )
             ),
-            andreUtbetalinger = listOf("dagpenger", "sykepenger"),
+            andreUtbetalinger = listOf("dagpenger", "sykepenger", "midlertidigkompensasjonsnfri"),
             vedlegg = listOf(
             ),
             frilans = Frilans(
