@@ -168,7 +168,27 @@ class PdfV1GeneratorTest {
                 harForståttRettigheterOgPlikter = JaNei.Ja
             ),
             erArbeidstakerOgså = true,
-            hjemmePgaSmittevernhensyn = true
+            hjemmePgaSmittevernhensyn = true,
+            endringArbeidssituasjon = EndringArbeidssituasjon(
+                harEndringFrilans = JaNei.Ja,
+                endringerFrilans = listOf(
+                    Endring(
+                      dato = LocalDate.parse("2020-01-01"),
+                      forklaring = "Forklaring for denne endringen"
+                    ),
+                    Endring(
+                        dato = LocalDate.parse("2020-02-02"),
+                        forklaring = "Forklaring for denne endringen"
+                    )
+                ),
+                harEndringSelvstendig = JaNei.Ja,
+                endringerSelvstendig = listOf(
+                    Endring(
+                        dato = LocalDate.parse("2020-01-01"),
+                        forklaring = "Forklaring for denne endringen"
+                    )
+                )
+            )
         )
     }
 
@@ -189,7 +209,7 @@ class PdfV1GeneratorTest {
     }
 
     @Test
-   // @Ignore
+    @Ignore
     fun `opprett lesbar oppsummerings-PDF`() {
         genererOppsummeringsPdfer(true)
     }

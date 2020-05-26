@@ -24,7 +24,20 @@ data class MeldingV1(
     val selvstendigVirksomheter: List<Virksomhet>? = null,
     val erArbeidstakerOgså: Boolean,
     val hjemmePgaSmittevernhensyn: Boolean,
-    val bekreftelser: Bekreftelser
+    val bekreftelser: Bekreftelser,
+    val endringArbeidssituasjon: EndringArbeidssituasjon? = null
+)
+
+data class EndringArbeidssituasjon(
+    val harEndringFrilans: JaNei,
+    val endringerFrilans: List<Endring> = listOf(),
+    val harEndringSelvstendig: JaNei,
+    val endringerSelvstendig: List<Endring> = listOf()
+)
+
+data class Endring(
+    val dato: LocalDate,
+    val forklaring: String
 )
 
 data class Bekreftelser(

@@ -356,7 +356,27 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             )
         ),
         erArbeidstakerOgså = true,
-        hjemmePgaSmittevernhensyn = true
+        hjemmePgaSmittevernhensyn = true,
+        endringArbeidssituasjon = EndringArbeidssituasjon(
+            harEndringFrilans = JaNei.Ja,
+            endringerFrilans = listOf(
+                Endring(
+                    dato = LocalDate.parse("2020-01-01"),
+                    forklaring = "Forklaring for denne endringen"
+                ),
+                Endring(
+                    dato = LocalDate.parse("2020-02-02"),
+                    forklaring = "Forklaring for denne endringen"
+                )
+            ),
+            harEndringSelvstendig = JaNei.Ja,
+            endringerSelvstendig = listOf(
+                Endring(
+                    dato = LocalDate.parse("2020-01-01"),
+                    forklaring = "Forklaring for denne endringen"
+                )
+            )
+        )
     )
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }

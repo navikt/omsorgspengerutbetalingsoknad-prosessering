@@ -95,7 +95,6 @@
             </li>
         {{/each}}
     </ul>
-
     <!-- UTENLANDSOPPHOLD i Perioden -->
     {{#if harOpphold}}
         <h3>Utenlandsopphold i perioden</h3>
@@ -136,7 +135,39 @@
     <h2><span>Spørsmål</span></h2>{{# each søknad.spørsmål as |s|}}
     <p class="sporsmalstekst">{{s.spørsmål}}</p>
     {{>jaNeiCheckbox parameter=s.svar}} <br/><br/>
-{{/each}}
+    {{/each}}
+
+    <!-- Endring arbeidssituasjon i perioden -->
+    {{#if søknad.endringArbeidssituasjon}}
+        <h2><span>Endring arbeidssituasjon i perioden</span></h2>
+        <p class="sporsmalstekst">Har endring i arbeidssituasjon som frilanser?</p>
+        {{>jaNeiCheckbox parameter=søknad.endringArbeidssituasjon.harEndringFrilans}} <br/>
+        {{#if søknad.endringArbeidssituasjon.harEndringFrilans}}
+            {{#each søknad.endringArbeidssituasjon.endringerFrilans as |endringFrilans|}}
+                <ul>
+                    <p><b>Dato:</b> {{#dato endringFrilans.dato}} {{/dato}}</p>
+                    <div class="fritekst">
+                        <p class="sporsmalstekst"><img class="lite_ikon" src="{{ image "Fritekst.png" }}"/>Søkers forklaring:</p>
+                        <p class="fritekst_textarea">{{endringFrilans.forklaring}}</p>
+                    </div>
+                </ul>
+            {{/each}}
+        {{/if}}
+
+        <p class="sporsmalstekst">Har endring i arbeidssituasjon som selvstendig næringsdrivende?</p>
+        {{>jaNeiCheckbox parameter=søknad.endringArbeidssituasjon.harEndringSelvstendig}} <br/>
+        {{#if søknad.endringArbeidssituasjon.harEndringSelvstendig}}
+            {{#each søknad.endringArbeidssituasjon.endringerSelvstendig as |endringerSelvstendig|}}
+                <ul>
+                    <p><b>Dato:</b> {{#dato endringerSelvstendig.dato}} {{/dato}}</p>
+                    <div class="fritekst">
+                        <p class="sporsmalstekst"><img class="lite_ikon" src="{{ image "Fritekst.png" }}"/>Søkers forklaring:</p>
+                        <p class="fritekst_textarea">{{endringerSelvstendig.forklaring}}</p>
+                    </div>
+                </ul>
+            {{/each}}
+        {{/if}}
+    {{/if}}
 
     <!-- MEDLEMSKAP -->
     <h2><span>Medlemskap</span></h2>

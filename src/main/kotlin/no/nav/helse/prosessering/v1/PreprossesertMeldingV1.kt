@@ -19,7 +19,8 @@ data class PreprossesertMeldingV1(
     val frilans: Frilans? = null,
     val selvstendigVirksomheter: List<Virksomhet>? = null,
     val hjemmePgaSmittevernhensyn: Boolean,
-    val bekreftelser: Bekreftelser
+    val bekreftelser: Bekreftelser,
+    val endringArbeidssituasjon: EndringArbeidssituasjon? = null
 ) {
     internal constructor(
         melding: MeldingV1,
@@ -40,7 +41,8 @@ data class PreprossesertMeldingV1(
         frilans = melding.frilans,
         selvstendigVirksomheter = melding.selvstendigVirksomheter,
         hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn,
-        bekreftelser = melding.bekreftelser
+        bekreftelser = melding.bekreftelser,
+        endringArbeidssituasjon = melding.endringArbeidssituasjon
     )
 }
 

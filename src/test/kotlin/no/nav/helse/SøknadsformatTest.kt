@@ -24,8 +24,8 @@ class SøknadsformatTest {
             )
         )
         println(String(json))
-        JSONAssert.assertEquals(
-            """{
+        JSONAssert.assertEquals("""
+            {
             "søknadId": "$søknadId",
             "språk": "nb",
             "mottatt": "2018-01-02T03:04:05.000000006Z",
@@ -99,7 +99,23 @@ class SøknadsformatTest {
             "bekreftelser": {
             "harBekreftetOpplysninger": true,
             "harForståttRettigheterOgPlikter": true
-        }
+            },
+            "endringArbeidssituasjon": {
+              "harEndringFrilans": true,
+              "endringerFrilans": [
+                {
+                  "dato": "2020-01-01",
+                  "forklaring": "Korona"
+                }
+              ],
+              "harEndringSelvstendig": true,
+              "endringerSelvstendig": [
+                {
+                  "dato": "2020-01-01",
+                  "forklaring": "Korona"
+                }
+              ]
+            }
     }
         """.trimIndent(), String(json), true
         )
@@ -197,6 +213,22 @@ class SøknadsformatTest {
             harForståttRettigheterOgPlikter = JaNei.Ja
         ),
         erArbeidstakerOgså = true,
-        hjemmePgaSmittevernhensyn = true
+        hjemmePgaSmittevernhensyn = true,
+        endringArbeidssituasjon = EndringArbeidssituasjon(
+            harEndringFrilans = JaNei.Ja,
+            endringerFrilans = listOf(
+                Endring(
+                    dato = LocalDate.parse("2020-01-01"),
+                    forklaring = "Korona"
+                )
+            ),
+            harEndringSelvstendig = JaNei.Ja,
+            endringerSelvstendig = listOf(
+                Endring(
+                    dato = LocalDate.parse("2020-01-01"),
+                    forklaring = "Korona"
+                )
+            )
+        )
     )
 }
