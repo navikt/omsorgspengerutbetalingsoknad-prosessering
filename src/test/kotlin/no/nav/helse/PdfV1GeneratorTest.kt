@@ -95,17 +95,20 @@ class PdfV1GeneratorTest {
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(1),
                     tilOgMed = start.plusDays(1),
-                    lengde = Duration.ofHours(5).plusMinutes(0)
+                    antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(0),
+                    antallTimerBorte = Duration.ofHours(5).plusMinutes(0)
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(2),
                     tilOgMed = start.plusDays(2),
-                    lengde = Duration.ofHours(5).plusMinutes(30)
+                    antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30),
+                    antallTimerBorte = Duration.ofHours(5).plusMinutes(0)
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(3),
                     tilOgMed = start.plusDays(3),
-                    lengde = Duration.ofHours(4).plusMinutes(30)
+                    antallTimerPlanlagt = Duration.ofHours(4).plusMinutes(30),
+                    antallTimerBorte = Duration.ofHours(5).plusMinutes(0)
                 )
             ),
             andreUtbetalinger = listOf("dagpenger", "sykepenger", "midlertidigkompensasjonsnfri"),
@@ -189,7 +192,7 @@ class PdfV1GeneratorTest {
     }
 
     @Test
-   // @Ignore
+    @Ignore
     fun `opprett lesbar oppsummerings-PDF`() {
         genererOppsummeringsPdfer(true)
     }

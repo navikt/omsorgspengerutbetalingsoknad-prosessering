@@ -156,7 +156,7 @@ private fun MeldingV1.erSelvstendingNæringsdrivendeFrilansOgArbeidstaker() =
     selvstendigVirksomheter != null && frilans != null && erArbeidstakerOgså
 
 private fun List<Utbetalingsperiode>.søkerBareOmTimer(): String {
-    val antallTimePerioder = filter { it.lengde !== null }
+    val antallTimePerioder = filter { it.antallTimerBorte !== null }
         .count()
 
     return if (antallTimePerioder > 0 && antallTimePerioder == size) "Ja" else "Nei"
@@ -164,7 +164,7 @@ private fun List<Utbetalingsperiode>.søkerBareOmTimer(): String {
 
 fun List<Utbetalingsperiode>.tilAntallHeleDager(): Double {
     var antallDager = 0L
-    filter { it.lengde === null }
+    filter { it.antallTimerBorte === null }
     map {
         antallDager += ChronoUnit.DAYS.between(it.fraOgMed, it.tilOgMed)
     }
@@ -173,16 +173,16 @@ fun List<Utbetalingsperiode>.tilAntallHeleDager(): Double {
 
 fun List<Utbetalingsperiode>.tilAntallDelDager(): Double {
     var antallDelDager = 0L
-    filter { it.lengde !== null }
+    filter { it.antallTimerBorte !== null }
     map {
-        antallDelDager += TimeUnit.HOURS.toDays(it.lengde?.toHours() ?: 0)
+        antallDelDager += TimeUnit.HOURS.toDays(it.antallTimerBorte?.toHours() ?: 0)
     }
     return antallDelDager.toDouble()
 }
 
 
 private fun List<Utbetalingsperiode>.søkerBareOmDager(): String {
-    val antallDagPerioder = filter { it.lengde == null }
+    val antallDagPerioder = filter { it.antallTimerBorte == null }
         .count()
 
     return if (antallDagPerioder > 0 && antallDagPerioder == size) "Ja" else "Nei"

@@ -73,15 +73,18 @@ class SøknadsformatTest {
             "utbetalingsperioder": [{
                 "fraOgMed": "2020-01-01",
                 "tilOgMed": "2020-01-11",
-                "lengde": "PT5H30M"
+                "antallTimerBorte": "PT5H30M",
+                "antallTimerPlanlagt": "PT5H30M"
             }, {
                 "fraOgMed": "2020-01-21",
                 "tilOgMed": "2020-01-21",
-                "lengde": "PT5H30M"
+                "antallTimerBorte": "PT5H30M",
+                "antallTimerPlanlagt": "PT5H30M"
             }, {
                 "fraOgMed": "2020-01-31",
                 "tilOgMed": "2020-02-05",
-                "lengde": "PT5H30M"
+                "antallTimerBorte": "PT5H30M",
+                "antallTimerPlanlagt": "PT5H30M"
             }],
             "andreUtbetalinger": ["dagpenger", "sykepenger"],
             "vedlegg": [
@@ -168,17 +171,20 @@ class SøknadsformatTest {
             Utbetalingsperiode(
                 fraOgMed = start,
                 tilOgMed = start.plusDays(10),
-                lengde = Duration.ofHours(5).plusMinutes(30)
+                antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
+                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
             ),
             Utbetalingsperiode(
                 fraOgMed = start.plusDays(20),
                 tilOgMed = start.plusDays(20),
-                lengde = Duration.ofHours(5).plusMinutes(30)
+                antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
+                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
             ),
             Utbetalingsperiode(
                 fraOgMed = start.plusDays(30),
                 tilOgMed = start.plusDays(35),
-                lengde = Duration.ofHours(5).plusMinutes(30)
+                antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
+                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
             )
         ),
         andreUtbetalinger = listOf("dagpenger", "sykepenger"),

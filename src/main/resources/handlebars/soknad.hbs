@@ -88,8 +88,9 @@
         {{# each søknad.utbetalingsperioder as |u|}}
             <li>
                 Periode: {{#dato u.fraOgMed}}{{/dato}} - {{#dato u.tilOgMed}}{{/dato}}
-                {{#if u.lengde}}
-                    <br/>Lengde: {{#varighet u.lengde}}{{/varighet}}
+                {{#if u.antallTimerBorte}}
+                    <br/>AntallTimerBorte: {{#varighet u.antallTimerBorte}}{{/varighet}}
+                    <br/>AntallTimerPlanlagt: {{#varighet u.antallTimerPlanlagt}}{{/varighet}}
                 {{/if}}
                 <br/><br/>
             </li>
