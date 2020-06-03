@@ -124,6 +124,7 @@ data class Søker(
 data class Utbetalingsperiode(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,
+    val lengde: Duration? = null, //TODO: beholde lengde i en periode slik at vi ikke mister info i overgangen
     val antallTimerBorte: Duration? = null,
     val antallTimerPlanlagt: Duration? = null
 )

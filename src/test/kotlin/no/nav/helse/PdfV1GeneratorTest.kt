@@ -109,6 +109,11 @@ class PdfV1GeneratorTest {
                     tilOgMed = start.plusDays(3),
                     antallTimerPlanlagt = Duration.ofHours(4).plusMinutes(30),
                     antallTimerBorte = Duration.ofHours(5).plusMinutes(0)
+                ),
+                Utbetalingsperiode(
+                    fraOgMed = start.plusDays(3),
+                    tilOgMed = start.plusDays(3),
+                    lengde = Duration.ofHours(3)
                 )
             ),
             andreUtbetalinger = listOf("dagpenger", "sykepenger", "midlertidigkompensasjonsnfri"),
