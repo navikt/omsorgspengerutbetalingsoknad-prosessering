@@ -74,17 +74,20 @@ class SøknadsformatTest {
                 "fraOgMed": "2020-01-01",
                 "tilOgMed": "2020-01-11",
                 "antallTimerBorte": "PT5H30M",
-                "antallTimerPlanlagt": "PT5H30M"
+                "antallTimerPlanlagt": "PT5H30M",
+                "lengde": null
             }, {
                 "fraOgMed": "2020-01-21",
                 "tilOgMed": "2020-01-21",
                 "antallTimerBorte": "PT5H30M",
-                "antallTimerPlanlagt": "PT5H30M"
+                "antallTimerPlanlagt": "PT5H30M",
+                "lengde": null
             }, {
                 "fraOgMed": "2020-01-31",
                 "tilOgMed": "2020-02-05",
                 "antallTimerBorte": "PT5H30M",
-                "antallTimerPlanlagt": "PT5H30M"
+                "antallTimerPlanlagt": "PT5H30M",
+                "lengde": null
             }],
             "andreUtbetalinger": ["dagpenger", "sykepenger"],
             "vedlegg": [
