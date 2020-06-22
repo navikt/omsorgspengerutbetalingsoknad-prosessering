@@ -89,7 +89,11 @@
             <li>
                 Periode: {{#dato u.fraOgMed}}{{/dato}} - {{#dato u.tilOgMed}}{{/dato}}
                 {{#if u.lengde}}
-                    <br/>Lengde: {{#varighet u.lengde}}{{/varighet}}
+                <br/> Lengde: {{#varighet u.lengde}}{{/varighet}}
+                {{/if}}
+                {{#if u.antallTimerBorte}}
+                    <br/>Antall timer planlagt jobbe: {{#varighet u.antallTimerPlanlagt}}{{/varighet}}
+                    <br/>Antall timer borte: {{#varighet u.antallTimerBorte}}{{/varighet}}
                 {{/if}}
                 <br/><br/>
             </li>

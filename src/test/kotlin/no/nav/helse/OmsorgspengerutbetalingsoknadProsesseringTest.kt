@@ -288,17 +288,20 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             Utbetalingsperiode(
                 fraOgMed = start,
                 tilOgMed = start.plusDays(10),
-                lengde = Duration.ofHours(5).plusMinutes(30)
+                antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
+                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
             ),
             Utbetalingsperiode(
                 fraOgMed = start.plusDays(20),
                 tilOgMed = start.plusDays(20),
-                lengde = Duration.ofHours(5).plusMinutes(30)
+                antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
+                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
             ),
             Utbetalingsperiode(
                 fraOgMed = start.plusDays(30),
                 tilOgMed = start.plusDays(35),
-                lengde = Duration.ofHours(5).plusMinutes(30)
+                antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
+                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
             )
         ),
         andreUtbetalinger = listOf("dagpenger", "sykepenger"),

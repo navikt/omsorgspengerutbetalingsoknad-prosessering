@@ -173,7 +173,7 @@ private fun Bekreftelser.bekreftelserSomMap(): Map<String, Boolean> {
 }
 
 private fun Duration.tilString(): String = when (this.toMinutesPart()) {
-    0 -> "${this.toHoursPart()} timer"
+    0 -> "${this.toHours()} timer"
     else -> "${this.toHoursPart()} timer og ${this.toMinutesPart()} minutter"
 }
 
