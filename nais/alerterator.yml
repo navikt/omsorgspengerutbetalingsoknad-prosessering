@@ -24,6 +24,6 @@ spec:
 
     - alert: {{app}} feiler
       expr: stream_status{app="{{app}}"} > 0
-      for: 1m
+      for: 20m
       description: "\{{ $labels.stream }}-stream feiler. Sjekk loggene for å se hvorfor."
       action: "`kubectl logs \{{ $labels.kubernetes_pod_name }} -n \{{ $labels.kubernetes_namespace }}`"
