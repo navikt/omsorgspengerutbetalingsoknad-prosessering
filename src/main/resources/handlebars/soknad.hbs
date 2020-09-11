@@ -82,6 +82,16 @@
         </ul>
     {{/if}}
 
+    {{#if søknad.hjemmePgaStengtBhgSkole}}
+        <h2><span>Stengt barnehage/skole</span></h2>
+        <ul>
+            <li>Søker opplyser å være hjemme fra jobb fordi barnehage/skole har vært stengt</li>
+            {{#if ikkeHarSendtInnVedlegg}}
+                <li>Bekreftelse fra barnehage/skole ikke lastet opp. Må ettersendes.</li>
+            {{/if}}
+        </ul>
+    {{/if}}
+
     <!-- UTBETALINGSPERIODER -->
     <h2><span>Utbetalingsperioder</span></h2>
     <ul>

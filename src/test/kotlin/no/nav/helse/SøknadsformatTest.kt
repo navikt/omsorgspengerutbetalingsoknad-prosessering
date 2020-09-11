@@ -25,6 +25,7 @@ class SøknadsformatTest {
         )
         println(String(json))
         JSONAssert.assertEquals(
+            //language=json
             """{
             "søknadId": "$søknadId",
             "språk": "nb",
@@ -102,6 +103,7 @@ class SøknadsformatTest {
                 "fødselsnummer": "02119970078"
             }],
             "hjemmePgaSmittevernhensyn": true,
+            "hjemmePgaStengtBhgSkole": true,
             "bekreftelser": {
             "harBekreftetOpplysninger": true,
             "harForståttRettigheterOgPlikter": true
@@ -206,6 +208,7 @@ class SøknadsformatTest {
             harForståttRettigheterOgPlikter = JaNei.Ja
         ),
         erArbeidstakerOgså = true,
-        hjemmePgaSmittevernhensyn = true
+        hjemmePgaSmittevernhensyn = true,
+        hjemmePgaStengtBhgSkole = true
     )
 }

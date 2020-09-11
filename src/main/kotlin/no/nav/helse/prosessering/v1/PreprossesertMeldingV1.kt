@@ -19,6 +19,7 @@ data class PreprossesertMeldingV1(
     val frilans: Frilans? = null,
     val selvstendigVirksomheter: List<Virksomhet>? = null,
     val hjemmePgaSmittevernhensyn: Boolean,
+    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til Boolean etter lansering.
     val bekreftelser: Bekreftelser
 ) {
     internal constructor(
