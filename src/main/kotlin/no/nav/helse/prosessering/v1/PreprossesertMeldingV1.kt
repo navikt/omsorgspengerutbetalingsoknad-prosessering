@@ -41,6 +41,7 @@ data class PreprossesertMeldingV1(
         frilans = melding.frilans,
         selvstendigVirksomheter = melding.selvstendigVirksomheter,
         hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn,
+        hjemmePgaStengtBhgSkole = melding.hjemmePgaStengtBhgSkole,
         bekreftelser = melding.bekreftelser
     )
 }
