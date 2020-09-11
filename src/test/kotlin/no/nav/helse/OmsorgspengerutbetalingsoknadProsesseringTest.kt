@@ -127,18 +127,6 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
     }
 
     @Test
-    fun test() {
-        val melding = gyldigMelding(
-            fødselsnummerSoker = gyldigFodselsnummerA
-        )
-
-        kafkaTestProducer.leggTilMottak(melding)
-        val hentCleanupMelding = cleanupKonsumer
-            .hentCleanupMelding(melding.søknadId)
-        JSONObject(hentCleanupMelding)
-    }
-
-    @Test
     fun `Gylding melding blir prosessert av journalføringskonsumer`() {
         val melding = gyldigMelding(
             fødselsnummerSoker = gyldigFodselsnummerA
