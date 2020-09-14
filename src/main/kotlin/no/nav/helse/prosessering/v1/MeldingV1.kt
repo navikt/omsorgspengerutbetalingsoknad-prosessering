@@ -24,6 +24,7 @@ data class MeldingV1(
     val selvstendigVirksomheter: List<Virksomhet>? = null,
     val erArbeidstakerOgså: Boolean,
     val hjemmePgaSmittevernhensyn: Boolean,
+    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til Boolean etter lansering.
     val bekreftelser: Bekreftelser
 )
 

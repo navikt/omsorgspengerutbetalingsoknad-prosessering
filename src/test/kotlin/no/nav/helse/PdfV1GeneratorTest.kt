@@ -177,7 +177,8 @@ class PdfV1GeneratorTest {
                 harForståttRettigheterOgPlikter = JaNei.Ja
             ),
             erArbeidstakerOgså = true,
-            hjemmePgaSmittevernhensyn = true
+            hjemmePgaSmittevernhensyn = true,
+            hjemmePgaStengtBhgSkole = true
         )
     }
 

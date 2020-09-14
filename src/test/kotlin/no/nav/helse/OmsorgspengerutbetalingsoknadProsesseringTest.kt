@@ -17,6 +17,7 @@ import no.nav.common.KafkaEnvironment
 import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
 import no.nav.helse.prosessering.v1.*
 import no.nav.helse.prosessering.v1.asynkron.TopicEntry
+import org.json.JSONObject
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.slf4j.Logger
