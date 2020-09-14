@@ -25,7 +25,6 @@ private val virksomhetsCounter = Counter.build()
         "fiskerErPaBladB",
         "registrertINorge",
         "harRegnskapsforer",
-        "harRevisor",
         "harVarigEndring",
         "nyligOppstartetVirksomhet"
     )
@@ -131,7 +130,6 @@ private fun MeldingV1.virksomheterMetric() {
                 it.fiskerErPåBladB?.boolean?.tilJaEllerNei() ?: "Nei",
                 it.registrertINorge.boolean.tilJaEllerNei(),
                 if (it.regnskapsfører == null) "Nei" else "Ja",
-                if (it.revisor == null) "Nei" else "Ja",
                 if (it.varigEndring == null) "Nei" else "Ja",
                 if (it.yrkesaktivSisteTreFerdigliknedeÅrene == null) "Nei" else "Ja"
             )
