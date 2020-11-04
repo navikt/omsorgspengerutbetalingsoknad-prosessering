@@ -1,276 +1,262 @@
 <!DOCTYPE html>
-<html>
+<html lang="NO">
+
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>Søknad om utbetaling av omsorgspenger for selvstendig næringsdrivende og frilansere</title>
-    {{#block 'style' }}
+    <meta name="subject" content="Søknad om utbetaling av omsorgspenger for selvstendig næringsdrivende og frilansere" />
+    <meta name="author" content="nav.no" />
+    <meta name="description"
+          content="Søknad om utbetaling av omsorgspenger for selvstendig næringsdrivende og frilansere mottatt {{mottaksUkedag}} {{#tidspunkt søknad.mottatt}}{{/tidspunkt}}" />
+    <bookmarks>
+        <bookmark name="Søker" href="#søker" />
+        <bookmark name="Fosterbarn" href="#fosterbarn" />
+        <bookmark name="Smittevern" href="#smittevern" />
+        <bookmark name="Utbetalingsperioder" href="#utbetalingsperioder" />
+        <bookmark name="Spørsmål" href="#spørsmål" />
+        <bookmark name="Medlemskap" href="#medlemskap" />
+        <bookmark name="Utenlandsopphold" href="#utenlandsopphold" />
+        <bookmark name="Frilans" href="#frilans" />
+        <bookmark name="Selvstendig næringsdrivende" href="#selvstendig" />
+        <bookmark name="Samtykke" href="#samtykke" />
+    </bookmarks>
+    {{#block 'style-common' }}
     {{/block}}
-
-    {{#*inline "jaNeiCheckbox"}}
-        {{#if parameter}}
-            <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
-            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
-        {{else}}
-            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
-            <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
-        {{/if}}
-    {{/inline}}
 </head>
+
 <body>
-<div id="header">
-    <img class="navlogo" src="{{ image "Navlogo.png" }}"/>
-    <h1 class="title">Søknad om utbetaling av omsorgspenger for selvstendig næringsdrivende og frilansere</h1>
-</div>
-<div class="container">
-    <div id="container_top">
-        <div class="nokkeldata">
-            <br/><br/>
-            <p>
-                <span class="nokkeldata__overskrift">Sendt til NAV</span><br/>
-                {{mottaksUkedag}} {{#tidspunkt søknad.mottatt}}{{/tidspunkt}}
-            </p>
-            <p>
-                <span class="nokkeldata__overskrift">Språk</span><br/>
-                {{språk}}
-            </p>
+    <h1 id="header">Søknad om utbetaling av omsorgspenger for selvstendig næringsdrivende og frilansere</h1>
+    <p class="nokkelinfo"><strong>Sendt til NAV </strong>{{mottaksUkedag}} {{#tidspunkt søknad.mottatt}}{{/tidspunkt}}</p>
+    <p class="nokkelinfo">Språk {{språk}}</p>
+
+    <div class="innholdscontainer">
+        <div class="person" id="søker">
+            <p class="navn">{{ søker.formatertNavn }}</p>
+            <p>{{ søknad.søker.fødselsnummer }}<br /></p>
         </div>
-        <div class="personinfo">
-            <div class="persontekst">
-                <div class="persontekst__sidetopp">
-                    <p>
-                        Søker
-                    </p>
-                    <img class="ikon" src="{{ image "Personikon.png" }}"/>
-                    <div class="persontekst__personalia">
-                        <p class="navn">
-                            {{ søker.formatertNavn }}
-                        </p>
-                        <p class="id">
-                            {{ søknad.søker.fødselsnummer }}<br/>
-                        </p>
-                    </div>
-                    <br/>
 
-                    {{#if harFosterbarn}}
-                        <p>
-                            Fosterbarn
-                        </p>
-                    {{/if}}
-                    {{# each søknad.fosterbarn as |barn|}}
-                        <img class="ikon" src="{{ image "Personikon.png" }}"/>
-                        <div class="persontekst__personalia">
-                            <p class="id">
-                                {{ barn.fødselsnummer }}
-                            </p>
-                        </div>
-                        <br/>
-                    {{/each}}
-
-                </div>
-            </div>
+        <div class="person" id="fosterbarn">
+            {{#if harFosterbarn}}
+                <p>Fosterbarn</p>
+            {{# each søknad.fosterbarn as |barn|}}
+                <p>Fødselsnummer</p>
+                <p>{{ barn.fødselsnummer }}</p>
+                <br/>
+            {{/each}}
+            {{/if}}
         </div>
-    </div>
-    <br/>
 
-    {{#if søknad.hjemmePgaSmittevernhensyn}}
-        <h2><span>Særlige Smittevernhensyn</span></h2>
-        <ul>
-            <li>Søker opplyser å være hjemme med barn grunnet smittevernhensyn</li>
-            {{#if ikkeHarSendtInnVedlegg}}
-                <li>Vedlegg ikke lastet opp. Må ettersendes.</li>
-            {{/if}}
-        </ul>
-    {{/if}}
-
-    {{#if søknad.hjemmePgaStengtBhgSkole}}
-        <h2><span>Stengt barnehage/skole</span></h2>
-        <ul>
-            <li>Søker opplyser å være hjemme fra jobb fordi barnehage/skole har vært lokalt stengt</li>
-            {{#if ikkeHarSendtInnVedlegg}}
-                <li>Bekreftelse fra barnehage/skole ikke lastet opp. Må ettersendes.</li>
-            {{/if}}
-        </ul>
-    {{/if}}
-
-    <!-- UTBETALINGSPERIODER -->
-    <h2><span>Utbetalingsperioder</span></h2>
-    <ul>
-        {{# each søknad.utbetalingsperioder as |u|}}
-            <li>
-                Periode: {{#dato u.fraOgMed}}{{/dato}} - {{#dato u.tilOgMed}}{{/dato}}
-                {{#if u.lengde}}
-                <br/> Lengde: {{#varighet u.lengde}}{{/varighet}}
-                {{/if}}
-                {{#if u.antallTimerBorte}}
-                    <br/>Antall timer planlagt jobbe: {{#varighet u.antallTimerPlanlagt}}{{/varighet}}
-                    <br/>Antall timer borte: {{#varighet u.antallTimerBorte}}{{/varighet}}
-                {{/if}}
-                <br/><br/>
-            </li>
-        {{/each}}
-    </ul>
-
-    <!-- UTENLANDSOPPHOLD i Perioden -->
-    {{#if harOpphold}}
-        <h3>Utenlandsopphold i perioden</h3>
-    {{/if}}
-    <ul>
-        {{# each søknad.opphold as |o|}}
-        <li>
-            {{# if o.erEØSLand}}
-                <li>
-                    {{o.landnavn}}: {{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}} <br/>
-                </li>
-            {{else}}
-                <li>
-                    {{o.landnavn}} (utenfor EØS): {{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}} <br/>
-                </li>
-            {{/if}}
-            </li>
-        {{/each}}
-    </ul>
-
-    <!-- Bekreftet andre utbetalinger -->
-    {{#if harSøktAndreYtelser}}
-        <h3>Søkt om andre ytelser</h3>
-    {{/if}}
-    <ul>
-        {{# each søknad.andreUtbetalinger as |utbetaling|}}
-            <li>
-                {{#eq utbetaling "midlertidigkompensasjonsnfri"}}
-                    Midlertidig kompensasjon for selvstendig næringsdrivende og frilansere
-                    {{else}}
-                    {{#storForbokstav utbetaling}}{{/storForbokstav}} <br/>
-                {{/eq}}
-            </li>
-        {{/each}}
-    </ul>
-
-    <!-- SPØRSMÅL -->
-    <h2><span>Spørsmål</span></h2>{{# each søknad.spørsmål as |s|}}
-    <p class="sporsmalstekst">{{s.spørsmål}}</p>
-    {{>jaNeiCheckbox parameter=s.svar}} <br/><br/>
-{{/each}}
-
-    <!-- MEDLEMSKAP -->
-    <h2><span>Medlemskap</span></h2>
-
-    <p class="sporsmalstekst">Bodd i utlandet siste 12 månedene?</p>
-    {{>jaNeiCheckbox parameter=medlemskap.siste12}}
-
-    <br/><br/>
-
-    <p class="sporsmalstekst">Skal bo i utlandet neste 12 månedene?</p>
-    {{>jaNeiCheckbox parameter=medlemskap.neste12}}
-    <br/><br/>
-
-    {{#if harBosteder}}
-        <h3>Utenlandsopphold i medlemsperioden</h3>
-    {{/if}}
-    <ul>
-        {{# each søknad.bosteder as |b|}}
-            <li>
-                {{b.landnavn}}: {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
-            </li>
-        {{/each}}
-    </ul>
-
-    <!-- FRILANS -->
-    {{# if søknad.frilans }}
-        <h2><span>Frilans</span></h2>
-        <p class="sporsmalstekst">Når startet du som frilanser?</p>
-        <p>{{#dato søknad.frilans.startdato}}{{/dato}}</p>
-        <br/> <br/>
-
-        <p class="sporsmalstekst">Har du jobbet og hatt inntekt som frilanser de siste 4 uker?</p>
-        {{>jaNeiCheckbox parameter=søknad.frilans}}  <br/> <br/>
-
-        <p class="sporsmalstekst">Jobber du fortsatt som frilanser?</p>
-        {{>jaNeiCheckbox parameter=søknad.frilans.jobberFortsattSomFrilans}}
-    {{/if}}
-
-    <br/>
-    <!-- SELVSTENDIG NÆRINGSDRIVENDE -->
-    {{#if søknad.selvstendigVirksomheter}}
-        <h2><span>Selvstendig næringsdrivende</span></h2>
-        {{# each søknad.selvstendigVirksomheter as |virksomhet|~}}
-
-            <h3>{{virksomhet.navnPåVirksomheten}} ({{#dato virksomhet.fraOgMed}}{{/dato}} -
-                {{#if virksomhet.tilOgMed}}
-                    {{#dato virksomhet.tilOgMed}}{{/dato}})
-                {{else}}
-                    pågående)
-                {{/if}}</h3>
-            <p>Næringstype:
-                {{# each virksomhet.næringstyper as |næringstype|~}}
-                    {{#if @first}}
-                        {{#enumNæringstyper næringstype}}{{/enumNæringstyper}}
-                    {{else}}
-                        , {{#enumNæringstyper næringstype}}{{/enumNæringstyper}}
+        <section id="smittevern">
+            {{#if søknad.hjemmePgaSmittevernhensyn}}
+                <h2>Særlige smittevernhensyn</h2>
+                <ul>
+                    <li>Du opplyser at du må være hjemme med barn på grunn av særlige smittevernhensyn.</li>
+                    {{#if ikkeHarSendtInnVedlegg}}
+                        <li>Vedlegg ikke lastet opp. Må ettersendes.</li>
                     {{/if}}
-                    {{#eq næringstype "FISKE"}}
-                        {{#if virksomhet.fiskerErPåBladB}}
-                            (blad B)
-                        {{else}}
-                            (ikke blad B)
+                </ul>
+            {{/if}}
+
+            {{#if søknad.hjemmePgaStengtBhgSkole}}
+                <h2>Lokalt stengt barnehage eller skole</h2>
+                <ul>
+                    <li>Du opplyser at du er hjemme med barn fordi barnehagen eller skolen har vært lokalt stengt.</li>
+                    {{#if ikkeHarSendtInnVedlegg}}
+                        <li>Bekreftelse fra barnehage eller skole er ikke lagt ved, og må ettersendes.</li>
+                    {{/if}}
+                </ul>
+            {{/if}}
+        </section>
+
+        <section id="utbetalingsperioder">
+            <h2>Perioder med utbetaling</h2>
+            <ul>
+                {{# each søknad.utbetalingsperioder as |u|}}
+                    <li>
+                        Periode: {{#dato u.fraOgMed}}{{/dato}} - {{#dato u.tilOgMed}}{{/dato}}
+                        {{#if u.lengde}}
+                            <br/> Lengde: {{#varighet u.lengde}}{{/varighet}}
                         {{/if}}
-                    {{/eq}}
-                {{/each}}</p>
-            {{#if virksomhet.næringsinntekt}}
-                <p>Næringsinntekt: {{virksomhet.næringsinntekt}},-</p>
-            {{/if}}
-            {{#if virksomhet.registrertINorge}}
-                <p>Registrert i Norge</p>
-                <p>Organisasjonsnummeret: {{virksomhet.organisasjonsnummer}}</p>
-            {{else}}
-                <p>Registrert i land: {{virksomhet.registrertILand}}</p>
-            {{/if}}
+                        {{#if u.antallTimerBorte}}
+                            <br/>Antall timer du har planlagt jobbe: {{#varighet u.antallTimerPlanlagt}}{{/varighet}}
+                            <br/>Antall timer du var borte fra jobb: {{#varighet u.antallTimerBorte}}{{/varighet}}
+                        {{/if}}
+                        <br/><br/>
+                    </li>
+                {{/each}}
+            </ul>
 
-            {{#if virksomhet.yrkesaktivSisteTreFerdigliknedeÅrene}}
-                <p>Oppgi dato for når du ble
-                    yrkesaktiv: {{#dato virksomhet.yrkesaktivSisteTreFerdigliknedeÅrene.oppstartsdato}}{{/dato}}</p>
+            {{#if harOpphold}}
+                <h3>Utenlandsopphold i perioden</h3>
             {{/if}}
-            {{#if virksomhet.varigEndring}}
-                <h3>Varig endring</h3>
-                <ul>
-                    <p>Dato for endring: {{#dato virksomhet.varigEndring.dato}}{{/dato}}</p>
-                    <p>Næringsinntekten etter endringen: {{virksomhet.varigEndring.inntektEtterEndring}}</p>
-                    <div class="fritekst">
-                        <p class="sporsmalstekst"><img class="lite_ikon" src="{{ image "Fritekst.png" }}"/>Søkers
-                            forklaring:</p>
-                        <p class="fritekst_textarea">{{virksomhet.varigEndring.forklaring}}</p>
-                    </div>
-                </ul>
+            <ul>
+                {{# each søknad.opphold as |o|}}
+                <li>
+                    {{# if o.erEØSLand}}
+                        <li>
+                            {{o.landnavn}}: {{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}} <br/>
+                        </li>
+                    {{else}}
+                        <li>
+                            {{o.landnavn}} (utenfor EØS): {{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}} <br/>
+                        </li>
+                    {{/if}}
+                    </li>
+                {{/each}}
+            </ul>
+
+            {{#if harSøktAndreYtelser}}
+                <h3>Andre utbetalinger du har søkt om fra NAV</h3>
             {{/if}}
-            {{#if virksomhet.regnskapsfører}}
-                <h3>Regnskapsfører:</h3>
-                <ul>
-                    <p>Navn: {{virksomhet.regnskapsfører.navn}}</p>
-                    <p>Telefon: {{virksomhet.regnskapsfører.telefon}}</p>
-                </ul>
+            <ul>
+                {{# each søknad.andreUtbetalinger as |utbetaling|}}
+                    <li>
+                        {{#eq utbetaling "midlertidigkompensasjonsnfri"}}
+                            Midlertidig kompensasjon for selvstendig næringsdrivende og frilansere
+                        {{else}}
+                            {{#storForbokstav utbetaling}}{{/storForbokstav}} <br/>
+                        {{/eq}}
+                    </li>
+                {{/each}}
+            </ul>
+
+        </section>
+
+        <section id="spørsmål">
+            <h2>Andre spørsmål du svarte på i søknaden</h2>
+            {{# each søknad.spørsmål as |s|}}
+            <p class="sporsmalstekst">{{s.spørsmål}}</p>
+            {{jaNeiSvar s.svar}} <br/><br/>
+            {{/each}}
+        </section>
+
+        <section id="medlemskap">
+            <h2>Medlemskap i folketrygden</h2>
+
+            <p class="sporsmalstekst">Har du bodd i utlandet siste 12 månedene?</p>
+            {{jaNeiSvar medlemskap.siste12}}
+
+            <br/><br/>
+
+            <p class="sporsmalstekst">Skal du bo i utlandet de neste 12 månedene?</p>
+            {{jaNeiSvar medlemskap.neste12}}
+            <br/><br/>
+
+            {{#if harBosteder}}
+                <h3>Utenlandsopphold i medlemsperioden</h3>
             {{/if}}
-            {{#if @last}}
-                <!--Setter ikke <hr/> på siste linje -->
-            {{else}}
-                <hr/>
+            <ul>
+                {{# each søknad.bosteder as |b|}}
+                    <li>
+                        {{b.landnavn}}: {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
+                    </li>
+                {{/each}}
+            </ul>
+
+        </section>
+
+        <section id="frilans">
+            {{# if søknad.frilans }}
+                <h2>Frilans</h2>
+                <p class="sporsmalstekst">Når startet du som frilanser?</p>
+                <p>{{#dato søknad.frilans.startdato}}{{/dato}}</p>
+                <br/>
+
+                <p class="sporsmalstekst">Har du jobbet og hatt inntekt som frilanser de siste 4 ukene?</p>
+                {{jaNeiSvar true}}  <br/> <br/>
+
+                <p class="sporsmalstekst">Jobber du fremdeles som frilanser?</p>
+                {{jaNeiSvar søknad.frilans.jobberFortsattSomFrilans}}
             {{/if}}
-        {{/each}}
-    {{/if}}
+        </section>
 
-    <h2><span>Samtykker</span></h2>
-    <p class="sporsmalstekst">Har forstått rettigheter og plikter?</p>
-    {{>jaNeiCheckbox parameter=bekreftelser.harBekreftetOpplysninger}}
-    <br/><br/>
+        <section id="selvstendig">
+            {{#if søknad.selvstendigVirksomheter}}
+                <h2>Selvstendig næringsdrivende</h2>
+                {{# each søknad.selvstendigVirksomheter as |virksomhet|~}}
 
-    <p class="sporsmalstekst">Har bekreftet opplysninger?</p>
-    {{>jaNeiCheckbox parameter=bekreftelser.harForståttRettigheterOgPlikter}}
+                    <h3>{{virksomhet.navnPåVirksomheten}} ({{#dato virksomhet.fraOgMed}}{{/dato}} -
+                        {{#if virksomhet.tilOgMed}}
+                            {{#dato virksomhet.tilOgMed}}{{/dato}})
+                        {{else}}
+                            pågående)
+                        {{/if}}</h3>
+                    <p>Næringstype:
+                        {{# each virksomhet.næringstyper as |næringstype|~}}
+                            {{#if @first}}
+                                {{#enumNæringstyper næringstype}}{{/enumNæringstyper}}
+                            {{else}}
+                                , {{#enumNæringstyper næringstype}}{{/enumNæringstyper}}
+                            {{/if}}
+                            {{#eq næringstype "FISKE"}}
+                                {{#if virksomhet.fiskerErPåBladB}}
+                                    (blad B)
+                                {{else}}
+                                    (ikke blad B)
+                                {{/if}}
+                            {{/eq}}
+                        {{/each}}</p>
+                    {{#if virksomhet.næringsinntekt}}
+                        <p>Næringsinntekt: {{virksomhet.næringsinntekt}},-</p>
+                    {{/if}}
+                    {{#if virksomhet.registrertINorge}}
+                        <p>Registrert i Norge</p>
+                        <p>Organisasjonsnummeret: {{virksomhet.organisasjonsnummer}}</p>
+                    {{else}}
+                        <p>Registrert i land: {{virksomhet.registrertILand}}</p>
+                    {{/if}}
 
-</div>
+                    {{#if virksomhet.yrkesaktivSisteTreFerdigliknedeÅrene}}
+                        <p>Oppgi dato for når du ble
+                            yrkesaktiv: {{#dato virksomhet.yrkesaktivSisteTreFerdigliknedeÅrene.oppstartsdato}}{{/dato}}</p>
+                    {{/if}}
+                    {{#if virksomhet.varigEndring}}
+                        <h3>Varig endring</h3>
+                        <ul>
+                            <li>
+                                <p>Dato for når varig endring oppsto: {{#dato virksomhet.varigEndring.dato}}{{/dato}}</p>
+                                <p>Næringsinntekt etter endringen: {{virksomhet.varigEndring.inntektEtterEndring}}</p>
+                                <div class="fritekst">
+                                    <p class="sporsmalstekst">Din forklaring om varig endring</p>
+                                    <p class="fritekst_textarea">{{virksomhet.varigEndring.forklaring}}</p>
+                                </div>
+                            </li>
+                        </ul>
+                    {{/if}}
+                    {{#if virksomhet.regnskapsfører}}
+                        <h3>Regnskapsfører:</h3>
+                        <ul>
+                            <li>
+                                <p>Navn: {{virksomhet.regnskapsfører.navn}}</p>
+                                <p>Telefon: {{virksomhet.regnskapsfører.telefon}}</p>
+                            </li>
+                        </ul>
+                    {{/if}}
+                    {{#if @last}}
+                    {{else}}
+                        <hr/>
+                    {{/if}}
+                {{/each}}
+            {{/if}}
+        </section>
 
-<!-- FOOTER -->
-<div id="footer">
-    <span class="soknadsid">{{ søknad.søknadId }}</span>
-    <span class="sidetall">side <span id="pagenumber"></span> av <span id="pagecount"></span></span>
-</div>
+        <section id="samtykke">
+            <h2>Samtykke fra deg</h2>
+            <p class="sporsmalstekst">Har du forstått dine rettigheter og plikter?</p>
+            {{jaNeiSvar bekreftelser.harBekreftetOpplysninger}}
+            <br/><br/>
+
+            <p class="sporsmalstekst">Har du bekreftet at opplysninger som er gitt er riktige?</p>
+            {{jaNeiSvar bekreftelser.harForståttRettigheterOgPlikter}}
+        </section>
+
+    </div>
+
+    <!-- FOOTER -->
+    <p id="footer">
+        <span class="soknadsid">{{ søknad.søknadId }}</span>
+        <span class="sidetall">side <span id="pagenumber"></span> av <span id="pagecount"></span></span>
+    </p>
 </body>
+
 </html>
