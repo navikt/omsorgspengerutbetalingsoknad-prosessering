@@ -5,12 +5,14 @@ import no.nav.helse.joark.JoarkGateway
 import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.prosessering.v1.PreprosseseringV1Service
 import org.slf4j.LoggerFactory
+import java.time.ZonedDateTime
 
 internal class AsynkronProsesseringV1Service(
     kafkaConfig: KafkaConfig,
     preprosseseringV1Service: PreprosseseringV1Service,
     joarkGateway: JoarkGateway,
-    dokumentService: DokumentService
+    dokumentService: DokumentService,
+    datoMottattEtter: ZonedDateTime
 ) {
 
     private companion object {
@@ -19,17 +21,20 @@ internal class AsynkronProsesseringV1Service(
 
     private val preprosseseringStream = PreprosseseringStream(
         kafkaConfig = kafkaConfig,
-        preprosseseringV1Service = preprosseseringV1Service
+        preprosseseringV1Service = preprosseseringV1Service,
+        datoMottattEtter = datoMottattEtter
     )
 
     private val journalforingsStream = JournalforingsStream(
         kafkaConfig = kafkaConfig,
-        joarkGateway = joarkGateway
+        joarkGateway = joarkGateway,
+        datoMottattEtter = datoMottattEtter
     )
 
     private val cleanupStream = CleanupStream(
         kafkaConfig = kafkaConfig,
-        dokumentService = dokumentService
+        dokumentService = dokumentService,
+        datoMottattEtter = datoMottattEtter
     )
 
     private val healthChecks = setOf(
