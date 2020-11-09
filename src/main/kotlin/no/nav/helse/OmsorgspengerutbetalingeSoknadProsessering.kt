@@ -36,6 +36,7 @@ import no.nav.helse.prosessering.v1.asynkron.AsynkronProsesseringV1Service
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.net.URI
+import java.time.ZonedDateTime
 
 private val logger: Logger = LoggerFactory.getLogger("nav.OmsorgspengerutbetalingSoknadProsessering")
 
@@ -80,7 +81,8 @@ fun Application.omsorgspengerutbetalingSoknadProsessering() {
         kafkaConfig = configuration.getKafkaConfig(),
         preprosseseringV1Service = preprosseseringV1Service,
         joarkGateway = joarkGateway,
-        dokumentService = dokumentService
+        dokumentService = dokumentService,
+        datoMottattEtter = configuration.soknadDatoMottattEtter()
     )
 
     environment.monitor.subscribe(ApplicationStopping) {
@@ -120,6 +122,8 @@ fun Application.omsorgspengerutbetalingSoknadProsessering() {
         )
     }
 }
+
+fun ZonedDateTime.erEtter(zonedDateTime: ZonedDateTime): Boolean = this.isAfter(zonedDateTime)
 
 private fun Url.Companion.healthURL(baseUrl: URI) = Url.buildURL(baseUrl = baseUrl, pathParts = listOf("health"))
 
