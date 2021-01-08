@@ -12,6 +12,12 @@ import io.ktor.server.testing.createTestEnvironment
 import io.ktor.server.testing.handleRequest
 import io.ktor.util.KtorExperimentalAPI
 import io.prometheus.client.CollectorRegistry
+import io.ktor.config.*
+import io.ktor.http.*
+import io.ktor.server.engine.*
+import io.ktor.server.testing.*
+import io.ktor.util.*
+import io.prometheus.client.CollectorRegistry
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.time.delay
 import no.nav.common.KafkaEnvironment
@@ -22,7 +28,6 @@ import no.nav.helse.prosessering.v1.Næringstyper
 import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
 import no.nav.helse.prosessering.v1.Virksomhet
 import no.nav.helse.prosessering.v1.asynkron.TopicEntry
-import org.json.JSONObject
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.slf4j.Logger
