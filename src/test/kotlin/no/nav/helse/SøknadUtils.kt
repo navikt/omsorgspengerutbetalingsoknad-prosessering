@@ -111,11 +111,6 @@ internal object SøknadUtils {
                     dato = LocalDate.now().minusDays(20),
                     inntektEtterEndring = 234543,
                     forklaring = "Forklaring som handler om varig endring"
-                ),
-                revisor = Revisor(
-                    navn = "Kjell Revisor",
-                    telefon = "9999",
-                    kanInnhenteOpplysninger = JaNei.Ja
                 )
             )
         ),

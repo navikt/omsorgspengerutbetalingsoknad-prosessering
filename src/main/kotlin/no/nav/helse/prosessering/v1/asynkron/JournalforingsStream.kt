@@ -9,9 +9,22 @@ import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
-import no.nav.helse.prosessering.v1.*
-import no.nav.k9.søknad.felles.*
-import no.nav.k9.søknad.felles.Søker
+import no.nav.helse.prosessering.v1.FosterBarn
+import no.nav.helse.prosessering.v1.Frilans
+import no.nav.helse.prosessering.v1.Næringstyper
+import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
+import no.nav.helse.prosessering.v1.PreprossesertSøker
+import no.nav.helse.prosessering.v1.Virksomhet
+import no.nav.k9.søknad.felles.opptjening.snf.Frilanser
+import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende
+import no.nav.k9.søknad.felles.opptjening.snf.VirksomhetType
+import no.nav.k9.søknad.felles.personopplysninger.Barn
+import no.nav.k9.søknad.felles.personopplysninger.Søker
+import no.nav.k9.søknad.felles.type.Landkode
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
+import no.nav.k9.søknad.felles.type.Organisasjonsnummer
+import no.nav.k9.søknad.felles.type.Periode
+import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.omsorgspenger.utbetaling.snf.OmsorgspengerUtbetalingSøknad
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
@@ -106,15 +119,15 @@ private fun PreprossesertMeldingV1.tilKOmsorgspengerUtbetalingSøknad(): Omsorgs
     return builder.build()
 }
 
-private fun List<Virksomhet>.tilK9SelvstendingNæringsdrivende(): List<SelvstendigNæringsdrivende> = map {
+private fun List<Virksomhet>.tilK9SelvstendingNæringsdrivende(): List<SelvstendigNæringsdrivende> = map { virksomhet ->
     val builder = SelvstendigNæringsdrivende.builder()
-        .virksomhetNavn(it.navnPåVirksomheten)
+        .virksomhetNavn(virksomhet.navnPåVirksomheten)
         .periode(
-            Periode(it.fraOgMed, it.tilOgMed),
-            it.tilK9SelvstendingNæringsdrivendeInfo()
+            Periode(virksomhet.fraOgMed, virksomhet.tilOgMed),
+            virksomhet.tilK9SelvstendingNæringsdrivendeInfo()
         )
 
-    it.organisasjonsnummer?.let { builder.organisasjonsnummer(Organisasjonsnummer.of(it)) }
+    virksomhet.organisasjonsnummer?.let { builder.organisasjonsnummer(Organisasjonsnummer.of(it)) }
 
     builder.build()
 }
