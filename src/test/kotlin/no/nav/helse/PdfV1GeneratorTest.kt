@@ -132,6 +132,7 @@ class PdfV1GeneratorTest {
                     navnPåVirksomheten = "Kjells Møbelsnekkeri",
                     registrertINorge = JaNei.Ja,
                     organisasjonsnummer = "111111",
+                    næringsinntekt = 123456789,
                     fiskerErPåBladB = JaNei.Ja,
                     varigEndring = VarigEndring(
                         dato = LocalDate.now().minusDays(20),

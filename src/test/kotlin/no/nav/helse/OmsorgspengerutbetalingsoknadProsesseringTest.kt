@@ -262,6 +262,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                     næringstyper = listOf(Næringstyper.ANNEN),
                     fiskerErPåBladB = JaNei.Nei,
                     registrertINorge = JaNei.Nei,
+                    næringsinntekt = 123456789,
                     registrertILand = "dk",
                     registrertIUtlandet = Land("dk", "Danmark"),
                     fraOgMed = LocalDate.now().minusYears(2)

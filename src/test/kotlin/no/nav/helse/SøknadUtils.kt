@@ -106,6 +106,7 @@ internal object SøknadUtils {
                 tilOgMed = LocalDate.now().plusDays(10),
                 navnPåVirksomheten = "Kjells Møbelsnekkeri",
                 registrertINorge = JaNei.Ja,
+                næringsinntekt = 123456789,
                 organisasjonsnummer = "111111",
                 varigEndring = VarigEndring(
                     dato = LocalDate.now().minusDays(20),
