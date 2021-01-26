@@ -14,6 +14,7 @@ import no.nav.common.KafkaEnvironment
 import no.nav.helse.SøknadUtils.defaultSøknad
 import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
 import no.nav.helse.prosessering.v1.JaNei
+import no.nav.helse.prosessering.v1.Land
 import no.nav.helse.prosessering.v1.Næringstyper
 import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
 import no.nav.helse.prosessering.v1.Virksomhet
@@ -262,6 +263,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                     fiskerErPåBladB = JaNei.Nei,
                     registrertINorge = JaNei.Nei,
                     registrertILand = "dk",
+                    registrertIUtlandet = Land("dk", "Danmark"),
                     fraOgMed = LocalDate.now().minusYears(2)
                 )
             )
