@@ -9,23 +9,32 @@ import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
+import no.nav.helse.prosessering.v1.Bosted
 import no.nav.helse.prosessering.v1.FosterBarn
 import no.nav.helse.prosessering.v1.Frilans
 import no.nav.helse.prosessering.v1.Næringstyper
+import no.nav.helse.prosessering.v1.Opphold
 import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
 import no.nav.helse.prosessering.v1.PreprossesertSøker
+import no.nav.helse.prosessering.v1.Utbetalingsperiode
 import no.nav.helse.prosessering.v1.Virksomhet
-import no.nav.k9.søknad.felles.opptjening.snf.Frilanser
-import no.nav.k9.søknad.felles.opptjening.snf.SelvstendigNæringsdrivende
-import no.nav.k9.søknad.felles.opptjening.snf.VirksomhetType
+import no.nav.k9.søknad.Søknad
+import no.nav.k9.søknad.felles.Versjon
+import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet
+import no.nav.k9.søknad.felles.aktivitet.Frilanser
+import no.nav.k9.søknad.felles.aktivitet.Organisasjonsnummer
+import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende
+import no.nav.k9.søknad.felles.aktivitet.VirksomhetType
+import no.nav.k9.søknad.felles.fravær.FraværPeriode
 import no.nav.k9.søknad.felles.personopplysninger.Barn
+import no.nav.k9.søknad.felles.personopplysninger.Bosteder
 import no.nav.k9.søknad.felles.personopplysninger.Søker
+import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
 import no.nav.k9.søknad.felles.type.Landkode
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9.søknad.felles.type.Organisasjonsnummer
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
-import no.nav.k9.søknad.omsorgspenger.utbetaling.snf.OmsorgspengerUtbetalingSøknad
+import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
@@ -33,6 +42,8 @@ import org.apache.kafka.streams.kstream.Produced
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
 import java.time.ZonedDateTime
+import javax.validation.Valid
+import javax.validation.constraints.NotNull
 
 internal class JournalforingsStream(
     joarkGateway: JoarkGateway,
@@ -104,20 +115,57 @@ internal class JournalforingsStream(
     internal fun stop() = stream.stop(becauseOfError = false)
 }
 
-private fun PreprossesertMeldingV1.tilKOmsorgspengerUtbetalingSøknad(): OmsorgspengerUtbetalingSøknad {
-    val builder = OmsorgspengerUtbetalingSøknad.builder()
-        .søknadId(SøknadId.of(soknadId))
-        .mottattDato(mottatt)
-        .søker(søker.tilK9Søker())
+private fun PreprossesertMeldingV1.tilKOmsorgspengerUtbetalingSøknad(): Søknad {
 
-    fosterbarn?.let { builder.fosterbarn(it.tilK9Barn()) }
-
-    frilans?.let { builder.frilanser(it.tilK9Frilanser()) }
-
-    selvstendigVirksomheter?.let { builder.selvstendigNæringsdrivende(it.tilK9SelvstendingNæringsdrivende()) }
-
-    return builder.build()
+    return Søknad(
+        SøknadId.of(soknadId),
+        Versjon.of("2.0"),
+        mottatt,
+        søker.tilK9Søker(),
+        OmsorgspengerUtbetaling(
+            fosterbarn?.tilK9Barn(),
+            arbeidAktivitet(),
+            this.utbetalingsperioder.tilFraværsperiode(),
+            this.bosteder.tilK9Bosteder(),
+            this.opphold.tilK9Utenlandsopphold()
+        )
+    )
 }
+
+fun List<Opphold>.tilK9Utenlandsopphold(): Utenlandsopphold {
+    val perioder = mutableMapOf<Periode, Utenlandsopphold.UtenlandsoppholdPeriodeInfo>()
+    forEach {
+
+        val periode = Periode(it.fraOgMed, it.tilOgMed)
+        perioder[periode] = Utenlandsopphold.UtenlandsoppholdPeriodeInfo.builder()
+            .land(Landkode.of(it.landkode))
+            .build()
+    }
+    return Utenlandsopphold.builder()
+        .perioder(perioder)
+        .build()
+}
+
+private fun List<Bosted>.tilK9Bosteder(): @Valid @NotNull Bosteder {
+    val perioder = mutableMapOf<Periode, Bosteder.BostedPeriodeInfo>()
+    forEach {
+        val periode = Periode(it.fraOgMed, it.tilOgMed)
+        perioder[periode] = Bosteder.BostedPeriodeInfo.builder()
+            .land(Landkode.of(it.landkode))
+            .build()
+    }
+
+    return Bosteder(perioder)
+}
+
+private fun List<Utbetalingsperiode>.tilFraværsperiode(): List<FraværPeriode> = map {
+    FraværPeriode(Periode(it.fraOgMed, it.tilOgMed), it.lengde)
+}
+
+private fun PreprossesertMeldingV1.arbeidAktivitet() = ArbeidAktivitet.builder()
+    .frilanser(frilans?.tilK9Frilanser())
+    .selvstendigNæringsdrivende(selvstendigVirksomheter?.tilK9SelvstendingNæringsdrivende())
+    .build()
 
 private fun List<Virksomhet>.tilK9SelvstendingNæringsdrivende(): List<SelvstendigNæringsdrivende> = map { virksomhet ->
     val builder = SelvstendigNæringsdrivende.builder()
