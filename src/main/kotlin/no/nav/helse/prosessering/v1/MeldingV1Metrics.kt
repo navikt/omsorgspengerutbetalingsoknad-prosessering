@@ -139,19 +139,19 @@ private fun MeldingV1.virksomheterMetric() {
 
 private fun MeldingV1.erFrilanser() = selvstendigVirksomheter == null && frilans != null && erArbeidstakerOgså == false
 private fun MeldingV1.erSelvstendigNæringsdrivende() =
-    selvstendigVirksomheter != null && frilans == null && erArbeidstakerOgså == false
+    !selvstendigVirksomheter.isNullOrEmpty() && frilans == null && erArbeidstakerOgså == false
 
 private fun MeldingV1.erFrilanserOgSelvstendigNæringsdrivende() =
-    selvstendigVirksomheter != null && frilans != null && erArbeidstakerOgså == false
+    !selvstendigVirksomheter.isNullOrEmpty() && frilans != null && erArbeidstakerOgså == false
 
 private fun MeldingV1.erFrilanserOgArbeidstaker() =
-    selvstendigVirksomheter == null && frilans != null && erArbeidstakerOgså == true
+    selvstendigVirksomheter.isNullOrEmpty() && frilans != null && erArbeidstakerOgså == true
 
 private fun MeldingV1.erSelvstendingNæringsdrivendeOgArbeidstaker() =
-    selvstendigVirksomheter != null && frilans == null && erArbeidstakerOgså
+    !selvstendigVirksomheter.isNullOrEmpty() && frilans == null && erArbeidstakerOgså
 
 private fun MeldingV1.erSelvstendingNæringsdrivendeFrilansOgArbeidstaker() =
-    selvstendigVirksomheter != null && frilans != null && erArbeidstakerOgså
+    !selvstendigVirksomheter.isNullOrEmpty() && frilans != null && erArbeidstakerOgså
 
 private fun List<Utbetalingsperiode>.søkerBareOmTimer(): String {
     val antallTimePerioder = filter { it.antallTimerBorte !== null }
