@@ -1,7 +1,6 @@
 package no.nav.helse
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import no.nav.helse.dusseldorf.ktor.jackson.dusseldorfConfigured
+import no.nav.k9.søknad.JsonUtils
 import no.nav.k9.søknad.Søknad
 import org.json.JSONObject
 import org.skyscreamer.jsonassert.JSONAssert
@@ -18,6 +17,6 @@ internal fun String.assertJournalførtFormat() {
     assertNotNull(data.getString("journalpostId"))
     val søknad = assertNotNull(data.getJSONObject("søknad"))
 
-    val rekonstruertSøknad = jacksonObjectMapper().dusseldorfConfigured().readValue(søknad.toString(), Søknad::class.java)
-    JSONAssert.assertEquals(søknad, JSONObject(rekonstruertSøknad), true)
+    val rekonstruertSøknad = JsonUtils.getObjectMapper().readValue(søknad.toString(), Søknad::class.java)
+    JSONAssert.assertEquals(søknad.toString(), JsonUtils.toString(rekonstruertSøknad), true)
 }

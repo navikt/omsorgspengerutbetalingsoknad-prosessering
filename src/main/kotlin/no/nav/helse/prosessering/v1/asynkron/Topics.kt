@@ -8,6 +8,7 @@ import no.nav.helse.dusseldorf.ktor.jackson.dusseldorfConfigured
 import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.v1.MeldingV1
 import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
+import no.nav.k9.søknad.JsonUtils
 import no.nav.k9.søknad.Søknad
 import org.apache.kafka.common.serialization.Deserializer
 import org.apache.kafka.common.serialization.Serdes
@@ -83,7 +84,7 @@ private class CleanupSerDes: SerDes<TopicEntry<Cleanup>>() {
 private class JournalfortSerDes: SerDes<TopicEntry<Journalfort>>() {
     override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<Journalfort>? {
         return data?.let {
-            objectMapper.readValue(it)
+            JsonUtils.getObjectMapper().readValue(it)
         }
     }
 }

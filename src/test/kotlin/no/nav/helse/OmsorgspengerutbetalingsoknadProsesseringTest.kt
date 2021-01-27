@@ -138,7 +138,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         kafkaTestProducer.leggTilMottak(melding)
         journalføringsKonsumer
             .hentJournalførtMelding(melding.søknadId)
-            //.rekonstruertSøknad()
+            .assertJournalførtFormat()
     }
 
     @Test
@@ -160,7 +160,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         restartEngine()
         journalføringsKonsumer
             .hentJournalførtMelding(melding.søknadId)
-            //.rekonstruertSøknad()
+            .assertJournalførtFormat()
     }
 
     private fun readyGir200HealthGir503() {
@@ -186,7 +186,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         kafkaTestProducer.leggTilMottak(melding)
         journalføringsKonsumer
             .hentJournalførtMelding(melding.søknadId)
-            //.rekonstruertSøknad()
+            .assertJournalførtFormat()
     }
 
     @Test
@@ -201,7 +201,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         kafkaTestProducer.leggTilMottak(melding)
         journalføringsKonsumer
             .hentJournalførtMelding(melding.søknadId)
-            //.rekonstruertSøknad()
+            .assertJournalførtFormat()
     }
 
     @Test
@@ -246,7 +246,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         kafkaTestProducer.leggTilMottak(melding)
         journalføringsKonsumer
             .hentJournalførtMelding(melding.søknadId)
-            //.rekonstruertSøknad()
+            .assertJournalførtFormat()
     }
 
     @Test
@@ -273,7 +273,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         kafkaTestProducer.leggTilMottak(melding)
         journalføringsKonsumer
             .hentJournalførtMelding(melding.søknadId)
-            //.rekonstruertSøknad()
+            .assertJournalførtFormat()
     }
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }
