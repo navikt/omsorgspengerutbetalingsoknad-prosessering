@@ -21,6 +21,7 @@ import no.nav.helse.prosessering.v1.Virksomhet
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet
+import no.nav.k9.søknad.felles.aktivitet.Arbeidstaker
 import no.nav.k9.søknad.felles.aktivitet.Frilanser
 import no.nav.k9.søknad.felles.aktivitet.Organisasjonsnummer
 import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende
@@ -41,6 +42,7 @@ import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.Produced
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
+import java.time.LocalDate
 import java.time.ZonedDateTime
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
@@ -163,6 +165,7 @@ private fun List<Utbetalingsperiode>.tilFraværsperiode(): List<FraværPeriode> 
 }
 
 private fun PreprossesertMeldingV1.arbeidAktivitet() = ArbeidAktivitet.builder()
+    .arbeidstaker(Arbeidstaker.builder().build())
     .frilanser(frilans?.tilK9Frilanser())
     .selvstendigNæringsdrivende(selvstendigVirksomheter?.tilK9SelvstendingNæringsdrivende())
     .build()
@@ -184,7 +187,7 @@ private fun Virksomhet.tilK9SelvstendingNæringsdrivendeInfo(): SelvstendigNæri
     val infoBuilder = SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
     infoBuilder
         .virksomhetstyper(næringstyper.tilK9Virksomhetstyper())
-        .erNyoppstartet(false)
+        .erNyoppstartet(!fraOgMed.eldreEnn4År())
         .registrertIUtlandet(!registrertINorge.boolean)
 
     if (registrertINorge.boolean) infoBuilder.landkode(Landkode.NORGE)
@@ -192,9 +195,6 @@ private fun Virksomhet.tilK9SelvstendingNæringsdrivendeInfo(): SelvstendigNæri
 
     næringsinntekt?.let { infoBuilder.bruttoInntekt(BigDecimal.valueOf(it.toLong())) }
 
-    yrkesaktivSisteTreFerdigliknedeÅrene?.let {
-        infoBuilder.erNyoppstartet(true)
-    }
     regnskapsfører?.let {
         infoBuilder
             .regnskapsførerNavn(it.navn)
@@ -209,6 +209,9 @@ private fun Virksomhet.tilK9SelvstendingNæringsdrivendeInfo(): SelvstendigNæri
     }
     return infoBuilder.build()
 }
+
+private fun LocalDate.eldreEnn4År(): Boolean = isBefore(LocalDate.now().minusYears(4))
+
 
 private fun List<Næringstyper>.tilK9Virksomhetstyper(): List<VirksomhetType> = map {
     when (it) {
