@@ -185,7 +185,7 @@ private fun Virksomhet.tilK9SelvstendingNæringsdrivendeInfo(): SelvstendigNæri
     infoBuilder
         .virksomhetstyper(næringstyper.tilK9Virksomhetstyper())
         .erNyoppstartet(false)
-        .registrertIUtlandet(registrertINorge.boolean)
+        .registrertIUtlandet(!registrertINorge.boolean)
 
     if (registrertINorge.boolean) infoBuilder.landkode(Landkode.NORGE)
     else infoBuilder.landkode(Landkode.of(registrertIUtlandet!!.landkode))
