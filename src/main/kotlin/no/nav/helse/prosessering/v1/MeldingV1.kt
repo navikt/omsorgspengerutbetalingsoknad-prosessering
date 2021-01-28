@@ -21,7 +21,7 @@ data class MeldingV1(
     val fosterbarn: List<FosterBarn>? = listOf(),
     val vedlegg: List<URI>,
     val frilans: Frilans? = null,
-    val selvstendigVirksomheter: List<Virksomhet>? = null,
+    val selvstendigVirksomheter: List<Virksomhet> = listOf(),
     val erArbeidstakerOgså: Boolean,
     val hjemmePgaSmittevernhensyn: Boolean,
     val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til Boolean etter lansering.
