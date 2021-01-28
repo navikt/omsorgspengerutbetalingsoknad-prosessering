@@ -186,7 +186,7 @@ private fun Virksomhet.tilK9SelvstendingNæringsdrivendeInfo(): SelvstendigNæri
     val infoBuilder = SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
     infoBuilder
         .virksomhetstyper(næringstyper.tilK9Virksomhetstyper())
-        .erNyoppstartet(!fraOgMed.eldreEnn4År())
+        .erNyoppstartet(yrkesaktivSisteTreFerdigliknedeÅrene?.let { false }) // TODO: 28/01/2021 : Må fortsatt avklares
         .registrertIUtlandet(!registrertINorge.boolean)
 
     if (registrertINorge.boolean) infoBuilder.landkode(Landkode.NORGE)
