@@ -165,7 +165,6 @@ private fun List<Utbetalingsperiode>.tilFraværsperiode(): List<FraværPeriode> 
 }
 
 private fun PreprossesertMeldingV1.arbeidAktivitet() = ArbeidAktivitet.builder()
-    .arbeidstaker(Arbeidstaker.builder().build())
     .frilanser(frilans?.tilK9Frilanser())
     .selvstendigNæringsdrivende(selvstendigVirksomheter.tilK9SelvstendingNæringsdrivende())
     .build()
