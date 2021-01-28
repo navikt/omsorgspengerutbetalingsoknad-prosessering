@@ -97,7 +97,7 @@ class SøknadsformatTest {
                 "http://localhost:8080/vedlegg/3"
             ],
             "frilans": null,
-            "selvstendigVirksomheter": null,
+            "selvstendigVirksomheter": [],
             "erArbeidstakerOgså": true,
             "fosterbarn": [{
                 "fødselsnummer": "02119970078"
