@@ -17,7 +17,7 @@ data class PreprossesertMeldingV1(
     val andreUtbetalinger: List<String>?, //TODO: Fjern ? når dette er prodsatt.
     val fosterbarn: List<FosterBarn>? = listOf(),
     val frilans: Frilans? = null,
-    val selvstendigVirksomheter: List<Virksomhet>? = null,
+    val selvstendigVirksomheter: List<Virksomhet> = listOf(),
     val hjemmePgaSmittevernhensyn: Boolean,
     val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til Boolean etter lansering.
     val bekreftelser: Bekreftelser
