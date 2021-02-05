@@ -36,7 +36,7 @@ internal class PdfV1Generator {
             registerHelper("eq", Helper<String> { context, options ->
                 if (context == options.param(0)) options.fn() else options.inverse()
             })
-            registerHelper("enumNæringstyper", Helper<String> { context, options ->
+            registerHelper("enumNæringstyper", Helper<String> { context, _ ->
                 Næringstyper.valueOf(context).beskrivelse
             })
             registerHelper("fritekst", Helper<String> { context, _ ->

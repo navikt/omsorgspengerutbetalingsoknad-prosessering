@@ -3,6 +3,7 @@ package no.nav.helse.prosessering.v1
 import no.nav.helse.CorrelationId
 import no.nav.helse.aktoer.AktørId
 import no.nav.helse.dokument.DokumentService
+import no.nav.helse.k9format.tilKOmsorgspengerUtbetalingSøknad
 import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.SoknadId
 import org.slf4j.LoggerFactory
@@ -44,8 +45,10 @@ internal class PreprosseseringV1Service(
 
         logger.info("Mellomlagrer Oppsummerings-JSON")
 
+        val k9FormatSøknad = melding.k9FormatSøknad ?: melding.tilKOmsorgspengerUtbetalingSøknad()
+
         val soknadJsonUrl = dokumentService.lagreSoknadsMelding(
-            melding = melding,
+            melding = k9FormatSøknad,
             aktørId = søkerAktørId,
             correlationId = correlationId
         )
@@ -67,7 +70,8 @@ internal class PreprosseseringV1Service(
         val preprossesertMeldingV1 = PreprossesertMeldingV1(
             melding = melding,
             dokumentUrls = komplettDokumentUrls.toList(),
-            søkerAktørId = søkerAktørId
+            søkerAktørId = søkerAktørId,
+            k9FormatSøknad = k9FormatSøknad
         )
         melding.reportMetrics()
         preprossesertMeldingV1.reportMetrics()

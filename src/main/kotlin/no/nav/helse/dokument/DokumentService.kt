@@ -2,7 +2,7 @@ package no.nav.helse.dokument
 
 import no.nav.helse.CorrelationId
 import no.nav.helse.aktoer.AktørId
-import no.nav.helse.prosessering.v1.MeldingV1
+import no.nav.k9.søknad.Søknad
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.net.URI
@@ -41,7 +41,7 @@ class DokumentService(
     }
 
     internal suspend fun lagreSoknadsMelding(
-        melding: MeldingV1,
+        melding: Søknad,
         aktørId: AktørId,
         correlationId: CorrelationId
     ) : URI {

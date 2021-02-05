@@ -1,6 +1,7 @@
 package no.nav.helse.prosessering.v1
 
 import no.nav.helse.aktoer.AktørId
+import no.nav.k9.søknad.Søknad
 import java.net.URI
 import java.time.ZonedDateTime
 
@@ -20,12 +21,14 @@ data class PreprossesertMeldingV1(
     val selvstendigVirksomheter: List<Virksomhet> = listOf(),
     val hjemmePgaSmittevernhensyn: Boolean,
     val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til Boolean etter lansering.
-    val bekreftelser: Bekreftelser
+    val bekreftelser: Bekreftelser,
+    val k9FormatSøknad: Søknad? = null
 ) {
     internal constructor(
         melding: MeldingV1,
         dokumentUrls: List<List<URI>>,
-        søkerAktørId: AktørId
+        søkerAktørId: AktørId,
+        k9FormatSøknad: Søknad? = null
     ) : this(
         soknadId = melding.søknadId,
         mottatt = melding.mottatt,
@@ -42,7 +45,8 @@ data class PreprossesertMeldingV1(
         selvstendigVirksomheter = melding.selvstendigVirksomheter,
         hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn,
         hjemmePgaStengtBhgSkole = melding.hjemmePgaStengtBhgSkole,
-        bekreftelser = melding.bekreftelser
+        bekreftelser = melding.bekreftelser,
+        k9FormatSøknad = melding.k9FormatSøknad ?: k9FormatSøknad
     )
 }
 
