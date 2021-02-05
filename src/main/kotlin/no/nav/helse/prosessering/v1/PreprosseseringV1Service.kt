@@ -6,6 +6,8 @@ import no.nav.helse.dokument.DokumentService
 import no.nav.helse.k9format.tilKOmsorgspengerUtbetalingSøknad
 import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.SoknadId
+import no.nav.k9.søknad.JsonUtils
+import no.nav.k9.søknad.Søknad
 import org.slf4j.LoggerFactory
 
 internal class PreprosseseringV1Service(
@@ -45,7 +47,10 @@ internal class PreprosseseringV1Service(
 
         logger.info("Mellomlagrer Oppsummerings-JSON")
 
-        val k9FormatSøknad = melding.k9FormatSøknad ?: melding.tilKOmsorgspengerUtbetalingSøknad()
+        val k9FormatSøknad: Søknad = melding.k9FormatSøknad?.let {
+            logger.info("Bruker k9Format fra api: {}", JsonUtils.toString(it)) // TODO: 05/02/2021 fjern før prodsetting
+            it
+        } ?: melding.tilKOmsorgspengerUtbetalingSøknad()
 
         val soknadJsonUrl = dokumentService.lagreSoknadsMelding(
             melding = k9FormatSøknad,
