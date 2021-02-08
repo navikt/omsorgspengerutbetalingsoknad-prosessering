@@ -50,7 +50,10 @@ internal class PreprosseseringV1Service(
         val k9FormatSøknad: Søknad = melding.k9FormatSøknad?.let {
             logger.info("Bruker k9Format fra api: {}", JsonUtils.toString(it)) // TODO: 05/02/2021 fjern før prodsetting
             it
-        } ?: melding.tilKOmsorgspengerUtbetalingSøknad()
+        } ?: melding.tilKOmsorgspengerUtbetalingSøknad().let {
+            logger.info("Mapper om k9Format fra melding: {}", JsonUtils.toString(it)) // TODO: 05/02/2021 fjern før prodsetting
+            it
+        }
 
         val soknadJsonUrl = dokumentService.lagreSoknadsMelding(
             melding = k9FormatSøknad,
