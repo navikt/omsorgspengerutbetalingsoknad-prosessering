@@ -53,6 +53,7 @@ data class Virksomhet(
     val organisasjonsnummer: String? = null,
     val registrertINorge: JaNei,
     val registrertIUtlandet: Land? = null,
+    val erNyoppstartet: Boolean,
     val yrkesaktivSisteTreFerdigliknedeÅrene: YrkesaktivSisteTreFerdigliknedeÅrene? = null,
     val varigEndring: VarigEndring? = null,
     val regnskapsfører: Regnskapsfører? = null

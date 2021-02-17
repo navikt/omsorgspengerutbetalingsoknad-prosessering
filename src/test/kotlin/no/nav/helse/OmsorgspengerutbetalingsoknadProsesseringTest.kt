@@ -271,6 +271,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                         landnavn = "Danmark"
                     ),
                     yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeÅrene(LocalDate.now()),
+                    erNyoppstartet = true,
                     varigEndring = VarigEndring(
                         dato = LocalDate.now().minusDays(20),
                         inntektEtterEndring = 234543,

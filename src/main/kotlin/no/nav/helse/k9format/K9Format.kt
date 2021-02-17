@@ -125,10 +125,7 @@ private fun Virksomhet.tilK9SelvstendingNæringsdrivendeInfo(): SelvstendigNæri
 
     næringsinntekt?.let { infoBuilder.bruttoInntekt(BigDecimal.valueOf(it.toLong())) }
 
-    when (erEldreEnn3År()) {
-        true -> infoBuilder.erNyoppstartet(false)
-        false -> infoBuilder.erNyoppstartet(true)
-    }
+    infoBuilder.erNyoppstartet(this.erNyoppstartet)
 
     regnskapsfører?.let {
         infoBuilder

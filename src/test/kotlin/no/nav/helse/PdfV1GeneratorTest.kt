@@ -128,6 +128,7 @@ class PdfV1GeneratorTest {
                 Virksomhet(
                     næringstyper = listOf(Næringstyper.ANNEN, Næringstyper.FISKE),
                     fraOgMed = LocalDate.now(),
+                    erNyoppstartet = true,
                     tilOgMed = LocalDate.now().plusDays(10),
                     navnPåVirksomheten = "Kjells Møbelsnekkeri",
                     registrertINorge = JaNei.Ja,
@@ -144,6 +145,7 @@ class PdfV1GeneratorTest {
                     næringstyper = listOf(Næringstyper.JORDBRUK_SKOGBRUK, Næringstyper.DAGMAMMA, Næringstyper.FISKE),
                     fiskerErPåBladB = JaNei.Ja,
                     fraOgMed = LocalDate.now(),
+                    erNyoppstartet = true,
                     næringsinntekt = 1111,
                     navnPåVirksomheten = "Tull Og Tøys",
                     registrertINorge = JaNei.Nei,

@@ -130,6 +130,7 @@ internal object SøknadUtils {
             Virksomhet(
                 næringstyper = listOf(Næringstyper.ANNEN, Næringstyper.FISKE),
                 fraOgMed = LocalDate.now(),
+                erNyoppstartet = true,
                 tilOgMed = LocalDate.now().plusDays(10),
                 navnPåVirksomheten = "Kjells Møbelsnekkeri",
                 registrertINorge = JaNei.Ja,
