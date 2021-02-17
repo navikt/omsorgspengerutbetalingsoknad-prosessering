@@ -147,7 +147,10 @@ class PdfV1GeneratorTest {
                     næringsinntekt = 1111,
                     navnPåVirksomheten = "Tull Og Tøys",
                     registrertINorge = JaNei.Nei,
-                    registrertILand = "Bahamas",
+                    registrertIUtlandet = Land(
+                        landkode = "DEU",
+                        landnavn = "Tyskland"
+                    ),
                     yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeÅrene(LocalDate.now()),
                     varigEndring = VarigEndring(
                         dato = LocalDate.now().minusDays(20),

@@ -17,7 +17,10 @@ import no.nav.helse.prosessering.v1.JaNei
 import no.nav.helse.prosessering.v1.Land
 import no.nav.helse.prosessering.v1.Næringstyper
 import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
+import no.nav.helse.prosessering.v1.Regnskapsfører
+import no.nav.helse.prosessering.v1.VarigEndring
 import no.nav.helse.prosessering.v1.Virksomhet
+import no.nav.helse.prosessering.v1.YrkesaktivSisteTreFerdigliknedeÅrene
 import no.nav.helse.prosessering.v1.asynkron.TopicEntry
 import org.junit.AfterClass
 import org.junit.BeforeClass
@@ -258,14 +261,26 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             ),
             selvstendigVirksomheter = listOf(
                 Virksomhet(
-                    navnPåVirksomheten = "Danks Rederi",
-                    næringstyper = listOf(Næringstyper.ANNEN),
-                    fiskerErPåBladB = JaNei.Nei,
+                    næringstyper = listOf(Næringstyper.JORDBRUK_SKOGBRUK, Næringstyper.DAGMAMMA, Næringstyper.FISKE),
+                    fiskerErPåBladB = JaNei.Ja,
+                    fraOgMed = LocalDate.now(),
+                    næringsinntekt = 1111,
+                    navnPåVirksomheten = "Tull Og Tøys",
                     registrertINorge = JaNei.Nei,
-                    næringsinntekt = 123456789,
-                    registrertILand = "dk",
-                    registrertIUtlandet = Land("dk", "Danmark"),
-                    fraOgMed = LocalDate.now().minusYears(2)
+                    registrertIUtlandet = Land(
+                        landkode = "DK",
+                        landnavn = "Danmark"
+                    ),
+                    yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeÅrene(LocalDate.now()),
+                    varigEndring = VarigEndring(
+                        dato = LocalDate.now().minusDays(20),
+                        inntektEtterEndring = 234543,
+                        forklaring = "Forklaring som handler om varig endring"
+                    ),
+                    regnskapsfører = Regnskapsfører(
+                        navn = "Bjarne Regnskap",
+                        telefon = "65484578"
+                    )
                 )
             )
         )

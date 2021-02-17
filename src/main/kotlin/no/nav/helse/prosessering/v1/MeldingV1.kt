@@ -52,7 +52,6 @@ data class Virksomhet(
     val navnPåVirksomheten: String,
     val organisasjonsnummer: String? = null,
     val registrertINorge: JaNei,
-    val registrertILand: String? = null, //TODO: Kan fjernes etter at registrertIUtlandet er prodsatt og det har gått mer enn 24t.
     val registrertIUtlandet: Land? = null,
     val yrkesaktivSisteTreFerdigliknedeÅrene: YrkesaktivSisteTreFerdigliknedeÅrene? = null,
     val varigEndring: VarigEndring? = null,
