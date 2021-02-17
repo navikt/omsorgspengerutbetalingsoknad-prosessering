@@ -14,8 +14,8 @@ internal fun String.assertJournalførtFormat() {
 
     val data = assertNotNull(rawJson.getJSONObject("data"))
 
-    assertNotNull(data.getString("journalpostId"))
-    val søknad = assertNotNull(data.getJSONObject("søknad"))
+    assertNotNull(data.getJSONObject("journalførtMelding")).getString("journalpostId")
+    val søknad = assertNotNull(data.getJSONObject("melding")).getJSONObject("k9FormatSøknad")
 
     val rekonstruertSøknad = JsonUtils.getObjectMapper().readValue(søknad.toString(), Søknad::class.java)
     JSONAssert.assertEquals(søknad.toString(), JsonUtils.toString(rekonstruertSøknad), true)

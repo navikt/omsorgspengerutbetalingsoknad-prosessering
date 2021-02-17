@@ -54,7 +54,6 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         private val kafkaEnvironment = KafkaWrapper.bootstrap()
         private val kafkaTestProducer = kafkaEnvironment.meldingsProducer()
 
-        private val journalføringsKonsumer = kafkaEnvironment.journalføringsKonsumer()
         private val cleanupKonsumer = kafkaEnvironment.cleanupKonsumer()
         private val preprossesertKonsumer = kafkaEnvironment.preprossesertKonsumer()
 
@@ -103,7 +102,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         fun tearDown() {
             logger.info("Tearing down")
             wireMockServer.stop()
-            journalføringsKonsumer.close()
+            cleanupKonsumer.close()
             kafkaTestProducer.close()
             stopEngine()
             kafkaEnvironment.tearDown()
@@ -139,8 +138,8 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        journalføringsKonsumer
-            .hentJournalførtMelding(melding.søknadId)
+        cleanupKonsumer
+            .hentCleanupMelding(melding.søknadId)
             .assertJournalførtFormat()
     }
 
@@ -161,8 +160,8 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
         wireMockServer.stubJournalfor(201) // Simulerer journalføring fungerer igjen
         restartEngine()
-        journalføringsKonsumer
-            .hentJournalførtMelding(melding.søknadId)
+        cleanupKonsumer
+            .hentCleanupMelding(melding.søknadId)
             .assertJournalførtFormat()
     }
 
@@ -187,8 +186,8 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        journalføringsKonsumer
-            .hentJournalførtMelding(melding.søknadId)
+        cleanupKonsumer
+            .hentCleanupMelding(melding.søknadId)
             .assertJournalførtFormat()
     }
 
@@ -202,8 +201,8 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        journalføringsKonsumer
-            .hentJournalførtMelding(melding.søknadId)
+        cleanupKonsumer
+            .hentCleanupMelding(melding.søknadId)
             .assertJournalførtFormat()
     }
 
@@ -247,8 +246,8 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        journalføringsKonsumer
-            .hentJournalførtMelding(melding.søknadId)
+        cleanupKonsumer
+            .hentCleanupMelding(melding.søknadId)
             .assertJournalførtFormat()
     }
 
@@ -286,8 +285,8 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        journalføringsKonsumer
-            .hentJournalførtMelding(melding.søknadId)
+        cleanupKonsumer
+            .hentCleanupMelding(melding.søknadId)
             .assertJournalførtFormat()
     }
 
