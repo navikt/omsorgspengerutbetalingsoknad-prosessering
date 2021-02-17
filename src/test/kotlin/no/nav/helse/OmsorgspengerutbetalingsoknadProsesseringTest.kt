@@ -343,7 +343,10 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                 næringsinntekt = 1111,
                 navnPåVirksomheten = "Tull Og Tøys",
                 registrertINorge = JaNei.Nei,
-                registrertILand = "Bahamas",
+                registrertIUtlandet = Land(
+                    landkode = "DK",
+                    landnavn = "Danmark"
+                ),
                 yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeÅrene(LocalDate.now()),
                 varigEndring = VarigEndring(
                     dato = LocalDate.now().minusDays(20),

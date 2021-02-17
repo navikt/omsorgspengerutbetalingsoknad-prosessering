@@ -50,11 +50,18 @@ data class Virksomhet(
     val navnPåVirksomheten: String,
     val organisasjonsnummer: String? = null,
     val registrertINorge: JaNei,
-    val registrertILand: String? = null,
+    val registrertIUtlandet: Land? = null,
     val yrkesaktivSisteTreFerdigliknedeÅrene: YrkesaktivSisteTreFerdigliknedeÅrene? = null,
     val varigEndring: VarigEndring? = null,
     val regnskapsfører: Regnskapsfører? = null
 )
+
+/**
+ * ISO 3166 alpha-3 landkode.
+ *
+ * @see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
+ */
+data class Land(val landkode: String, val landnavn: String)
 
 /**
  * Unngå `Boolean` default-verdi null -> false
