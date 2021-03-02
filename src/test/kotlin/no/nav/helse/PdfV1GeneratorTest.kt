@@ -33,9 +33,9 @@ class PdfV1GeneratorTest {
                 aktørId = "123456",
                 fødselsnummer = fødselsnummerSoker,
                 fødselsdato = LocalDate.now().minusDays(1000),
-                etternavn = "Nordmann",
-                mellomnavn = "Mellomnavn",
-                fornavn = "Ola"
+                etternavn = "NORDMANN",
+                mellomnavn = "MELLOMNAVN",
+                fornavn = "OLA"
             ),
             bosteder = listOf(
                 Bosted(
