@@ -144,7 +144,8 @@ internal object SøknadUtils {
             )
         ),
         erArbeidstakerOgså = true,
-        hjemmePgaSmittevernhensyn = true
+        hjemmePgaSmittevernhensyn = true,
+        k9FormatSøknad = defaultK9FormatOmsorgspengerutbetaling()
     )
 
     fun defaultK9FormatOmsorgspengerutbetaling(søknadId: UUID = UUID.randomUUID()) = Søknad(

@@ -27,7 +27,7 @@ data class MeldingV1(
     val hjemmePgaSmittevernhensyn: Boolean,
     val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til Boolean etter lansering.
     val bekreftelser: Bekreftelser,
-    val k9FormatSøknad: Søknad? = null
+    val k9FormatSøknad: Søknad
 )
 
 data class Bekreftelser(

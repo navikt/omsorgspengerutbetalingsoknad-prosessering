@@ -179,7 +179,8 @@ class PdfV1GeneratorTest {
             ),
             erArbeidstakerOgså = true,
             hjemmePgaSmittevernhensyn = true,
-            hjemmePgaStengtBhgSkole = true
+            hjemmePgaStengtBhgSkole = true,
+            k9FormatSøknad = SøknadUtils.defaultK9FormatOmsorgspengerutbetaling()
         )
     }
 

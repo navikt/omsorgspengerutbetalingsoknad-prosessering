@@ -22,13 +22,12 @@ data class PreprossesertMeldingV1(
     val hjemmePgaSmittevernhensyn: Boolean,
     val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til Boolean etter lansering.
     val bekreftelser: Bekreftelser,
-    val k9FormatSøknad: Søknad? = null
+    val k9FormatSøknad: Søknad
 ) {
     internal constructor(
         melding: MeldingV1,
         dokumentUrls: List<List<URI>>,
-        søkerAktørId: AktørId,
-        k9FormatSøknad: Søknad? = null
+        søkerAktørId: AktørId
     ) : this(
         soknadId = melding.søknadId,
         mottatt = melding.mottatt,
@@ -46,7 +45,7 @@ data class PreprossesertMeldingV1(
         hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn,
         hjemmePgaStengtBhgSkole = melding.hjemmePgaStengtBhgSkole,
         bekreftelser = melding.bekreftelser,
-        k9FormatSøknad = melding.k9FormatSøknad ?: k9FormatSøknad
+        k9FormatSøknad = melding.k9FormatSøknad
     )
 }
 
