@@ -5,48 +5,17 @@ import no.nav.helse.aktoer.AktørId
 import no.nav.helse.erEtter
 import no.nav.helse.joark.JoarkGateway
 import no.nav.helse.joark.JoarkNavn
-import no.nav.helse.k9format.tilKOmsorgspengerUtbetalingSøknad
 import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
-import no.nav.helse.prosessering.v1.Bosted
-import no.nav.helse.prosessering.v1.FosterBarn
-import no.nav.helse.prosessering.v1.Frilans
-import no.nav.helse.prosessering.v1.Næringstyper
-import no.nav.helse.prosessering.v1.Opphold
 import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
-import no.nav.helse.prosessering.v1.PreprossesertSøker
-import no.nav.helse.prosessering.v1.Utbetalingsperiode
-import no.nav.helse.prosessering.v1.Virksomhet
-import no.nav.k9.søknad.Søknad
-import no.nav.k9.søknad.felles.Versjon
-import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet
-import no.nav.k9.søknad.felles.aktivitet.Arbeidstaker
-import no.nav.k9.søknad.felles.aktivitet.Frilanser
-import no.nav.k9.søknad.felles.aktivitet.Organisasjonsnummer
-import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende
-import no.nav.k9.søknad.felles.aktivitet.VirksomhetType
-import no.nav.k9.søknad.felles.fravær.FraværPeriode
-import no.nav.k9.søknad.felles.personopplysninger.Barn
-import no.nav.k9.søknad.felles.personopplysninger.Bosteder
-import no.nav.k9.søknad.felles.personopplysninger.Søker
-import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
-import no.nav.k9.søknad.felles.type.Landkode
-import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9.søknad.felles.type.Periode
-import no.nav.k9.søknad.felles.type.SøknadId
-import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.Produced
 import org.slf4j.LoggerFactory
-import java.math.BigDecimal
-import java.time.LocalDate
 import java.time.ZonedDateTime
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
 
 internal class JournalforingsStream(
     joarkGateway: JoarkGateway,
@@ -100,7 +69,7 @@ internal class JournalforingsStream(
                         logger.info("Dokumenter journalført med ID = ${journaPostId.journalpostId}.")
                         val journalfort = Journalfort(
                             journalpostId = journaPostId.journalpostId,
-                            søknad = entry.data.k9FormatSøknad?: entry.data.tilKOmsorgspengerUtbetalingSøknad()
+                            søknad = entry.data.k9FormatSøknad
                         )
                         Cleanup(
                             metadata = entry.metadata,

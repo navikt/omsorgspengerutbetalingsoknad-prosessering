@@ -3,7 +3,6 @@ package no.nav.helse.prosessering.v1
 import no.nav.helse.CorrelationId
 import no.nav.helse.aktoer.AktørId
 import no.nav.helse.dokument.DokumentService
-import no.nav.helse.k9format.tilKOmsorgspengerUtbetalingSøknad
 import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.SoknadId
 import no.nav.k9.søknad.JsonUtils
