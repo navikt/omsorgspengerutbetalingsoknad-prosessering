@@ -175,7 +175,7 @@ class PdfV1GeneratorTest {
                     aleneOmOmsorgen = true
                 )
             ),
-            andreBarn = listOf(
+            fosterbarn = listOf(
                 FosterBarn(
                     fødselsnummer = gyldigFodselsnummerB
                 ),

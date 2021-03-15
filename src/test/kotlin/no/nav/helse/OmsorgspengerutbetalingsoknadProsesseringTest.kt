@@ -318,7 +318,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                 aleneOmOmsorgen = true
             )
         ),
-        andreBarn = listOf(
+        fosterbarn = listOf(
             FosterBarn(
                 fødselsnummer = "02119970078"
             )

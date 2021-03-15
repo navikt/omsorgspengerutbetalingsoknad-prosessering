@@ -117,7 +117,7 @@ internal class PdfV1Generator {
                                 it.fraOgMed.isEqual(mottatt) || it.fraOgMed.isAfter(mottatt)
                             }
                         ),
-                        "harFosterbarn" to melding.andreBarn?.isNotEmpty(),
+                        "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
                         "harBarn" to melding.barn?.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harSøktAndreYtelser" to melding.andreUtbetalinger?.isNotEmpty(),

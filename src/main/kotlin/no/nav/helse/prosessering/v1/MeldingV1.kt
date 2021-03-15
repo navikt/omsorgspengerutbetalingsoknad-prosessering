@@ -20,7 +20,7 @@ data class MeldingV1(
     val utbetalingsperioder: List<Utbetalingsperiode>,
     val andreUtbetalinger: List<String>?, //TODO: Fjern ? når dette er prodsatt.
     val barn: List<Barn>? = listOf(),
-    @JsonAlias("fosterbarn", "andreBarn") val andreBarn: List<FosterBarn>? = listOf(),
+    val fosterbarn: List<FosterBarn>? = listOf(),
     val vedlegg: List<URI>,
     val frilans: Frilans? = null,
     val selvstendigVirksomheter: List<Virksomhet> = listOf(),

@@ -110,7 +110,7 @@ class SøknadsformatTest {
                 "aktørId": "123456"
               }
             ],
-            "andreBarn": [{
+            "fosterbarn": [{
                 "fødselsnummer": "02119970078"
             }],
             "hjemmePgaSmittevernhensyn": null,
@@ -215,7 +215,7 @@ class SøknadsformatTest {
                 aleneOmOmsorgen = true
             )
         ),
-        andreBarn = listOf(
+        fosterbarn = listOf(
             FosterBarn(
                 fødselsnummer = "02119970078"
             )
