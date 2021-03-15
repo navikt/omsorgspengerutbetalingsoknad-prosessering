@@ -18,7 +18,6 @@ import no.nav.common.KafkaEnvironment
 import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
 import no.nav.helse.prosessering.v1.*
 import no.nav.helse.prosessering.v1.asynkron.TopicEntry
-import org.json.JSONObject
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.slf4j.Logger
@@ -292,23 +291,34 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                 fraOgMed = start,
                 tilOgMed = start.plusDays(10),
                 antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
-                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
+                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30),
+                årsak = FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
             ),
             Utbetalingsperiode(
                 fraOgMed = start.plusDays(20),
                 tilOgMed = start.plusDays(20),
                 antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
-                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
+                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30),
+                årsak = FraværÅrsak.SMITTEVERNHENSYN
             ),
             Utbetalingsperiode(
                 fraOgMed = start.plusDays(30),
                 tilOgMed = start.plusDays(35),
                 antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
-                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
+                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30),
+                årsak = FraværÅrsak.ANNET
             )
         ),
         andreUtbetalinger = listOf("dagpenger", "sykepenger"),
-        fosterbarn = listOf(
+        barn = listOf(
+            Barn(
+                identitetsnummer = "02119970078",
+                aktørId = "123456",
+                navn = "Barn Barnesen",
+                aleneOmOmsorgen = true
+            )
+        ),
+        andreBarn = listOf(
             FosterBarn(
                 fødselsnummer = "02119970078"
             )
@@ -360,7 +370,8 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             )
         ),
         erArbeidstakerOgså = true,
-        hjemmePgaSmittevernhensyn = true
+        hjemmePgaStengtBhgSkole = null,
+        hjemmePgaSmittevernhensyn = null
     )
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }

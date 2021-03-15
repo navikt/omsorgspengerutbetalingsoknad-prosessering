@@ -1,5 +1,6 @@
 package no.nav.helse.prosessering.v1
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import no.nav.helse.aktoer.AktørId
 import java.net.URI
 import java.time.ZonedDateTime
@@ -15,11 +16,12 @@ data class PreprossesertMeldingV1(
     val dokumentUrls: List<List<URI>>,
     val utbetalingsperioder: List<Utbetalingsperiode>,
     val andreUtbetalinger: List<String>?, //TODO: Fjern ? når dette er prodsatt.
-    val fosterbarn: List<FosterBarn>? = listOf(),
+    val barn: List<Barn>? = listOf(),
+    @JsonAlias("fosterbarn", "andreBarn") val andreBarn: List<FosterBarn>? = listOf(),
     val frilans: Frilans? = null,
     val selvstendigVirksomheter: List<Virksomhet> = listOf(),
-    val hjemmePgaSmittevernhensyn: Boolean,
-    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til Boolean etter lansering.
+    val hjemmePgaSmittevernhensyn: Boolean? = null, // TODO: 15/03/2021 utgår
+    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO: 15/03/2021 utgår
     val bekreftelser: Bekreftelser
 ) {
     internal constructor(
@@ -37,7 +39,8 @@ data class PreprossesertMeldingV1(
         dokumentUrls = dokumentUrls,
         utbetalingsperioder = melding.utbetalingsperioder,
         andreUtbetalinger = melding.andreUtbetalinger,
-        fosterbarn = melding.fosterbarn,
+        barn = melding.barn,
+        andreBarn = melding.andreBarn,
         frilans = melding.frilans,
         selvstendigVirksomheter = melding.selvstendigVirksomheter,
         hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn,

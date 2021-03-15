@@ -36,7 +36,7 @@ internal class PdfV1Generator {
             registerHelper("eq", Helper<String> { context, options ->
                 if (context == options.param(0)) options.fn() else options.inverse()
             })
-            registerHelper("enumNæringstyper", Helper<String> { context, options ->
+            registerHelper("enumNæringstyper", Helper<String> { context, _ ->
                 Næringstyper.valueOf(context).beskrivelse
             })
             registerHelper("fritekst", Helper<String> { context, _ ->
@@ -61,6 +61,13 @@ internal class PdfV1Generator {
             })
             registerHelper("jaNeiSvar", Helper<Boolean> { context, _ ->
                 if (context == true) "Ja" else "Nei"
+            })
+            registerHelper("årsak", Helper<String> { context, _ ->
+                when(FraværÅrsak.valueOf(context)) {
+                    FraværÅrsak.ANNET -> "Annet"
+                    FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE -> "Stengt skole eller barnehage"
+                    FraværÅrsak.SMITTEVERNHENSYN -> "Smittevernhensyn"
+                }
             })
 
             infiniteLoops(true)
@@ -110,7 +117,8 @@ internal class PdfV1Generator {
                                 it.fraOgMed.isEqual(mottatt) || it.fraOgMed.isAfter(mottatt)
                             }
                         ),
-                        "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
+                        "harFosterbarn" to melding.andreBarn?.isNotEmpty(),
+                        "harBarn" to melding.barn?.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harSøktAndreYtelser" to melding.andreUtbetalinger?.isNotEmpty(),
                         "ikkeHarSendtInnVedlegg" to melding.vedlegg.isEmpty(),

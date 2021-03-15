@@ -100,7 +100,7 @@ private fun PreprossesertMeldingV1.tilKOmsorgspengerUtbetalingSøknad(): Omsorgs
         .mottattDato(mottatt)
         .søker(søker.tilK9Søker())
 
-    fosterbarn?.let { builder.barn(it.tilK9Barn()) }
+    andreBarn?.let { builder.barn(it.tilK9Barn()) }
 
     return builder.build()
 }
