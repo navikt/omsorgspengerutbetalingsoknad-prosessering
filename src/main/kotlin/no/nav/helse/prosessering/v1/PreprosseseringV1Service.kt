@@ -29,8 +29,6 @@ internal class PreprosseseringV1Service(
 
         val søkerAktørId = AktørId(melding.søker.aktørId)
 
-        logger.info("Søkerens AktørID = $søkerAktørId")
-
         logger.info("Genererer Oppsummerings-PDF av søknaden.")
         val soknadOppsummeringPdf = pdfV1Generator.generateSoknadOppsummeringPdf(melding)
 
