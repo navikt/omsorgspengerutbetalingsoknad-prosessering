@@ -60,4 +60,10 @@ data class PreprossesertSøker(
         etternavn = søker.etternavn,
         aktørId = aktørId.id
     )
+
+    override fun toString(): String {
+        return "PreprossesertSøker()"
+    }
+
+
 }

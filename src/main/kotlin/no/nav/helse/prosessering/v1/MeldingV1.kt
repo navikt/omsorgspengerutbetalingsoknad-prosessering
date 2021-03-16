@@ -54,7 +54,11 @@ data class Virksomhet(
     val yrkesaktivSisteTreFerdigliknedeÅrene: YrkesaktivSisteTreFerdigliknedeÅrene? = null,
     val varigEndring: VarigEndring? = null,
     val regnskapsfører: Regnskapsfører? = null
-)
+) {
+    override fun toString(): String {
+        return "Virksomhet()"
+    }
+}
 
 /**
  * ISO 3166 alpha-3 landkode.
@@ -83,7 +87,11 @@ enum class JaNei (@get:JsonValue val boolean: Boolean) {
 
 data class FosterBarn(
     val fødselsnummer: String
-)
+) {
+    override fun toString(): String {
+        return "FosterBarn()"
+    }
+}
 
 
 data class YrkesaktivSisteTreFerdigliknedeÅrene(
@@ -118,7 +126,7 @@ data class Søker(
     val aktørId: String
 ) {
     override fun toString(): String {
-        return "Soker(fornavn='$fornavn', mellomnavn=$mellomnavn, etternavn='$etternavn', fødselsdato=$fødselsdato, aktørId='$aktørId')"
+        return "Soker()"
     }
 }
 
