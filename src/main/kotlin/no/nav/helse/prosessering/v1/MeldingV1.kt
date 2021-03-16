@@ -140,10 +140,10 @@ data class Utbetalingsperiode(
     val årsak: FraværÅrsak? = null
 )
 
-enum class FraværÅrsak(val verdi: String) {
-    @JsonAlias("stengtSkoleBhg") STENGT_SKOLE_ELLER_BARNEHAGE("Stengt skole eller barnehage"),
-    @JsonAlias("smittevernhensyn") SMITTEVERNHENSYN("Smittevernhensyn"),
-    @JsonAlias("annet") ANNET("Annet"),
+enum class FraværÅrsak {
+    STENGT_SKOLE_ELLER_BARNEHAGE,
+    SMITTEVERNHENSYN,
+    ANNET
 }
 
 
