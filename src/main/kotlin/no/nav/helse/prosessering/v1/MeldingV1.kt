@@ -89,7 +89,7 @@ enum class JaNei (@get:JsonValue val boolean: Boolean) {
 
 data class Barn(
     var identitetsnummer: String,
-    val aktørId: String,
+    val aktørId: String? = null,
     val navn: String,
     val aleneOmOmsorgen: Boolean,
 )
