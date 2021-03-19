@@ -19,7 +19,7 @@ data class MeldingV1(
     val spørsmål: List<SpørsmålOgSvar>,
     val utbetalingsperioder: List<Utbetalingsperiode>,
     val andreUtbetalinger: List<String>?, //TODO: Fjern ? når dette er prodsatt.
-    val barn: List<Barn>? = listOf(),
+    val barn: List<Barn> = listOf(),
     val fosterbarn: List<FosterBarn>? = listOf(),
     val vedlegg: List<URI>,
     val frilans: Frilans? = null,

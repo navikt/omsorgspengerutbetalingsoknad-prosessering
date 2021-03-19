@@ -118,7 +118,7 @@ internal class PdfV1Generator {
                             }
                         ),
                         "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
-                        "harBarn" to melding.barn?.isNotEmpty(),
+                        "harBarn" to melding.barn.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harSøktAndreYtelser" to melding.andreUtbetalinger?.isNotEmpty(),
                         "ikkeHarSendtInnVedlegg" to melding.vedlegg.isEmpty(),
