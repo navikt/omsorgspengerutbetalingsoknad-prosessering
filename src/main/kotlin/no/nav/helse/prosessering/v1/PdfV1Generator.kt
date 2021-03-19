@@ -64,7 +64,7 @@ internal class PdfV1Generator {
             })
             registerHelper("årsak", Helper<String> { context, _ ->
                 when(FraværÅrsak.valueOf(context)) {
-                    FraværÅrsak.ANNET -> "Annet"
+                    FraværÅrsak.ORDINÆRT_FRAVÆR -> "Ordinært fravær"
                     FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE -> "Stengt skole eller barnehage"
                     FraværÅrsak.SMITTEVERNHENSYN -> "Smittevernhensyn"
                 }

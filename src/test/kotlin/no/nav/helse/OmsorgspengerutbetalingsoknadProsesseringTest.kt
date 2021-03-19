@@ -306,7 +306,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                 tilOgMed = start.plusDays(35),
                 antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
                 antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30),
-                årsak = FraværÅrsak.ANNET
+                årsak = FraværÅrsak.ORDINÆRT_FRAVÆR
             )
         ),
         andreUtbetalinger = listOf("dagpenger", "sykepenger"),

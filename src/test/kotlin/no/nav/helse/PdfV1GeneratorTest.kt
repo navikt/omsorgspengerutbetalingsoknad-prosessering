@@ -91,7 +91,7 @@ class PdfV1GeneratorTest {
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(30),
                     tilOgMed = start.plusDays(35),
-                    årsak = FraværÅrsak.ANNET
+                    årsak = FraværÅrsak.ORDINÆRT_FRAVÆR
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(1),
@@ -113,7 +113,7 @@ class PdfV1GeneratorTest {
                     lengde = Duration.ofHours(2),
                     antallTimerPlanlagt = Duration.ofHours(4).plusMinutes(30),
                     antallTimerBorte = Duration.ofHours(5).plusMinutes(0),
-                    årsak = FraværÅrsak.ANNET
+                    årsak = FraværÅrsak.ORDINÆRT_FRAVÆR
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(3),
