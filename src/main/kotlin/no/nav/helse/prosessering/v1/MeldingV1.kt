@@ -1,5 +1,6 @@
 package no.nav.helse.prosessering.v1
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonValue
@@ -18,13 +19,14 @@ data class MeldingV1(
     val spørsmål: List<SpørsmålOgSvar>,
     val utbetalingsperioder: List<Utbetalingsperiode>,
     val andreUtbetalinger: List<String>?, //TODO: Fjern ? når dette er prodsatt.
+    val barn: List<Barn> = listOf(),
     val fosterbarn: List<FosterBarn>? = listOf(),
     val vedlegg: List<URI>,
     val frilans: Frilans? = null,
     val selvstendigVirksomheter: List<Virksomhet> = listOf(),
     val erArbeidstakerOgså: Boolean,
-    val hjemmePgaSmittevernhensyn: Boolean,
-    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til Boolean etter lansering.
+    val hjemmePgaSmittevernhensyn: Boolean? = null, // TODO: 15/03/2021 utgår.
+    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO: 15/03/2021 utgår
     val bekreftelser: Bekreftelser
 )
 
@@ -85,6 +87,13 @@ enum class JaNei (@get:JsonValue val boolean: Boolean) {
     }
 }
 
+data class Barn(
+    var identitetsnummer: String,
+    val aktørId: String? = null,
+    val navn: String,
+    val aleneOmOmsorgen: Boolean,
+)
+
 data class FosterBarn(
     val fødselsnummer: String
 ) {
@@ -135,8 +144,16 @@ data class Utbetalingsperiode(
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,
     val lengde: Duration? = null, //TODO: beholde lengde i en periode slik at vi ikke mister info i overgangen
     val antallTimerBorte: Duration? = null,
-    val antallTimerPlanlagt: Duration? = null
+    val antallTimerPlanlagt: Duration? = null,
+    val årsak: FraværÅrsak? = null
 )
+
+enum class FraværÅrsak {
+    STENGT_SKOLE_ELLER_BARNEHAGE,
+    SMITTEVERNHENSYN,
+    ORDINÆRT_FRAVÆR
+}
+
 
 data class Bosted(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,

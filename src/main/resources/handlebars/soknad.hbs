@@ -10,6 +10,7 @@
           content="Søknad om utbetaling av omsorgspenger for selvstendig næringsdrivende og frilansere mottatt {{mottaksUkedag}} {{#tidspunkt søknad.mottatt}}{{/tidspunkt}}" />
     <bookmarks>
         <bookmark name="Søker" href="#søker" />
+        <bookmark name="Barn" href="#barn" />
         <bookmark name="Fosterbarn" href="#fosterbarn" />
         <bookmark name="Smittevern" href="#smittevern" />
         <bookmark name="Utbetalingsperioder" href="#utbetalingsperioder" />
@@ -45,6 +46,22 @@
             {{/if}}
         </div>
 
+        <section id="barn">
+            {{#if harBarn}}
+                <h2>Dine barn</h2>
+                <ul>
+                    {{#each søknad.barn as |barn|}}
+                        <li>
+                            <p class="sporsmalstekst">{{barn.navn}} ({{barn.identitetsnummer}})</p>
+                            <p class="sporsmalstekst">Er du alene om omsorgen for dette barnet?</p>
+                            {{ jaNeiSvar barn.aleneOmOmsorgen}}
+                        </li>
+                    {{/each}}
+                </ul>
+            {{/if}}
+        </section>
+
+        <!--TODO: seksjon for smittevern utgår-->
         <section id="smittevern">
             {{#if søknad.hjemmePgaSmittevernhensyn}}
                 <h2>Særlige smittevernhensyn</h2>
@@ -79,6 +96,9 @@
                         {{#if u.antallTimerBorte}}
                             <br/>Antall timer du har planlagt jobbe: {{#varighet u.antallTimerPlanlagt}}{{/varighet}}
                             <br/>Antall timer du var borte fra jobb: {{#varighet u.antallTimerBorte}}{{/varighet}}
+                        {{/if}}
+                        {{#if u.årsak}}
+                            <br/>Årsak: {{#årsak u.årsak}}{{/årsak}}
                         {{/if}}
                         <br/><br/>
                     </li>
