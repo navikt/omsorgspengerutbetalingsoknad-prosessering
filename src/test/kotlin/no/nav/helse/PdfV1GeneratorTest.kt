@@ -122,7 +122,8 @@ class PdfV1GeneratorTest {
             ),
             frilans = Frilans(
                 startdato = LocalDate.now().minusYears(3),
-                jobberFortsattSomFrilans = true
+                sluttdato = LocalDate.now().minusYears(1),
+                jobberFortsattSomFrilans = false
             ),
             selvstendigVirksomheter = listOf(
                 Virksomhet(
