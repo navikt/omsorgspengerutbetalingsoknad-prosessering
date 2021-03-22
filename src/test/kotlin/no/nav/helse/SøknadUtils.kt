@@ -1,6 +1,7 @@
 package no.nav.helse
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import no.nav.helse.prosessering.v1.Barn
 import no.nav.helse.prosessering.v1.Bekreftelser
 import no.nav.helse.prosessering.v1.Bosted
 import no.nav.helse.prosessering.v1.FosterBarn
@@ -20,7 +21,6 @@ import no.nav.k9.søknad.felles.aktivitet.Organisasjonsnummer
 import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende
 import no.nav.k9.søknad.felles.aktivitet.VirksomhetType
 import no.nav.k9.søknad.felles.fravær.FraværPeriode
-import no.nav.k9.søknad.felles.personopplysninger.Barn
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
 import no.nav.k9.søknad.felles.type.Landkode
@@ -34,6 +34,7 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
+import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn
 
 internal object SøknadUtils {
     internal val objectMapper = jacksonObjectMapper().omsorgspengerKonfiguert()
@@ -112,6 +113,14 @@ internal object SøknadUtils {
             )
         ),
         andreUtbetalinger = listOf("dagpenger", "sykepenger"),
+        barn = listOf(
+            Barn(
+                identitetsnummer = "02119970078",
+                aktørId = "123456",
+                navn = "Barn Barnesen",
+                aleneOmOmsorgen = true
+            )
+        ),
         fosterbarn = listOf(
             FosterBarn(
                 fødselsnummer = "02119970078"
@@ -155,7 +164,7 @@ internal object SøknadUtils {
         no.nav.k9.søknad.felles.personopplysninger.Søker(NorskIdentitetsnummer.of("12345678910")),
         OmsorgspengerUtbetaling(
             listOf(
-                Barn(NorskIdentitetsnummer.of("10987654321"), null)
+                K9Barn(NorskIdentitetsnummer.of("10987654321"), null)
             ),
             ArbeidAktivitet(
                 null,

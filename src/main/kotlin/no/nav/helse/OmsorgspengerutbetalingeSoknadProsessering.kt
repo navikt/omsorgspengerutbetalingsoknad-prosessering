@@ -32,6 +32,7 @@ import no.nav.helse.dusseldorf.ktor.metrics.MetricsRoute
 import no.nav.helse.joark.JoarkGateway
 import no.nav.helse.prosessering.v1.PdfV1Generator
 import no.nav.helse.prosessering.v1.PreprosseseringV1Service
+import no.nav.helse.prosessering.v1.asynkron.AleneOmOmsorgenProducer
 import no.nav.helse.prosessering.v1.asynkron.AsynkronProsesseringV1Service
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -69,7 +70,8 @@ fun Application.omsorgspengerutbetalingSoknadProsessering() {
 
     val preprosseseringV1Service = PreprosseseringV1Service(
         pdfV1Generator = PdfV1Generator(),
-        dokumentService = dokumentService
+        dokumentService = dokumentService,
+        aleneOmOmsorgenProducer = AleneOmOmsorgenProducer(configuration.getKafkaConfig())
     )
     val joarkGateway = JoarkGateway(
         baseUrl = configuration.getk9JoarkBaseUrl(),

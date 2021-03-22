@@ -62,6 +62,13 @@ internal class PdfV1Generator {
             registerHelper("jaNeiSvar", Helper<Boolean> { context, _ ->
                 if (context == true) "Ja" else "Nei"
             })
+            registerHelper("årsak", Helper<String> { context, _ ->
+                when(FraværÅrsak.valueOf(context)) {
+                    FraværÅrsak.ORDINÆRT_FRAVÆR -> "Ordinært fravær"
+                    FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE -> "Stengt skole eller barnehage"
+                    FraværÅrsak.SMITTEVERNHENSYN -> "Smittevernhensyn"
+                }
+            })
 
             infiniteLoops(true)
         }
@@ -111,6 +118,7 @@ internal class PdfV1Generator {
                             }
                         ),
                         "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
+                        "harBarn" to melding.barn.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harSøktAndreYtelser" to melding.andreUtbetalinger?.isNotEmpty(),
                         "ikkeHarSendtInnVedlegg" to melding.vedlegg.isEmpty(),

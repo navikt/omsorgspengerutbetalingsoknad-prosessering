@@ -20,11 +20,19 @@ data class Journalfort(val journalpostId: String, val søknad: Søknad)
 
 internal data class Topic<V>(
     val name: String,
-    val serDes : SerDes<V>
+    val serDes : SerDes<V>,
+    val valueSerializer: Serializer<TopicEntry<V>>? = null
 ) {
     val keySerializer = StringSerializer()
     val keySerde = Serdes.String()
     val valueSerde = Serdes.serdeFrom(serDes, serDes)
+}
+
+internal data class TopicUse<V>(
+    val name: String,
+    val valueSerializer : Serializer<TopicEntry<V>>
+) {
+    internal fun keySerializer() = StringSerializer()
 }
 
 internal object Topics {
@@ -39,6 +47,10 @@ internal object Topics {
     val CLEANUP = Topic(
         name = "privat-omsorgspengerutbetalingsoknad-cleanup",
         serDes = CleanupSerDes()
+    )
+    val K9_RAPID_V2 = Topic(
+        name = "k9-rapid-v2",
+        serDes = K9RapidSerDes()
     )
 }
 
@@ -70,6 +82,14 @@ private class PreprossesertSerDes: SerDes<TopicEntry<PreprossesertMeldingV1>>() 
     }
 }
 private class CleanupSerDes: SerDes<TopicEntry<Cleanup>>() {
+    override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<Cleanup>? {
+        return data?.let {
+            objectMapper.readValue(it)
+        }
+    }
+}
+
+private class K9RapidSerDes: SerDes<TopicEntry<Cleanup>>() {
     override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<Cleanup>? {
         return data?.let {
             objectMapper.readValue(it)

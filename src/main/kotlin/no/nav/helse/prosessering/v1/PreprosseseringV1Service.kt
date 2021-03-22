@@ -7,11 +7,13 @@ import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.SoknadId
 import no.nav.k9.søknad.JsonUtils
 import no.nav.k9.søknad.Søknad
+import no.nav.helse.prosessering.v1.asynkron.AleneOmOmsorgenProducer
 import org.slf4j.LoggerFactory
 
 internal class PreprosseseringV1Service(
     private val pdfV1Generator: PdfV1Generator,
-    private val dokumentService: DokumentService
+    private val dokumentService: DokumentService,
+    private val aleneOmOmsorgenProducer: AleneOmOmsorgenProducer,
 ) {
 
     private companion object {
@@ -64,6 +66,11 @@ internal class PreprosseseringV1Service(
         logger.info("Totalt ${komplettDokumentUrls.size} dokumentbolker.")
 
 
+        if(melding.harBarnTilRegistrering()){
+            logger.info("Registrerer barn med alene om omsorgen.")
+            aleneOmOmsorgenProducer.leggPåKø(melding, metadata)
+        }
+
         val preprossesertMeldingV1 = PreprossesertMeldingV1(
             melding = melding,
             dokumentUrls = komplettDokumentUrls.toList(),
@@ -73,5 +80,6 @@ internal class PreprosseseringV1Service(
         preprossesertMeldingV1.reportMetrics()
         return preprossesertMeldingV1
     }
-
 }
+
+private fun MeldingV1.harBarnTilRegistrering(): Boolean = barn.any { it.aleneOmOmsorgen }
