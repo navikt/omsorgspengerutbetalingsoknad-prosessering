@@ -2,6 +2,7 @@ package no.nav.helse.kafka
 
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.config.SaslConfigs
 import org.apache.kafka.common.config.SslConfigs
 import org.apache.kafka.streams.StreamsConfig.*
@@ -15,7 +16,7 @@ import java.util.*
 private val logger: Logger = LoggerFactory.getLogger(KafkaConfig::class.java)
 private const val ID_PREFIX = "srvomsut-prs-"
 
-internal class KafkaConfig(
+class KafkaConfig(
     bootstrapServers: String,
     credentials: Pair<String, String>,
     trustStore: Pair<String, String>?,
@@ -32,8 +33,18 @@ internal class KafkaConfig(
         medProcessingGuarantee(exactlyOnce)
     }
 
+    private val producer = Properties().apply {
+        put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
+        medCredentials(credentials)
+        medTrustStore(trustStore)
+    }
+
     internal fun stream(name: String) = streams.apply {
         put(APPLICATION_ID_CONFIG, "$ID_PREFIX$name")
+    }
+
+    internal fun producer(name: String) = producer.apply {
+        put(ProducerConfig.CLIENT_ID_CONFIG, "$ID_PREFIX$name")
     }
 }
 
