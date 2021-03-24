@@ -1,9 +1,7 @@
 package no.nav.helse
 
 import no.nav.helse.prosessering.v1.*
-import org.junit.Ignore
 import java.io.File
-import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -82,39 +80,46 @@ class PdfV1GeneratorTest {
             utbetalingsperioder = listOf(
                 Utbetalingsperiode(
                     fraOgMed = start,
-                    tilOgMed = start.plusDays(10)
+                    tilOgMed = start.plusDays(10),
+                    årsak = FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(20),
-                    tilOgMed = start.plusDays(20)
+                    tilOgMed = start.plusDays(20),
+                    årsak = FraværÅrsak.SMITTEVERNHENSYN
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(30),
-                    tilOgMed = start.plusDays(35)
+                    tilOgMed = start.plusDays(35),
+                    årsak = FraværÅrsak.ORDINÆRT_FRAVÆR
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(1),
                     tilOgMed = start.plusDays(1),
                     antallTimerPlanlagt = Duration.ofHours(24).plusMinutes(10),
-                    antallTimerBorte = Duration.ofHours(18).plusMinutes(0)
+                    antallTimerBorte = Duration.ofHours(18).plusMinutes(0),
+                    årsak = FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(2),
                     tilOgMed = start.plusDays(2),
                     antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30),
-                    antallTimerBorte = Duration.ofHours(5).plusMinutes(0)
+                    antallTimerBorte = Duration.ofHours(5).plusMinutes(0),
+                    årsak = FraværÅrsak.SMITTEVERNHENSYN
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(3),
                     tilOgMed = start.plusDays(3),
                     lengde = Duration.ofHours(2),
                     antallTimerPlanlagt = Duration.ofHours(4).plusMinutes(30),
-                    antallTimerBorte = Duration.ofHours(5).plusMinutes(0)
+                    antallTimerBorte = Duration.ofHours(5).plusMinutes(0),
+                    årsak = FraværÅrsak.ORDINÆRT_FRAVÆR
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(3),
                     tilOgMed = start.plusDays(3),
-                    lengde = Duration.ofHours(24)
+                    lengde = Duration.ofHours(24),
+                    årsak = FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
                 )
             ),
             andreUtbetalinger = listOf("dagpenger", "sykepenger", "midlertidigkompensasjonsnfri"),
@@ -175,8 +180,8 @@ class PdfV1GeneratorTest {
                 harForståttRettigheterOgPlikter = JaNei.Ja
             ),
             erArbeidstakerOgså = true,
-            hjemmePgaSmittevernhensyn = true,
-            hjemmePgaStengtBhgSkole = true
+            hjemmePgaSmittevernhensyn = null,
+            hjemmePgaStengtBhgSkole = null
         )
     }
 

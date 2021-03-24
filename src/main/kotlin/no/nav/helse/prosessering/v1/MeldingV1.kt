@@ -23,8 +23,8 @@ data class MeldingV1(
     val frilans: Frilans? = null,
     val selvstendigVirksomheter: List<Virksomhet> = listOf(),
     val erArbeidstakerOgså: Boolean,
-    val hjemmePgaSmittevernhensyn: Boolean,
-    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til Boolean etter lansering.
+    val hjemmePgaSmittevernhensyn: Boolean? = null, // TODO: 15/03/2021 utgår.
+    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO: 15/03/2021 utgår
     val bekreftelser: Bekreftelser
 )
 
@@ -135,8 +135,16 @@ data class Utbetalingsperiode(
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,
     val lengde: Duration? = null, //TODO: beholde lengde i en periode slik at vi ikke mister info i overgangen
     val antallTimerBorte: Duration? = null,
-    val antallTimerPlanlagt: Duration? = null
+    val antallTimerPlanlagt: Duration? = null,
+    val årsak: FraværÅrsak? = null
 )
+
+enum class FraværÅrsak {
+    STENGT_SKOLE_ELLER_BARNEHAGE,
+    SMITTEVERNHENSYN,
+    ORDINÆRT_FRAVÆR
+}
+
 
 data class Bosted(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,

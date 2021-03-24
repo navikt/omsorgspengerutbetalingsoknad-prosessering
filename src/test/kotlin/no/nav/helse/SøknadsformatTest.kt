@@ -76,19 +76,22 @@ class SøknadsformatTest {
                 "tilOgMed": "2020-01-11",
                 "antallTimerBorte": "PT5H30M",
                 "antallTimerPlanlagt": "PT5H30M",
-                "lengde": null
+                "lengde": null,
+                "årsak": "STENGT_SKOLE_ELLER_BARNEHAGE"
             }, {
                 "fraOgMed": "2020-01-21",
                 "tilOgMed": "2020-01-21",
                 "antallTimerBorte": "PT5H30M",
                 "antallTimerPlanlagt": "PT5H30M",
-                "lengde": null
+                "lengde": null,
+                "årsak": "SMITTEVERNHENSYN"
             }, {
                 "fraOgMed": "2020-01-31",
                 "tilOgMed": "2020-02-05",
                 "antallTimerBorte": "PT5H30M",
                 "antallTimerPlanlagt": "PT5H30M",
-                "lengde": null
+                "lengde": null,
+                "årsak": "ORDINÆRT_FRAVÆR"
             }],
             "andreUtbetalinger": ["dagpenger", "sykepenger"],
             "vedlegg": [
@@ -102,8 +105,8 @@ class SøknadsformatTest {
             "fosterbarn": [{
                 "fødselsnummer": "02119970078"
             }],
-            "hjemmePgaSmittevernhensyn": true,
-            "hjemmePgaStengtBhgSkole": true,
+            "hjemmePgaSmittevernhensyn": null,
+            "hjemmePgaStengtBhgSkole": null,
             "bekreftelser": {
             "harBekreftetOpplysninger": true,
             "harForståttRettigheterOgPlikter": true
@@ -177,19 +180,22 @@ class SøknadsformatTest {
                 fraOgMed = start,
                 tilOgMed = start.plusDays(10),
                 antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
-                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
+                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30),
+                årsak = FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
             ),
             Utbetalingsperiode(
                 fraOgMed = start.plusDays(20),
                 tilOgMed = start.plusDays(20),
                 antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
-                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
+                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30),
+                årsak = FraværÅrsak.SMITTEVERNHENSYN
             ),
             Utbetalingsperiode(
                 fraOgMed = start.plusDays(30),
                 tilOgMed = start.plusDays(35),
                 antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
-                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
+                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30),
+                årsak = FraværÅrsak.ORDINÆRT_FRAVÆR
             )
         ),
         andreUtbetalinger = listOf("dagpenger", "sykepenger"),
@@ -208,7 +214,7 @@ class SøknadsformatTest {
             harForståttRettigheterOgPlikter = JaNei.Ja
         ),
         erArbeidstakerOgså = true,
-        hjemmePgaSmittevernhensyn = true,
-        hjemmePgaStengtBhgSkole = true
+        hjemmePgaSmittevernhensyn = null,
+        hjemmePgaStengtBhgSkole = null
     )
 }

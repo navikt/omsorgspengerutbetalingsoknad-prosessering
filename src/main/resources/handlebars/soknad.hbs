@@ -45,6 +45,7 @@
             {{/if}}
         </div>
 
+        <!--TODO: seksjon for smittevern utgår-->
         <section id="smittevern">
             {{#if søknad.hjemmePgaSmittevernhensyn}}
                 <h2>Særlige smittevernhensyn</h2>
@@ -79,6 +80,9 @@
                         {{#if u.antallTimerBorte}}
                             <br/>Antall timer du har planlagt jobbe: {{#varighet u.antallTimerPlanlagt}}{{/varighet}}
                             <br/>Antall timer du var borte fra jobb: {{#varighet u.antallTimerBorte}}{{/varighet}}
+                        {{/if}}
+                        {{#if u.årsak}}
+                            <br/>Årsak: {{#årsak u.årsak}}{{/årsak}}
                         {{/if}}
                         <br/><br/>
                     </li>

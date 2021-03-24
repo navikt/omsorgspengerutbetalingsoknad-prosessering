@@ -18,8 +18,8 @@ data class PreprossesertMeldingV1(
     val fosterbarn: List<FosterBarn>? = listOf(),
     val frilans: Frilans? = null,
     val selvstendigVirksomheter: List<Virksomhet> = listOf(),
-    val hjemmePgaSmittevernhensyn: Boolean,
-    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til Boolean etter lansering.
+    val hjemmePgaSmittevernhensyn: Boolean? = null, // TODO: 15/03/2021 utgår
+    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO: 15/03/2021 utgår
     val bekreftelser: Bekreftelser
 ) {
     internal constructor(

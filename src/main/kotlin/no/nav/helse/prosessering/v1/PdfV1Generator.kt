@@ -36,7 +36,7 @@ internal class PdfV1Generator {
             registerHelper("eq", Helper<String> { context, options ->
                 if (context == options.param(0)) options.fn() else options.inverse()
             })
-            registerHelper("enumNæringstyper", Helper<String> { context, options ->
+            registerHelper("enumNæringstyper", Helper<String> { context, _ ->
                 Næringstyper.valueOf(context).beskrivelse
             })
             registerHelper("fritekst", Helper<String> { context, _ ->
@@ -61,6 +61,13 @@ internal class PdfV1Generator {
             })
             registerHelper("jaNeiSvar", Helper<Boolean> { context, _ ->
                 if (context == true) "Ja" else "Nei"
+            })
+            registerHelper("årsak", Helper<String> { context, _ ->
+                when(FraværÅrsak.valueOf(context)) {
+                    FraværÅrsak.ORDINÆRT_FRAVÆR -> "Ordinært fravær"
+                    FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE -> "Stengt skole eller barnehage"
+                    FraværÅrsak.SMITTEVERNHENSYN -> "Smittevernhensyn"
+                }
             })
 
             infiniteLoops(true)

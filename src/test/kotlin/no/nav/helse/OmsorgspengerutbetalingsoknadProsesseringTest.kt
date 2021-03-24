@@ -2,23 +2,33 @@ package no.nav.helse
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.typesafe.config.ConfigFactory
-import io.ktor.config.ApplicationConfig
-import io.ktor.config.HoconApplicationConfig
-import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.engine.stop
-import io.ktor.server.testing.TestApplicationEngine
-import io.ktor.server.testing.createTestEnvironment
-import io.ktor.server.testing.handleRequest
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.config.*
+import io.ktor.http.*
+import io.ktor.server.engine.*
+import io.ktor.server.testing.*
+import io.ktor.util.*
 import io.prometheus.client.CollectorRegistry
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.time.delay
 import no.nav.common.KafkaEnvironment
 import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
-import no.nav.helse.prosessering.v1.*
+import no.nav.helse.prosessering.v1.Bekreftelser
+import no.nav.helse.prosessering.v1.Bosted
+import no.nav.helse.prosessering.v1.FosterBarn
+import no.nav.helse.prosessering.v1.FraværÅrsak
+import no.nav.helse.prosessering.v1.JaNei
+import no.nav.helse.prosessering.v1.Land
+import no.nav.helse.prosessering.v1.MeldingV1
+import no.nav.helse.prosessering.v1.Næringstyper
+import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
+import no.nav.helse.prosessering.v1.Regnskapsfører
+import no.nav.helse.prosessering.v1.SpørsmålOgSvar
+import no.nav.helse.prosessering.v1.Søker
+import no.nav.helse.prosessering.v1.Utbetalingsperiode
+import no.nav.helse.prosessering.v1.VarigEndring
+import no.nav.helse.prosessering.v1.Virksomhet
+import no.nav.helse.prosessering.v1.YrkesaktivSisteTreFerdigliknedeÅrene
 import no.nav.helse.prosessering.v1.asynkron.TopicEntry
-import org.json.JSONObject
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.slf4j.Logger
@@ -292,19 +302,22 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                 fraOgMed = start,
                 tilOgMed = start.plusDays(10),
                 antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
-                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
+                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30),
+                årsak = FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
             ),
             Utbetalingsperiode(
                 fraOgMed = start.plusDays(20),
                 tilOgMed = start.plusDays(20),
                 antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
-                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
+                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30),
+                årsak = FraværÅrsak.SMITTEVERNHENSYN
             ),
             Utbetalingsperiode(
                 fraOgMed = start.plusDays(30),
                 tilOgMed = start.plusDays(35),
                 antallTimerBorte = Duration.ofHours(5).plusMinutes(30),
-                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30)
+                antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30),
+                årsak = FraværÅrsak.ORDINÆRT_FRAVÆR
             )
         ),
         andreUtbetalinger = listOf("dagpenger", "sykepenger"),
@@ -360,7 +373,8 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             )
         ),
         erArbeidstakerOgså = true,
-        hjemmePgaSmittevernhensyn = true
+        hjemmePgaStengtBhgSkole = null,
+        hjemmePgaSmittevernhensyn = null
     )
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }

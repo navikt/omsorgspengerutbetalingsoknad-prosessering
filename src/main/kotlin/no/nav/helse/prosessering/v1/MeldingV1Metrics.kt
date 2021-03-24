@@ -115,9 +115,11 @@ internal fun MeldingV1.reportMetrics() {
         }
     }
 
-    særligeSmittevernhensynCounter
-        .labels(hjemmePgaSmittevernhensyn.tilJaEllerNei(), vedlegg.isNotEmpty().tilJaEllerNei())
-        .inc()
+    hjemmePgaSmittevernhensyn?.let {
+        særligeSmittevernhensynCounter
+            .labels(it.tilJaEllerNei(), vedlegg.isNotEmpty().tilJaEllerNei())
+            .inc()
+    }
 }
 
 private fun MeldingV1.virksomheterMetric() {
