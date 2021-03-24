@@ -102,14 +102,6 @@ class SøknadsformatTest {
             "frilans": null,
             "selvstendigVirksomheter": [],
             "erArbeidstakerOgså": true,
-            "barn": [
-              {
-                "identitetsnummer": "02119970078",
-                "aleneOmOmsorgen": true,
-                "navn": "Barn Barnesen",
-                "aktørId": "123456"
-              }
-            ],
             "fosterbarn": [{
                 "fødselsnummer": "02119970078"
             }],
@@ -207,14 +199,6 @@ class SøknadsformatTest {
             )
         ),
         andreUtbetalinger = listOf("dagpenger", "sykepenger"),
-        barn = listOf(
-            Barn(
-                identitetsnummer = "02119970078",
-                aktørId = "123456",
-                navn = "Barn Barnesen",
-                aleneOmOmsorgen = true
-            )
-        ),
         fosterbarn = listOf(
             FosterBarn(
                 fødselsnummer = "02119970078"

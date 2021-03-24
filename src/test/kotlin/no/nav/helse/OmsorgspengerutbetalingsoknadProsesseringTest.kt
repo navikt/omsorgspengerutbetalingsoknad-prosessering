@@ -56,7 +56,6 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
         private val journalføringsKonsumer = kafkaEnvironment.journalføringsKonsumer()
         private val cleanupKonsumer = kafkaEnvironment.cleanupKonsumer()
-        private val k9RapidKonsumer = kafkaEnvironment.k9RapidKonsumer()
         private val preprossesertKonsumer = kafkaEnvironment.preprossesertKonsumer()
 
         // Se https://github.com/navikt/dusseldorf-ktor#f%C3%B8dselsnummer
@@ -144,10 +143,9 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
     @Test
     fun `En feilprosessert melding vil bli prosessert etter at tjenesten restartes`() {
-        val søkerIdentitetsnummer = gyldigFodselsnummerA
 
         val melding = gyldigMelding(
-            fødselsnummerSoker = søkerIdentitetsnummer
+            fødselsnummerSoker = gyldigFodselsnummerA
         )
 
         wireMockServer.stubJournalfor(500) // Simulerer feil ved journalføring
@@ -161,10 +159,6 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         journalføringsKonsumer
             .hentJournalførtMelding(melding.søknadId)
             .assertJournalførtFormat()
-
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     private fun readyGir200HealthGir503() {
@@ -180,9 +174,8 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
     @Test
     fun `Melding som gjeder søker med D-nummer`() {
-        val søkerIdentitetsnummer = dNummerA
         val melding = gyldigMelding(
-            fødselsnummerSoker = søkerIdentitetsnummer
+            fødselsnummerSoker = dNummerA
         )
 
         kafkaTestProducer.leggTilMottak(melding)
@@ -190,9 +183,6 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             .hentJournalførtMelding(melding.søknadId)
             .assertJournalførtFormat()
 
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     @Test
@@ -206,34 +196,25 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         journalføringsKonsumer
             .hentJournalførtMelding(melding.søknadId)
             .assertJournalførtFormat()
-
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     @Test
     fun `Melding lagt til prosessering selv om oppslag paa aktør ID for barn feiler`() {
-        val søkerIdentitetsnummer = gyldigFodselsnummerA
 
         val melding = gyldigMelding(
-            fødselsnummerSoker = søkerIdentitetsnummer
+            fødselsnummerSoker = gyldigFodselsnummerA
         )
 
         kafkaTestProducer.leggTilMottak(melding)
         preprossesertKonsumer.hentPreprossesertMelding(melding.søknadId)
-
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
     }
 
 
     @Test
     fun `Forvent 2 legeerklæringer og 2 samværsavtaler dersom den er satt i melding`() {
-        val søkerIdentitetsnummer = gyldigFodselsnummerA
+
         val melding = gyldigMelding(
-            fødselsnummerSoker = søkerIdentitetsnummer
+            fødselsnummerSoker = gyldigFodselsnummerA
         )
 
         kafkaTestProducer.leggTilMottak(melding)
@@ -242,26 +223,18 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         assertEquals(4, preprossesertMelding.data.dokumentUrls.size)
         // 2 legeerklæringsvedlegg, 2, to samværsavtalevedlegg, og 1 søknadPdf.
 
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     @Test
     fun `Forvent riktig format på journalført melding`() {
-        val søkerIdentitetsnummer = gyldigFodselsnummerA
         val melding = gyldigMelding(
-            fødselsnummerSoker = søkerIdentitetsnummer
+            fødselsnummerSoker = gyldigFodselsnummerA
         )
 
         kafkaTestProducer.leggTilMottak(melding)
         journalføringsKonsumer
             .hentJournalførtMelding(melding.søknadId)
             .assertJournalførtFormat()
-
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     private fun gyldigMelding(
@@ -346,14 +319,6 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             )
         ),
         andreUtbetalinger = listOf("dagpenger", "sykepenger"),
-        barn = listOf(
-            Barn(
-                identitetsnummer = "02119970078",
-                aktørId = "123456",
-                navn = "Barn Barnesen",
-                aleneOmOmsorgen = true
-            )
-        ),
         fosterbarn = listOf(
             FosterBarn(
                 fødselsnummer = "02119970078"
@@ -411,13 +376,4 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
     )
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }
-}
-
-private fun String.validerAleneOmOmsorgenBehovssekvens(){
-    val rawJson = JSONObject(this)
-    assertEquals(rawJson.getJSONArray("@behovsrekkefølge").getString(0), "AleneOmOmsorgen")
-    assertEquals(rawJson.getString("@type"),"Behovssekvens")
-
-    assertNotNull(rawJson.getString("@correlationId"))
-    assertNotNull(rawJson.getJSONObject("@behov"))
 }
