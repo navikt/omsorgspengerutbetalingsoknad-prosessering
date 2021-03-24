@@ -20,6 +20,7 @@ import no.nav.k9.søknad.felles.aktivitet.Organisasjonsnummer
 import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende
 import no.nav.k9.søknad.felles.aktivitet.VirksomhetType
 import no.nav.k9.søknad.felles.fravær.FraværPeriode
+import no.nav.k9.søknad.felles.fravær.FraværÅrsak
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
 import no.nav.k9.søknad.felles.type.Landkode
@@ -203,16 +204,18 @@ internal object SøknadUtils {
                         "Something Fishy AS"
                     ),
                 ),
-                Frilanser(LocalDate.parse("2020-01-01"), true),
+                Frilanser(LocalDate.parse("2020-01-01"), null, true),
             ),
             listOf(
                 FraværPeriode(
                     Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-05")),
-                    Duration.ofHours(7)
+                    Duration.ofHours(7),
+                    FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
                 ),
                 FraværPeriode(
                     Periode(LocalDate.parse("2020-01-06"), LocalDate.parse("2020-01-10")),
-                    Duration.ofHours(4)
+                    Duration.ofHours(4),
+                    FraværÅrsak.SMITTEVERNHENSYN
                 ),
             ),
             Bosteder(

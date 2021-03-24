@@ -75,17 +75,20 @@ class SøknadsformatTest {
                       ],
                       "frilanser": {
                         "startdato": "2020-01-01",
+                        "sluttdato": null,
                         "jobberFortsattSomFrilans": true
                       }
                     },
                     "fraværsperioder": [
                       {
                         "periode": "2020-01-01/2020-01-05",
-                        "duration": "PT7H"
+                        "duration": "PT7H",
+                        "årsak": "STENGT_SKOLE_ELLER_BARNEHAGE"
                       },
                       {
                         "periode": "2020-01-06/2020-01-10",
-                        "duration": "PT4H"
+                        "duration": "PT4H",
+                        "årsak": "SMITTEVERNHENSYN"
                       }
                     ],
                     "bosteder": null,
