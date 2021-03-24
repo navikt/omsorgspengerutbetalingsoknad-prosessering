@@ -11,8 +11,7 @@
                   søknad.mottatt}}{{/tidspunkt}}"/>
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
-        <bookmark name="Barn" href="#barn"/>
-        <bookmark name="Fosterbarn" href="#fosterbarn"/>
+        <bookmark  name="Fosterbarn" href="#fosterbarn"/>
         <bookmark name="Smittevern" href="#smittevern"/>
         <bookmark name="Utbetalingsperioder" href="#utbetalingsperioder"/>
         <bookmark name="Spørsmål" href="#spørsmål"/>
@@ -46,21 +45,6 @@
             {{/each}}
         {{/if}}
     </div>
-
-    <section id="barn">
-        {{#if harBarn}}
-            <h2>Dine barn</h2>
-            <ul>
-                {{#each søknad.barn as |barn|}}
-                    <li>
-                        <p class="sporsmalstekst">{{barn.navn}} ({{barn.identitetsnummer}})</p>
-                        <p class="sporsmalstekst">Er du alene om omsorgen for dette barnet?</p>
-                        {{ jaNeiSvar barn.aleneOmOmsorgen}}
-                    </li>
-                {{/each}}
-            </ul>
-        {{/if}}
-    </section>
 
     <!--TODO: seksjon for smittevern utgår-->
     <section id="smittevern">

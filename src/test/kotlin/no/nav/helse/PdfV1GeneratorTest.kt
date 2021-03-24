@@ -171,14 +171,6 @@ class PdfV1GeneratorTest {
                     )
                 )
             ),
-            barn = listOf(
-                Barn(
-                    identitetsnummer = "02119970078",
-                    aktørId = "123456",
-                    navn = "Barn Barnesen",
-                    aleneOmOmsorgen = true
-                )
-            ),
             fosterbarn = listOf(
                 FosterBarn(
                     fødselsnummer = gyldigFodselsnummerB

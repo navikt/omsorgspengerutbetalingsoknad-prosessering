@@ -1,7 +1,6 @@
 package no.nav.helse
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import no.nav.helse.prosessering.v1.Barn
 import no.nav.helse.prosessering.v1.Bekreftelser
 import no.nav.helse.prosessering.v1.Bosted
 import no.nav.helse.prosessering.v1.FosterBarn
@@ -113,14 +112,6 @@ internal object SøknadUtils {
             )
         ),
         andreUtbetalinger = listOf("dagpenger", "sykepenger"),
-        barn = listOf(
-            Barn(
-                identitetsnummer = "02119970078",
-                aktørId = "123456",
-                navn = "Barn Barnesen",
-                aleneOmOmsorgen = true
-            )
-        ),
         fosterbarn = listOf(
             FosterBarn(
                 fødselsnummer = "02119970078"

@@ -1,20 +1,15 @@
 package no.nav.helse
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.SerializationFeature
-import io.ktor.application.Application
-import io.ktor.application.ApplicationStopping
-import io.ktor.application.call
-import io.ktor.application.install
-import io.ktor.features.ContentNegotiation
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.Url
-import io.ktor.jackson.jackson
-import io.ktor.response.respondText
-import io.ktor.routing.Routing
-import io.ktor.routing.get
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.application.*
+import io.ktor.features.*
+import io.ktor.http.*
+import io.ktor.jackson.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.util.*
 import io.prometheus.client.hotspot.DefaultExports
 import no.nav.helse.auth.AccessTokenClientResolver
 import no.nav.helse.dokument.DokumentGateway
@@ -32,7 +27,6 @@ import no.nav.helse.dusseldorf.ktor.metrics.MetricsRoute
 import no.nav.helse.joark.JoarkGateway
 import no.nav.helse.prosessering.v1.PdfV1Generator
 import no.nav.helse.prosessering.v1.PreprosseseringV1Service
-import no.nav.helse.prosessering.v1.asynkron.AleneOmOmsorgenProducer
 import no.nav.helse.prosessering.v1.asynkron.AsynkronProsesseringV1Service
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -70,8 +64,7 @@ fun Application.omsorgspengerutbetalingSoknadProsessering() {
 
     val preprosseseringV1Service = PreprosseseringV1Service(
         pdfV1Generator = PdfV1Generator(),
-        dokumentService = dokumentService,
-        aleneOmOmsorgenProducer = AleneOmOmsorgenProducer(configuration.getKafkaConfig())
+        dokumentService = dokumentService
     )
     val joarkGateway = JoarkGateway(
         baseUrl = configuration.getk9JoarkBaseUrl(),
@@ -131,5 +124,5 @@ private fun Url.Companion.healthURL(baseUrl: URI) = Url.buildURL(baseUrl = baseU
 
 
 internal fun ObjectMapper.omsorgspengerKonfiguert() = dusseldorfConfigured()
-    .setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE)
+    .setPropertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE)
     .configure(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS, false)

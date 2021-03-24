@@ -57,7 +57,6 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         private val kafkaTestProducer = kafkaEnvironment.meldingsProducer()
 
         private val cleanupKonsumer = kafkaEnvironment.cleanupKonsumer()
-        private val k9RapidKonsumer = kafkaEnvironment.k9RapidKonsumer()
         private val preprossesertKonsumer = kafkaEnvironment.preprossesertKonsumer()
 
         // Se https://github.com/navikt/dusseldorf-ktor#f%C3%B8dselsnummer
@@ -148,12 +147,11 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
     @Test
     fun `En feilprosessert melding vil bli prosessert etter at tjenesten restartes`() {
-        val søkerIdentitetsnummer = gyldigFodselsnummerA
 
         val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
             søker = defaultSøknad.søker.copy(
-                fødselsnummer = søkerIdentitetsnummer
+                fødselsnummer = gyldigFodselsnummerA
             )
         )
 
@@ -168,10 +166,6 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         cleanupKonsumer
             .hentCleanupMelding(melding.søknadId)
             .assertJournalførtFormat()
-
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     private fun readyGir200HealthGir503() {
@@ -187,11 +181,10 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
     @Test
     fun `Melding som gjeder søker med D-nummer`() {
-        val søkerIdentitetsnummer = dNummerA
         val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
             søker = defaultSøknad.søker.copy(
-                fødselsnummer = søkerIdentitetsnummer
+                fødselsnummer = dNummerA
             )
         )
 
@@ -200,20 +193,15 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         cleanupKonsumer
             .hentCleanupMelding(melding.søknadId)
             .assertJournalførtFormat()
-
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     @Test
     fun `Melding lagt til prosessering selv om sletting av vedlegg feiler`() {
-        val søkerIdentitetsnummer = gyldigFodselsnummerA
 
         val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
             søker = defaultSøknad.søker.copy(
-                fødselsnummer = søkerIdentitetsnummer
+                fødselsnummer = gyldigFodselsnummerA
             )
         )
 
@@ -221,40 +209,30 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         cleanupKonsumer
             .hentCleanupMelding(melding.søknadId)
             .assertJournalførtFormat()
-
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     @Test
     fun `Melding lagt til prosessering selv om oppslag paa aktør ID for barn feiler`() {
-        val søkerIdentitetsnummer = gyldigFodselsnummerA
 
         val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
             søker = defaultSøknad.søker.copy(
-                fødselsnummer = søkerIdentitetsnummer
+                fødselsnummer = gyldigFodselsnummerA
             )
         )
 
         kafkaTestProducer.leggTilMottak(melding)
         preprossesertKonsumer.hentPreprossesertMelding(melding.søknadId)
-
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
     }
 
 
     @Test
     fun `Forvent 2 legeerklæringer og 2 samværsavtaler dersom den er satt i melding`() {
-        val søkerIdentitetsnummer = gyldigFodselsnummerA
 
         val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
             søker = defaultSøknad.søker.copy(
-                fødselsnummer = søkerIdentitetsnummer
+                fødselsnummer = gyldigFodselsnummerA
             )
         )
 
@@ -264,18 +242,14 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         assertEquals(4, preprossesertMelding.data.dokumentUrls.size)
         // 2 legeerklæringsvedlegg, 2, to samværsavtalevedlegg, og 1 søknadPdf.
 
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     @Test
     fun `Forvent riktig format på journalført melding`() {
-        val søkerIdentitetsnummer = gyldigFodselsnummerA
         val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
             søker = defaultSøknad.søker.copy(
-                fødselsnummer = søkerIdentitetsnummer
+                fødselsnummer = gyldigFodselsnummerA
             )
         )
 
@@ -283,19 +257,14 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         cleanupKonsumer
             .hentCleanupMelding(melding.søknadId)
             .assertJournalførtFormat()
-
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     @Test
     fun `Tester virksomhet registrert i utlandet`() {
-        val søkerIdentitetsnummer = gyldigFodselsnummerA
         val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
             søker = defaultSøknad.søker.copy(
-                fødselsnummer = søkerIdentitetsnummer
+                fødselsnummer = gyldigFodselsnummerA
             ),
             selvstendigVirksomheter = listOf(
                 Virksomhet(
@@ -328,20 +297,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         cleanupKonsumer
             .hentCleanupMelding(melding.søknadId)
             .assertJournalførtFormat()
-
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }
-}
-
-private fun String.validerAleneOmOmsorgenBehovssekvens(){
-    val rawJson = JSONObject(this)
-    assertEquals(rawJson.getJSONArray("@behovsrekkefølge").getString(0), "AleneOmOmsorgen")
-    assertEquals(rawJson.getString("@type"),"Behovssekvens")
-
-    assertNotNull(rawJson.getString("@correlationId"))
-    assertNotNull(rawJson.getJSONObject("@behov"))
 }

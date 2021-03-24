@@ -42,10 +42,6 @@ class KafkaConfig(
     internal fun stream(name: String) = streams.apply {
         put(APPLICATION_ID_CONFIG, "$ID_PREFIX$name")
     }
-
-    internal fun producer(name: String) = producer.apply {
-        put(ProducerConfig.CLIENT_ID_CONFIG, "$ID_PREFIX$name")
-    }
 }
 
 private fun Properties.medProcessingGuarantee(exactlyOnce: Boolean) {
