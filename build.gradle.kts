@@ -4,7 +4,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val dusseldorfKtorVersion = "1.5.1.609bb61"
 val ktorVersion = ext.get("ktorVersion").toString()
 val k9FormatVersion = "3.0.0.3794ec7"
-val k9RapidVersion = "1.afab3a1"
 val slf4jVersion = ext.get("slf4jVersion").toString()
 
 val kotlinxCoroutinesVersion = ext.get("kotlinxCoroutinesVersion").toString()
@@ -47,9 +46,6 @@ dependencies {
 
     // Kafka
     implementation("org.apache.kafka:kafka-streams:$kafkaVersion")
-
-    //K9-Rapid
-    implementation("no.nav.k9.rapid:alene-om-omsorgen:$k9RapidVersion")
 
     // Test
     testImplementation ( "org.apache.kafka:kafka-clients:$kafkaVersion")

@@ -1,6 +1,5 @@
 package no.nav.helse.prosessering.v1
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonValue
@@ -19,7 +18,6 @@ data class MeldingV1(
     val spørsmål: List<SpørsmålOgSvar>,
     val utbetalingsperioder: List<Utbetalingsperiode>,
     val andreUtbetalinger: List<String>?, //TODO: Fjern ? når dette er prodsatt.
-    val barn: List<Barn> = listOf(),
     val fosterbarn: List<FosterBarn>? = listOf(),
     val vedlegg: List<URI>,
     val frilans: Frilans? = null,
@@ -86,13 +84,6 @@ enum class JaNei (@get:JsonValue val boolean: Boolean) {
         }
     }
 }
-
-data class Barn(
-    var identitetsnummer: String,
-    val aktørId: String? = null,
-    val navn: String,
-    val aleneOmOmsorgen: Boolean,
-)
 
 data class FosterBarn(
     val fødselsnummer: String
