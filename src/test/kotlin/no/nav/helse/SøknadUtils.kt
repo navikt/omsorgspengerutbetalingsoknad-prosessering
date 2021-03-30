@@ -1,6 +1,7 @@
 package no.nav.helse
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import no.nav.helse.prosessering.v1.AktivitetFravær.*
 import no.nav.helse.prosessering.v1.Bekreftelser
 import no.nav.helse.prosessering.v1.Bosted
 import no.nav.helse.prosessering.v1.FosterBarn
@@ -14,13 +15,14 @@ import no.nav.helse.prosessering.v1.VarigEndring
 import no.nav.helse.prosessering.v1.Virksomhet
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.Versjon
-import no.nav.k9.søknad.felles.aktivitet.ArbeidAktivitet
-import no.nav.k9.søknad.felles.aktivitet.Frilanser
-import no.nav.k9.søknad.felles.aktivitet.Organisasjonsnummer
-import no.nav.k9.søknad.felles.aktivitet.SelvstendigNæringsdrivende
-import no.nav.k9.søknad.felles.aktivitet.VirksomhetType
+import no.nav.k9.søknad.felles.fravær.AktivitetFravær
 import no.nav.k9.søknad.felles.fravær.FraværPeriode
 import no.nav.k9.søknad.felles.fravær.FraværÅrsak
+import no.nav.k9.søknad.felles.opptjening.Frilanser
+import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet
+import no.nav.k9.søknad.felles.opptjening.Organisasjonsnummer
+import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende
+import no.nav.k9.søknad.felles.opptjening.VirksomhetType
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
 import no.nav.k9.søknad.felles.type.Landkode
@@ -99,17 +101,20 @@ internal object SøknadUtils {
             Utbetalingsperiode(
                 fraOgMed = start,
                 tilOgMed = start.plusDays(10),
-                lengde = Duration.ofHours(5).plusMinutes(30)
+                lengde = Duration.ofHours(5).plusMinutes(30),
+                aktivitetFravær = listOf(FRILANSER)
             ),
             Utbetalingsperiode(
                 fraOgMed = start.plusDays(20),
                 tilOgMed = start.plusDays(20),
-                lengde = Duration.ofHours(5).plusMinutes(30)
+                lengde = Duration.ofHours(5).plusMinutes(30),
+                aktivitetFravær = listOf(SELVSTENDIG_VIRKSOMHET)
             ),
             Utbetalingsperiode(
                 fraOgMed = start.plusDays(30),
                 tilOgMed = start.plusDays(35),
-                lengde = Duration.ofHours(5).plusMinutes(30)
+                lengde = Duration.ofHours(5).plusMinutes(30),
+                aktivitetFravær = listOf(FRILANSER, SELVSTENDIG_VIRKSOMHET)
             )
         ),
         andreUtbetalinger = listOf("dagpenger", "sykepenger"),
@@ -158,7 +163,7 @@ internal object SøknadUtils {
             listOf(
                 K9Barn(NorskIdentitetsnummer.of("10987654321"), null)
             ),
-            ArbeidAktivitet(
+            OpptjeningAktivitet(
                 null,
                 listOf(
                     SelvstendigNæringsdrivende(
@@ -210,12 +215,14 @@ internal object SøknadUtils {
                 FraværPeriode(
                     Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-05")),
                     Duration.ofHours(7),
-                    FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
+                    FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE,
+                    listOf(AktivitetFravær.FRILANSER)
                 ),
                 FraværPeriode(
                     Periode(LocalDate.parse("2020-01-06"), LocalDate.parse("2020-01-10")),
                     Duration.ofHours(4),
-                    FraværÅrsak.SMITTEVERNHENSYN
+                    FraværÅrsak.SMITTEVERNHENSYN,
+                    listOf(AktivitetFravær.SELVSTENDIG_VIRKSOMHET)
                 ),
             ),
             Bosteder(

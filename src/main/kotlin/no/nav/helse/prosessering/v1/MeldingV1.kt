@@ -139,7 +139,8 @@ data class Utbetalingsperiode(
     val lengde: Duration? = null, //TODO: beholde lengde i en periode slik at vi ikke mister info i overgangen
     val antallTimerBorte: Duration? = null,
     val antallTimerPlanlagt: Duration? = null,
-    val årsak: FraværÅrsak? = null
+    val årsak: FraværÅrsak? = null,
+    val aktivitetFravær: List<AktivitetFravær> = listOf()
 )
 
 enum class FraværÅrsak {
@@ -148,6 +149,10 @@ enum class FraværÅrsak {
     ORDINÆRT_FRAVÆR
 }
 
+enum class AktivitetFravær {
+    FRILANSER,
+    SELVSTENDIG_VIRKSOMHET
+}
 
 data class Bosted(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,

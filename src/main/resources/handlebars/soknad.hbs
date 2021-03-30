@@ -11,7 +11,7 @@
                   søknad.mottatt}}{{/tidspunkt}}"/>
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
-        <bookmark  name="Fosterbarn" href="#fosterbarn"/>
+        <bookmark name="Fosterbarn" href="#fosterbarn"/>
         <bookmark name="Smittevern" href="#smittevern"/>
         <bookmark name="Utbetalingsperioder" href="#utbetalingsperioder"/>
         <bookmark name="Spørsmål" href="#spørsmål"/>
@@ -96,7 +96,16 @@
                     {{/if}}
                     {{#if u.årsak}}
                         <br/>Årsak: {{#årsak u.årsak}}{{/årsak}}
-                    {{/if}}<br/><br/>
+                    {{/if}}
+                    <br/> Fravær som
+                    {{#each u.aktivitetFravær as |aktivitet|}}
+                        {{#aktivitetFravær aktivitet}}{{/aktivitetFravær}}
+                        {{#if @last}}
+                        {{else}}
+                            og
+                        {{/if}}
+                    {{/each}}
+                    <br/><br/>
                 </li>
             {{/each}}
         </ul>

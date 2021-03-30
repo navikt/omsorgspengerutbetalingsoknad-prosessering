@@ -83,12 +83,14 @@ class SøknadsformatTest {
                       {
                         "periode": "2020-01-01/2020-01-05",
                         "duration": "PT7H",
-                        "årsak": "STENGT_SKOLE_ELLER_BARNEHAGE"
+                        "årsak": "STENGT_SKOLE_ELLER_BARNEHAGE",
+                        "aktivitetFravær": ["FRILANSER"]
                       },
                       {
                         "periode": "2020-01-06/2020-01-10",
                         "duration": "PT4H",
-                        "årsak": "SMITTEVERNHENSYN"
+                        "årsak": "SMITTEVERNHENSYN",
+                        "aktivitetFravær": ["SELVSTENDIG_VIRKSOMHET"]
                       }
                     ],
                     "bosteder": null,
