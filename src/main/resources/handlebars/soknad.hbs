@@ -82,7 +82,10 @@
     </section>
 
     <section id="utbetalingsperioder">
-        <h2>Perioder med utbetaling</h2>
+        <h2>Omsorgsdager du søker utbetaling for</h2>
+        <p class="sporsmalstekst">Har du dekket de 10 første omsorgsdagene selv</p>
+        {{jaNeiSvar søknad.harDekketTiFørsteDagerSelv}} <br/>
+
         <ul>
             {{# each søknad.utbetalingsperioder as |u|}}
                 <li>
@@ -91,15 +94,21 @@
                         <br/> Lengde: {{#varighet u.lengde}}{{/varighet}}
                     {{/if}}
                     {{#if u.antallTimerBorte}}
-                        <br/>Antall timer du har planlagt jobbe: {{#varighet u.antallTimerPlanlagt}}{{/varighet}}
-                        <br/>Antall timer du var borte fra jobb: {{#varighet u.antallTimerBorte}}{{/varighet}}
+                        <br/>Antall timer du skulle ha jobbet denne dagen: {{#varighet
+                            u.antallTimerPlanlagt}}{{/varighet}}
+                        <br/>Antall timer du var borte fra jobb denne dagen: {{#varighet
+                            u.antallTimerBorte}}{{/varighet}}
                     {{/if}}
                     {{#if u.årsak}}
                         <br/>Årsak: {{#årsak u.årsak}}{{/årsak}}
                     {{/if}}
-                    <br/> Fravær som
+
+                    <!--Hvis u.aktivitetFravær == 1 -> Fravær som-->
+                    <!--Hvis u.aktivitetFravær == 2 -> Fravær både som-->
+                    <br/> {{#fraværSomFormat u.aktivitetFravær }}{{/fraværSomFormat}}
                     {{#each u.aktivitetFravær as |aktivitet|}}
                         {{#aktivitetFravær aktivitet}}{{/aktivitetFravær}}
+
                         {{#if @last}}
                         {{else}}
                             og
@@ -111,7 +120,9 @@
         </ul>
 
         {{#if harOpphold}}
-            <h3>Utenlandsopphold i perioden</h3>
+            <h3>Utenlandsopphold i dager med fravær</h3>
+            <p>Har du vært i utlandet i noen av dagene du søker omsorgspenger for?</p>
+            {{jaNeiSvar harOpphold}}: <br/>
         {{/if}}
         <ul>
             {{# each søknad.opphold as |o|}}
@@ -131,7 +142,9 @@
         </ul>
 
         {{#if harSøktAndreYtelser}}
-            <h3>Andre utbetalinger du har søkt om fra NAV</h3>
+            <h3>Andre utbetalinger fra NAV</h3>
+            <p>Har du søkt om andre utbetalinger fra NAV?</p>
+            {{jaNeiSvar harSøktAndreYtelser}}: <br/>
         {{/if}}
         <ul>
             {{# each søknad.andreUtbetalinger as |utbetaling|}}
@@ -158,12 +171,12 @@
     <section id="medlemskap">
         <h2>Medlemskap i folketrygden</h2>
 
-        <p class="sporsmalstekst">Har du bodd i utlandet siste 12 månedene?</p>
+        <p class="sporsmalstekst">Har du bodd i utlandet i de siste 12 månedene?</p>
         {{jaNeiSvar medlemskap.siste12}}
 
         <br/><br/>
 
-        <p class="sporsmalstekst">Skal du bo i utlandet de neste 12 månedene?</p>
+        <p class="sporsmalstekst">Skal du bo i utlandet i de neste 12 månedene?</p>
         {{jaNeiSvar medlemskap.neste12}}
         <br/><br/>
 
@@ -182,13 +195,13 @@
 
     <section id="frilans">
         {{# if søknad.frilans }}
-            <h2>Frilans</h2>
+            <h2>Frilanser</h2>
+            <p class="sporsmalstekst">Var du frilanser i dagene du søker utbetaling for?</p>
+            {{jaNeiSvar true}}  <br/> <br/>
+
             <p class="sporsmalstekst">Når startet du som frilanser?</p>
             <p>{{#dato søknad.frilans.startdato}}{{/dato}}</p>
             <br/>
-
-            <p class="sporsmalstekst">Har du jobbet og hatt inntekt som frilanser de siste 4 ukene?</p>
-            {{jaNeiSvar true}}  <br/> <br/>
 
             <p class="sporsmalstekst">Jobber du fremdeles som frilanser?</p>
             {{jaNeiSvar søknad.frilans.jobberFortsattSomFrilans}}  <br/> <br/>
@@ -203,6 +216,8 @@
     <section id="selvstendig">
         {{#if søknad.selvstendigVirksomheter}}
             <h2>Selvstendig næringsdrivende</h2>
+            <p class="sporsmalstekst">Var du selvstendig næringsdrivende i dagene du søker utbetaling for?</p>
+            {{jaNeiSvar true}}  <br/> <br/>
             {{# each søknad.selvstendigVirksomheter as |virksomhet|~}}
 
                 <h3>{{virksomhet.navnPåVirksomheten}} ({{#dato virksomhet.fraOgMed}}{{/dato}} -
@@ -276,7 +291,7 @@
         {{jaNeiSvar bekreftelser.harBekreftetOpplysninger}}
         <br/><br/>
 
-        <p class="sporsmalstekst">Har du bekreftet at opplysninger som er gitt er riktige?</p>
+        <p class="sporsmalstekst">Har du bekreftet at opplysninger du har gitt er riktige?</p>
         {{jaNeiSvar bekreftelser.harForståttRettigheterOgPlikter}}
     </section>
 

@@ -75,6 +75,13 @@ internal class PdfV1Generator {
                     AktivitetFravær.SELVSTENDIG_VIRKSOMHET -> "selvstendig næringsdrivende"
                 }
             })
+            registerHelper("fraværSomFormat", Helper<List<String>> { context, _ ->
+                when(context.size) {
+                    1 -> "Fravær som"
+                    2 -> "Fravær både som"
+                    else -> ""
+                }
+            })
 
             infiniteLoops(true)
         }

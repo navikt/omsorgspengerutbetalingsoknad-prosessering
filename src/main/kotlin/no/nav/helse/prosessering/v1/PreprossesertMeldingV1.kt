@@ -10,6 +10,7 @@ data class PreprossesertMeldingV1(
     val mottatt: ZonedDateTime,
     val søker: PreprossesertSøker,
     val språk: String?,
+    val harDekketTiFørsteDagerSelv: Boolean? = null, // TODO: 08/04/2021 Fjern nullable etter prodsetting.
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,

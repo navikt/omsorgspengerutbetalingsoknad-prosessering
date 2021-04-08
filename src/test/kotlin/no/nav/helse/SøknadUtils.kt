@@ -55,6 +55,7 @@ internal object SøknadUtils {
             mellomnavn = "Mellomnavn",
             fornavn = "Ola"
         ),
+        harDekketTiFørsteDagerSelv = true,
         bosteder = listOf(
             Bosted(
                 fraOgMed = start,
