@@ -196,9 +196,6 @@
     <section id="frilans">
         {{# if søknad.frilans }}
             <h2>Frilanser</h2>
-            <p class="sporsmalstekst">Var du frilanser i dagene du søker utbetaling for?</p>
-            {{jaNeiSvar true}}  <br/> <br/>
-
             <p class="sporsmalstekst">Når startet du som frilanser?</p>
             <p>{{#dato søknad.frilans.startdato}}{{/dato}}</p>
             <br/>
@@ -216,8 +213,6 @@
     <section id="selvstendig">
         {{#if søknad.selvstendigVirksomheter}}
             <h2>Selvstendig næringsdrivende</h2>
-            <p class="sporsmalstekst">Var du selvstendig næringsdrivende i dagene du søker utbetaling for?</p>
-            {{jaNeiSvar true}}  <br/> <br/>
             {{# each søknad.selvstendigVirksomheter as |virksomhet|~}}
 
                 <h3>{{virksomhet.navnPåVirksomheten}} ({{#dato virksomhet.fraOgMed}}{{/dato}} -
