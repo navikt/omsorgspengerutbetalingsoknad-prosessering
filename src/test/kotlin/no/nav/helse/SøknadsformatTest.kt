@@ -104,7 +104,8 @@ class SøknadsformatTest {
                           "land": "SWE",
                           "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
                         }
-                      }
+                      },
+                      "perioderSomSkalSlettes": {}
                     }
                   }
                 }

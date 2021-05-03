@@ -25,6 +25,8 @@ import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende
 import no.nav.k9.søknad.felles.opptjening.VirksomhetType
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
+import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD
+import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING
 import no.nav.k9.søknad.felles.type.Landkode
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.k9.søknad.felles.type.Periode
@@ -226,34 +228,32 @@ internal object SøknadUtils {
                     listOf(AktivitetFravær.SELVSTENDIG_VIRKSOMHET)
                 ),
             ),
-            Bosteder(
+            Bosteder().medPerioder(
                 mapOf(
                     Periode(
                         LocalDate.parse("2020-01-01"),
                         LocalDate.parse("2020-01-05")
-                    ) to Bosteder.BostedPeriodeInfo(Landkode.SPANIA),
+                    ) to Bosteder.BostedPeriodeInfo().medLand(Landkode.SPANIA),
                     Periode(
                         LocalDate.parse("2020-01-06"),
                         LocalDate.parse("2020-01-10")
-                    ) to Bosteder.BostedPeriodeInfo(Landkode.NORGE)
+                    ) to Bosteder.BostedPeriodeInfo().medLand(Landkode.NORGE)
                 )
             ),
-            Utenlandsopphold(
+            Utenlandsopphold().medPerioder(
                 mapOf(
                     Periode(
                         LocalDate.parse("2020-01-01"),
                         LocalDate.parse("2020-01-05")
-                    ) to Utenlandsopphold.UtenlandsoppholdPeriodeInfo.builder()
-                        .land(Landkode.CANADA)
-                        .årsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD)
-                        .build(),
+                    ) to Utenlandsopphold.UtenlandsoppholdPeriodeInfo()
+                        .medLand(Landkode.CANADA)
+                        .medÅrsak(BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD),
                     Periode(
                         LocalDate.parse("2020-01-06"),
                         LocalDate.parse("2020-01-10")
-                    ) to Utenlandsopphold.UtenlandsoppholdPeriodeInfo.builder()
-                        .land(Landkode.SVERIGE)
-                        .årsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING)
-                        .build()
+                    ) to Utenlandsopphold.UtenlandsoppholdPeriodeInfo()
+                        .medLand(Landkode.SVERIGE)
+                        .medÅrsak(BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING)
                 )
             )
         )
