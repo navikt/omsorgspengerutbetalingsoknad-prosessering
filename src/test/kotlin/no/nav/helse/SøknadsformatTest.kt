@@ -93,7 +93,17 @@ class SøknadsformatTest {
                         "aktivitetFravær": ["SELVSTENDIG_VIRKSOMHET"]
                       }
                     ],
-                    "bosteder": null,
+                    "bosteder": {
+                       "perioder": {
+                        "2020-01-01/2020-01-05": {
+                          "land": "ESP"
+                        },
+                        "2020-01-06/2020-01-10": {
+                          "land": "NOR"
+                        }
+                      },
+                      "perioderSomSkalSlettes": {}
+                    },
                     "utenlandsopphold": {
                       "perioder": {
                         "2020-01-01/2020-01-05": {
