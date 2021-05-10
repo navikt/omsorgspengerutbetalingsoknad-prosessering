@@ -42,7 +42,7 @@ internal class PreprosseseringV1Service(
         )
         logger.info("Mellomlagring av Oppsummerings-PDF OK")
 
-        logger.info("Mellomlagrer Oppsummerings-JSON: {}", Søknad.SerDes.serialize(melding.k9FormatSøknad))
+        logger.info("Mellomlagrer Oppsummerings-JSON")
 
         val soknadJsonUrl = dokumentService.lagreSoknadsMelding(
             melding = melding.k9FormatSøknad,
