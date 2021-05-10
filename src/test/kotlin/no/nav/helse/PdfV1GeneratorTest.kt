@@ -192,8 +192,8 @@ class PdfV1GeneratorTest {
             ),
             erArbeidstakerOgså = true,
             k9FormatSøknad = SøknadUtils.defaultK9FormatOmsorgspengerutbetaling(),
-            hjemmePgaSmittevernhensyn = null,
-            hjemmePgaStengtBhgSkole = null
+            hjemmePgaSmittevernhensyn = true,
+            hjemmePgaStengtBhgSkole = true
         )
     }
 
