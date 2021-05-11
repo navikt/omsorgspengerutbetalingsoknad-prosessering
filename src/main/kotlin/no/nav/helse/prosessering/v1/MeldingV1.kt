@@ -14,19 +14,17 @@ data class MeldingV1(
     val mottatt: ZonedDateTime,
     val søker: Søker,
     val språk: String,
-    val harDekketTiFørsteDagerSelv: Boolean? = null, // TODO: 08/04/2021 Fjern nullable etter prodsetting.
+    val harDekketTiFørsteDagerSelv: Boolean,
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
     val utbetalingsperioder: List<Utbetalingsperiode>,
-    val andreUtbetalinger: List<String>?, //TODO: Fjern ? når dette er prodsatt.
+    val andreUtbetalinger: List<String>,
     val fosterbarn: List<FosterBarn>? = listOf(),
     val vedlegg: List<URI>,
     val frilans: Frilans? = null,
     val selvstendigVirksomheter: List<Virksomhet> = listOf(),
     val erArbeidstakerOgså: Boolean,
-    val hjemmePgaSmittevernhensyn: Boolean? = null, // TODO: 15/03/2021 utgår.
-    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO: 15/03/2021 utgår
     val bekreftelser: Bekreftelser,
     val k9FormatSøknad: Søknad
 )
@@ -137,10 +135,9 @@ data class Søker(
 data class Utbetalingsperiode(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,
-    val lengde: Duration? = null, //TODO: beholde lengde i en periode slik at vi ikke mister info i overgangen
     val antallTimerBorte: Duration? = null,
     val antallTimerPlanlagt: Duration? = null,
-    val årsak: FraværÅrsak? = null,
+    val årsak: FraværÅrsak,
     val aktivitetFravær: List<AktivitetFravær> = listOf()
 )
 

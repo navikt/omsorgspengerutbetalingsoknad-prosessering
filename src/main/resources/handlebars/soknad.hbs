@@ -12,7 +12,6 @@
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
         <bookmark name="Fosterbarn" href="#fosterbarn"/>
-        <bookmark name="Smittevern" href="#smittevern"/>
         <bookmark name="Utbetalingsperioder" href="#utbetalingsperioder"/>
         <bookmark name="Spørsmål" href="#spørsmål"/>
         <bookmark name="Medlemskap" href="#medlemskap"/>
@@ -46,29 +45,6 @@
         {{/if}}
     </div>
 
-    <!--TODO: seksjon for smittevern utgår-->
-    <section id="smittevern">
-        {{#if søknad.hjemmePgaSmittevernhensyn}}
-            <h2>Særlige smittevernhensyn</h2>
-            <ul>
-                <li>Du opplyser at du må være hjemme med barn på grunn av særlige smittevernhensyn.</li>
-                {{#if ikkeHarSendtInnVedlegg}}
-                    <li>Vedlegg ikke lastet opp. Må ettersendes.</li>
-                {{/if}}
-            </ul>
-        {{/if}}
-
-        {{#if søknad.hjemmePgaStengtBhgSkole}}
-            <h2>Lokalt stengt barnehage eller skole</h2>
-            <ul>
-                <li>Du opplyser at du er hjemme med barn fordi barnehagen eller skolen har vært lokalt stengt.</li>
-                {{#if ikkeHarSendtInnVedlegg}}
-                    <li>Bekreftelse fra barnehage eller skole er ikke lagt ved, og må ettersendes.</li>
-                {{/if}}
-            </ul>
-        {{/if}}
-    </section>
-
     <section id="utbetalingsperioder">
         <h2>Omsorgsdager du søker utbetaling for</h2>
         <p class="sporsmalstekst">Har du dekket de 10 første omsorgsdagene selv</p>
@@ -78,9 +54,6 @@
             {{# each søknad.utbetalingsperioder as |u|}}
                 <li>
                     Periode: {{#dato u.fraOgMed}}{{/dato}} - {{#dato u.tilOgMed}}{{/dato}}
-                    {{#if u.lengde}}
-                        <br/> Lengde: {{#varighet u.lengde}}{{/varighet}}
-                    {{/if}}
                     {{#if u.antallTimerBorte}}
                         <br/>Antall timer du skulle ha jobbet denne dagen: {{#varighet
                             u.antallTimerPlanlagt}}{{/varighet}}

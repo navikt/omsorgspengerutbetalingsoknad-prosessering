@@ -104,20 +104,20 @@ internal object SøknadUtils {
             Utbetalingsperiode(
                 fraOgMed = start,
                 tilOgMed = start.plusDays(10),
-                lengde = Duration.ofHours(5).plusMinutes(30),
-                aktivitetFravær = listOf(FRILANSER)
+                aktivitetFravær = listOf(FRILANSER),
+                årsak = no.nav.helse.prosessering.v1.FraværÅrsak.ORDINÆRT_FRAVÆR
             ),
             Utbetalingsperiode(
                 fraOgMed = start.plusDays(20),
                 tilOgMed = start.plusDays(20),
-                lengde = Duration.ofHours(5).plusMinutes(30),
-                aktivitetFravær = listOf(SELVSTENDIG_VIRKSOMHET)
+                aktivitetFravær = listOf(SELVSTENDIG_VIRKSOMHET),
+                årsak = no.nav.helse.prosessering.v1.FraværÅrsak.SMITTEVERNHENSYN
             ),
             Utbetalingsperiode(
                 fraOgMed = start.plusDays(30),
                 tilOgMed = start.plusDays(35),
-                lengde = Duration.ofHours(5).plusMinutes(30),
-                aktivitetFravær = listOf(FRILANSER, SELVSTENDIG_VIRKSOMHET)
+                aktivitetFravær = listOf(FRILANSER, SELVSTENDIG_VIRKSOMHET),
+                årsak = no.nav.helse.prosessering.v1.FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
             )
         ),
         andreUtbetalinger = listOf("dagpenger", "sykepenger"),
@@ -153,7 +153,6 @@ internal object SøknadUtils {
             )
         ),
         erArbeidstakerOgså = true,
-        hjemmePgaSmittevernhensyn = true,
         k9FormatSøknad = defaultK9FormatOmsorgspengerutbetaling()
     )
 

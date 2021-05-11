@@ -35,6 +35,7 @@ class PdfV1GeneratorTest {
                 mellomnavn = "MELLOMNAVN",
                 fornavn = "OLA"
             ),
+            harDekketTiFørsteDagerSelv = true,
             bosteder = listOf(
                 Bosted(
                     fraOgMed = start,
@@ -115,7 +116,6 @@ class PdfV1GeneratorTest {
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(3),
                     tilOgMed = start.plusDays(3),
-                    lengde = Duration.ofHours(2),
                     antallTimerPlanlagt = Duration.ofHours(4).plusMinutes(30),
                     antallTimerBorte = Duration.ofHours(5).plusMinutes(0),
                     årsak = FraværÅrsak.ORDINÆRT_FRAVÆR,
@@ -124,7 +124,6 @@ class PdfV1GeneratorTest {
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(3),
                     tilOgMed = start.plusDays(3),
-                    lengde = Duration.ofHours(24),
                     årsak = FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE,
                     aktivitetFravær = listOf(AktivitetFravær.FRILANSER, AktivitetFravær.SELVSTENDIG_VIRKSOMHET)
                 )
@@ -191,9 +190,7 @@ class PdfV1GeneratorTest {
                 harForståttRettigheterOgPlikter = JaNei.Ja
             ),
             erArbeidstakerOgså = true,
-            k9FormatSøknad = SøknadUtils.defaultK9FormatOmsorgspengerutbetaling(),
-            hjemmePgaSmittevernhensyn = true,
-            hjemmePgaStengtBhgSkole = true
+            k9FormatSøknad = SøknadUtils.defaultK9FormatOmsorgspengerutbetaling()
         )
     }
 

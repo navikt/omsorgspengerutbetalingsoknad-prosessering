@@ -10,18 +10,16 @@ data class PreprossesertMeldingV1(
     val mottatt: ZonedDateTime,
     val søker: PreprossesertSøker,
     val språk: String?,
-    val harDekketTiFørsteDagerSelv: Boolean? = null, // TODO: 08/04/2021 Fjern nullable etter prodsetting.
+    val harDekketTiFørsteDagerSelv: Boolean,
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
     val dokumentUrls: List<List<URI>>,
     val utbetalingsperioder: List<Utbetalingsperiode>,
-    val andreUtbetalinger: List<String>?, //TODO: Fjern ? når dette er prodsatt.
+    val andreUtbetalinger: List<String>,
     val fosterbarn: List<FosterBarn>? = listOf(),
     val frilans: Frilans? = null,
     val selvstendigVirksomheter: List<Virksomhet> = listOf(),
-    val hjemmePgaSmittevernhensyn: Boolean? = null, // TODO: 15/03/2021 utgår
-    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO: 15/03/2021 utgår
     val bekreftelser: Bekreftelser,
     val k9FormatSøknad: Søknad
 ) {
@@ -38,13 +36,12 @@ data class PreprossesertMeldingV1(
         opphold = melding.opphold,
         spørsmål = melding.spørsmål,
         dokumentUrls = dokumentUrls,
+        harDekketTiFørsteDagerSelv = melding.harDekketTiFørsteDagerSelv,
         utbetalingsperioder = melding.utbetalingsperioder,
         andreUtbetalinger = melding.andreUtbetalinger,
         fosterbarn = melding.fosterbarn,
         frilans = melding.frilans,
         selvstendigVirksomheter = melding.selvstendigVirksomheter,
-        hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn,
-        hjemmePgaStengtBhgSkole = melding.hjemmePgaStengtBhgSkole,
         bekreftelser = melding.bekreftelser,
         k9FormatSøknad = melding.k9FormatSøknad
     )
