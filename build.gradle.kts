@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val dusseldorfKtorVersion = "1.5.2.1303b90"
 val k9FormatVersion = "5.1.38"
-val openhtmltopdfVersion = "1.0.6"
+val openhtmltopdfVersion = "1.0.8"
 val handlebarsVersion = "4.1.2"
 
 val ktorVersion = ext.get("ktorVersion").toString()
