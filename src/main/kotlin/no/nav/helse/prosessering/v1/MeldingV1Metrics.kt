@@ -68,12 +68,6 @@ private val utbetalingsperioderCounter = Counter.build()
     .labelNames("sokerOmTimer", "sokerOmDager", "sokerOmDagerOgTimer")
     .register()
 
-private val særligeSmittevernhensynCounter = Counter.build()
-    .name("serligeSmittevernhensynCounter")
-    .help("Teller for info om særlige smittevernhensyn")
-    .labelNames("blirHjemme", "harVedleggLastetOpp")
-    .register()
-
 internal fun MeldingV1.reportMetrics() {
     opplastedeVedleggHistogram.observe(vedlegg.size.toDouble())
 
@@ -113,12 +107,6 @@ internal fun MeldingV1.reportMetrics() {
             selvstendigNæringsdrivendeFrilansOgArbeidstaker.inc()
             virksomheterMetric()
         }
-    }
-
-    hjemmePgaSmittevernhensyn?.let {
-        særligeSmittevernhensynCounter
-            .labels(it.tilJaEllerNei(), vedlegg.isNotEmpty().tilJaEllerNei())
-            .inc()
     }
 }
 
