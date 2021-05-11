@@ -124,7 +124,7 @@ internal fun MeldingV1.reportMetrics() {
 
 private fun MeldingV1.virksomheterMetric() {
 
-    selvstendigVirksomheter?.forEach {
+    selvstendigVirksomheter.forEach {
         val næringsTypeSomString = it.næringstyper.sortedDescending().joinToString(" , ")
         virksomhetsCounter
             .labels(
@@ -139,21 +139,21 @@ private fun MeldingV1.virksomheterMetric() {
     }
 }
 
-private fun MeldingV1.erFrilanser() = selvstendigVirksomheter == null && frilans != null && !erArbeidstakerOgså
+private fun MeldingV1.erFrilanser() = selvstendigVirksomheter.isEmpty() && frilans != null && !erArbeidstakerOgså
 private fun MeldingV1.erSelvstendigNæringsdrivende() =
-    !selvstendigVirksomheter.isNullOrEmpty() && frilans == null && !erArbeidstakerOgså
+    selvstendigVirksomheter.isNotEmpty() && frilans == null && !erArbeidstakerOgså
 
 private fun MeldingV1.erFrilanserOgSelvstendigNæringsdrivende() =
-    !selvstendigVirksomheter.isNullOrEmpty() && frilans != null && !erArbeidstakerOgså
+    selvstendigVirksomheter.isNotEmpty() && frilans != null && !erArbeidstakerOgså
 
 private fun MeldingV1.erFrilanserOgArbeidstaker() =
-    selvstendigVirksomheter.isNullOrEmpty() && frilans != null && erArbeidstakerOgså
+    selvstendigVirksomheter.isEmpty() && frilans != null && erArbeidstakerOgså
 
 private fun MeldingV1.erSelvstendingNæringsdrivendeOgArbeidstaker() =
-    !selvstendigVirksomheter.isNullOrEmpty() && frilans == null && erArbeidstakerOgså
+    selvstendigVirksomheter.isNotEmpty() && frilans == null && erArbeidstakerOgså
 
 private fun MeldingV1.erSelvstendingNæringsdrivendeFrilansOgArbeidstaker() =
-    !selvstendigVirksomheter.isNullOrEmpty() && frilans != null && erArbeidstakerOgså
+    selvstendigVirksomheter.isNotEmpty() && frilans != null && erArbeidstakerOgså
 
 private fun List<Utbetalingsperiode>.søkerBareOmTimer(): String {
     val antallTimePerioder = filter { it.antallTimerBorte !== null }

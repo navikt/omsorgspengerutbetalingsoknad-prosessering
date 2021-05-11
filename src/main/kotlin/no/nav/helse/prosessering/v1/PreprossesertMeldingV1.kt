@@ -1,6 +1,7 @@
 package no.nav.helse.prosessering.v1
 
 import no.nav.helse.aktoer.AktørId
+import no.nav.k9.søknad.Søknad
 import java.net.URI
 import java.time.ZonedDateTime
 
@@ -9,6 +10,7 @@ data class PreprossesertMeldingV1(
     val mottatt: ZonedDateTime,
     val søker: PreprossesertSøker,
     val språk: String?,
+    val harDekketTiFørsteDagerSelv: Boolean? = null, // TODO: 08/04/2021 Fjern nullable etter prodsetting.
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
@@ -20,7 +22,8 @@ data class PreprossesertMeldingV1(
     val selvstendigVirksomheter: List<Virksomhet> = listOf(),
     val hjemmePgaSmittevernhensyn: Boolean? = null, // TODO: 15/03/2021 utgår
     val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO: 15/03/2021 utgår
-    val bekreftelser: Bekreftelser
+    val bekreftelser: Bekreftelser,
+    val k9FormatSøknad: Søknad
 ) {
     internal constructor(
         melding: MeldingV1,
@@ -42,7 +45,8 @@ data class PreprossesertMeldingV1(
         selvstendigVirksomheter = melding.selvstendigVirksomheter,
         hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn,
         hjemmePgaStengtBhgSkole = melding.hjemmePgaStengtBhgSkole,
-        bekreftelser = melding.bekreftelser
+        bekreftelser = melding.bekreftelser,
+        k9FormatSøknad = melding.k9FormatSøknad
     )
 }
 

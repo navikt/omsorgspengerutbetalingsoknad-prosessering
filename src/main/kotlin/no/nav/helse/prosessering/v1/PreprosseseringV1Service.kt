@@ -5,6 +5,8 @@ import no.nav.helse.aktoer.AktørId
 import no.nav.helse.dokument.DokumentService
 import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.SoknadId
+import no.nav.k9.søknad.JsonUtils
+import no.nav.k9.søknad.Søknad
 import org.slf4j.LoggerFactory
 
 internal class PreprosseseringV1Service(
@@ -43,7 +45,7 @@ internal class PreprosseseringV1Service(
         logger.info("Mellomlagrer Oppsummerings-JSON")
 
         val soknadJsonUrl = dokumentService.lagreSoknadsMelding(
-            melding = melding,
+            melding = melding.k9FormatSøknad,
             aktørId = søkerAktørId,
             correlationId = correlationId
         )

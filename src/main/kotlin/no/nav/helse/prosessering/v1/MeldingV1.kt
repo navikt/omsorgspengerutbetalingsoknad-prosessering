@@ -3,6 +3,7 @@ package no.nav.helse.prosessering.v1
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonValue
+import no.nav.k9.søknad.Søknad
 import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
@@ -13,6 +14,7 @@ data class MeldingV1(
     val mottatt: ZonedDateTime,
     val søker: Søker,
     val språk: String,
+    val harDekketTiFørsteDagerSelv: Boolean? = null, // TODO: 08/04/2021 Fjern nullable etter prodsetting.
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
@@ -25,7 +27,8 @@ data class MeldingV1(
     val erArbeidstakerOgså: Boolean,
     val hjemmePgaSmittevernhensyn: Boolean? = null, // TODO: 15/03/2021 utgår.
     val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO: 15/03/2021 utgår
-    val bekreftelser: Bekreftelser
+    val bekreftelser: Bekreftelser,
+    val k9FormatSøknad: Søknad
 )
 
 data class Bekreftelser(
@@ -34,8 +37,8 @@ data class Bekreftelser(
 )
 
 data class Frilans(
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    val startdato: LocalDate,
+    @JsonFormat(pattern = "yyyy-MM-dd") val startdato: LocalDate,
+    @JsonFormat(pattern = "yyyy-MM-dd") val sluttdato: LocalDate? = null,
     val jobberFortsattSomFrilans: Boolean
 )
 
@@ -51,6 +54,7 @@ data class Virksomhet(
     val organisasjonsnummer: String? = null,
     val registrertINorge: JaNei,
     val registrertIUtlandet: Land? = null,
+    val erNyoppstartet: Boolean,
     val yrkesaktivSisteTreFerdigliknedeÅrene: YrkesaktivSisteTreFerdigliknedeÅrene? = null,
     val varigEndring: VarigEndring? = null,
     val regnskapsfører: Regnskapsfører? = null
@@ -136,7 +140,8 @@ data class Utbetalingsperiode(
     val lengde: Duration? = null, //TODO: beholde lengde i en periode slik at vi ikke mister info i overgangen
     val antallTimerBorte: Duration? = null,
     val antallTimerPlanlagt: Duration? = null,
-    val årsak: FraværÅrsak? = null
+    val årsak: FraværÅrsak? = null,
+    val aktivitetFravær: List<AktivitetFravær> = listOf()
 )
 
 enum class FraværÅrsak {
@@ -145,6 +150,10 @@ enum class FraværÅrsak {
     ORDINÆRT_FRAVÆR
 }
 
+enum class AktivitetFravær {
+    FRILANSER,
+    SELVSTENDIG_VIRKSOMHET
+}
 
 data class Bosted(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,
@@ -162,5 +171,3 @@ data class SpørsmålOgSvar(
 )
 
 typealias Spørsmål = String
-
-

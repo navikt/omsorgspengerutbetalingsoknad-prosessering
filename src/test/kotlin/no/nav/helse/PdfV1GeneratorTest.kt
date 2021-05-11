@@ -81,31 +81,36 @@ class PdfV1GeneratorTest {
                 Utbetalingsperiode(
                     fraOgMed = start,
                     tilOgMed = start.plusDays(10),
-                    årsak = FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
+                    årsak = FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE,
+                    aktivitetFravær = listOf(AktivitetFravær.FRILANSER)
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(20),
                     tilOgMed = start.plusDays(20),
-                    årsak = FraværÅrsak.SMITTEVERNHENSYN
+                    årsak = FraværÅrsak.SMITTEVERNHENSYN,
+                    aktivitetFravær = listOf(AktivitetFravær.SELVSTENDIG_VIRKSOMHET)
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(30),
                     tilOgMed = start.plusDays(35),
-                    årsak = FraværÅrsak.ORDINÆRT_FRAVÆR
+                    årsak = FraværÅrsak.ORDINÆRT_FRAVÆR,
+                    aktivitetFravær = listOf(AktivitetFravær.FRILANSER, AktivitetFravær.SELVSTENDIG_VIRKSOMHET)
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(1),
                     tilOgMed = start.plusDays(1),
                     antallTimerPlanlagt = Duration.ofHours(24).plusMinutes(10),
                     antallTimerBorte = Duration.ofHours(18).plusMinutes(0),
-                    årsak = FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
+                    årsak = FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE,
+                    aktivitetFravær = listOf(AktivitetFravær.FRILANSER)
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(2),
                     tilOgMed = start.plusDays(2),
                     antallTimerPlanlagt = Duration.ofHours(5).plusMinutes(30),
                     antallTimerBorte = Duration.ofHours(5).plusMinutes(0),
-                    årsak = FraværÅrsak.SMITTEVERNHENSYN
+                    årsak = FraværÅrsak.SMITTEVERNHENSYN,
+                    aktivitetFravær = listOf(AktivitetFravær.SELVSTENDIG_VIRKSOMHET)
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(3),
@@ -113,13 +118,15 @@ class PdfV1GeneratorTest {
                     lengde = Duration.ofHours(2),
                     antallTimerPlanlagt = Duration.ofHours(4).plusMinutes(30),
                     antallTimerBorte = Duration.ofHours(5).plusMinutes(0),
-                    årsak = FraværÅrsak.ORDINÆRT_FRAVÆR
+                    årsak = FraværÅrsak.ORDINÆRT_FRAVÆR,
+                    aktivitetFravær = listOf(AktivitetFravær.SELVSTENDIG_VIRKSOMHET)
                 ),
                 Utbetalingsperiode(
                     fraOgMed = start.plusDays(3),
                     tilOgMed = start.plusDays(3),
                     lengde = Duration.ofHours(24),
-                    årsak = FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
+                    årsak = FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE,
+                    aktivitetFravær = listOf(AktivitetFravær.FRILANSER, AktivitetFravær.SELVSTENDIG_VIRKSOMHET)
                 )
             ),
             andreUtbetalinger = listOf("dagpenger", "sykepenger", "midlertidigkompensasjonsnfri"),
@@ -127,16 +134,19 @@ class PdfV1GeneratorTest {
             ),
             frilans = Frilans(
                 startdato = LocalDate.now().minusYears(3),
-                jobberFortsattSomFrilans = true
+                sluttdato = LocalDate.now().minusYears(1),
+                jobberFortsattSomFrilans = false
             ),
             selvstendigVirksomheter = listOf(
                 Virksomhet(
                     næringstyper = listOf(Næringstyper.ANNEN, Næringstyper.FISKE),
                     fraOgMed = LocalDate.now(),
+                    erNyoppstartet = true,
                     tilOgMed = LocalDate.now().plusDays(10),
                     navnPåVirksomheten = "Kjells Møbelsnekkeri",
                     registrertINorge = JaNei.Ja,
                     organisasjonsnummer = "111111",
+                    næringsinntekt = 123456789,
                     fiskerErPåBladB = JaNei.Ja,
                     varigEndring = VarigEndring(
                         dato = LocalDate.now().minusDays(20),
@@ -148,6 +158,7 @@ class PdfV1GeneratorTest {
                     næringstyper = listOf(Næringstyper.JORDBRUK_SKOGBRUK, Næringstyper.DAGMAMMA, Næringstyper.FISKE),
                     fiskerErPåBladB = JaNei.Ja,
                     fraOgMed = LocalDate.now(),
+                    erNyoppstartet = true,
                     næringsinntekt = 1111,
                     navnPåVirksomheten = "Tull Og Tøys",
                     registrertINorge = JaNei.Nei,
@@ -180,8 +191,9 @@ class PdfV1GeneratorTest {
                 harForståttRettigheterOgPlikter = JaNei.Ja
             ),
             erArbeidstakerOgså = true,
-            hjemmePgaSmittevernhensyn = null,
-            hjemmePgaStengtBhgSkole = null
+            k9FormatSøknad = SøknadUtils.defaultK9FormatOmsorgspengerutbetaling(),
+            hjemmePgaSmittevernhensyn = true,
+            hjemmePgaStengtBhgSkole = true
         )
     }
 

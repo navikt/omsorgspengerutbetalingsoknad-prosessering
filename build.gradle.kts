@@ -2,7 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val dusseldorfKtorVersion = "1.5.2.1303b90"
-val k9FormatVersion = "3.0.0.3794ec7"
+val k9FormatVersion = "5.1.38"
 val openhtmltopdfVersion = "1.0.6"
 val handlebarsVersion = "4.1.2"
 
@@ -31,7 +31,7 @@ dependencies {
     implementation ( "no.nav.helse:dusseldorf-ktor-metrics:$dusseldorfKtorVersion")
     implementation ( "no.nav.helse:dusseldorf-ktor-health:$dusseldorfKtorVersion")
     implementation ( "no.nav.helse:dusseldorf-ktor-auth:$dusseldorfKtorVersion")
-    implementation ( "no.nav.k9:soknad-omsorgspenger-utbetaling:$k9FormatVersion")
+    implementation ( "no.nav.k9:soknad:$k9FormatVersion")
     implementation ( "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:$kotlinxCoroutinesVersion")
     
     // Client

@@ -69,6 +69,19 @@ internal class PdfV1Generator {
                     FraværÅrsak.SMITTEVERNHENSYN -> "Smittevernhensyn"
                 }
             })
+            registerHelper("aktivitetFravær", Helper<String> { context, _ ->
+                when(AktivitetFravær.valueOf(context)) {
+                    AktivitetFravær.FRILANSER -> "frilanser"
+                    AktivitetFravær.SELVSTENDIG_VIRKSOMHET -> "selvstendig næringsdrivende"
+                }
+            })
+            registerHelper("fraværSomFormat", Helper<List<String>> { context, _ ->
+                when(context.size) {
+                    1 -> "Fravær som"
+                    2 -> "Fravær både som"
+                    else -> ""
+                }
+            })
 
             infiniteLoops(true)
         }
