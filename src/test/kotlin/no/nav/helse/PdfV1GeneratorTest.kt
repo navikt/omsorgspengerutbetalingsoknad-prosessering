@@ -175,6 +175,29 @@ class PdfV1GeneratorTest {
                         navn = "Bjarne Regnskap",
                         telefon = "65484578"
                     )
+                ),
+                Virksomhet(
+                    næringstyper = listOf(Næringstyper.JORDBRUK_SKOGBRUK, Næringstyper.DAGMAMMA, Næringstyper.FISKE),
+                    fiskerErPåBladB = JaNei.Ja,
+                    fraOgMed = LocalDate.now(),
+                    erNyoppstartet = true,
+                    næringsinntekt = 1111,
+                    navnPåVirksomheten = "Tull Og Tøys V",
+                    registrertINorge = JaNei.Nei,
+                    registrertIUtlandet = Land(
+                        landkode = "DEU",
+                        landnavn = "Tyskland"
+                    ),
+                    yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeÅrene(LocalDate.now()),
+                    varigEndring = VarigEndring(
+                        dato = LocalDate.now().minusDays(20),
+                        inntektEtterEndring = 234543,
+                        forklaring = "Forklaring som handler om varig endring"
+                    ),
+                    regnskapsfører = Regnskapsfører(
+                        navn = "Bjarne Regnskap",
+                        telefon = "65484578"
+                    )
                 )
             ),
             fosterbarn = listOf(

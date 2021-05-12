@@ -135,7 +135,10 @@ internal class PdfV1Generator {
                         "harSøktAndreYtelser" to melding.andreUtbetalinger?.isNotEmpty(),
                         "ikkeHarSendtInnVedlegg" to melding.vedlegg.isEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
-                        "bekreftelser" to melding.bekreftelser.bekreftelserSomMap()
+                        "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
+                        "hjelper" to mapOf(
+                            "flereAktiveNæringsvirksomheter" to melding.harFlereAktiveVirksomheter()
+                        )
                     )
                 )
                 .resolver(MapValueResolver.INSTANCE)
@@ -210,3 +213,5 @@ private fun String.sprakTilTekst() = when (this.toLowerCase()) {
     "nn" -> "Nynorsk"
     else -> this
 }
+
+private fun MeldingV1.harFlereAktiveVirksomheter() = this.selvstendigVirksomheter.filter { it.tilOgMed == null }.size > 1
