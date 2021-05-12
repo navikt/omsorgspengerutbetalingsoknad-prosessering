@@ -135,10 +135,7 @@ internal class PdfV1Generator {
                         "harSøktAndreYtelser" to melding.andreUtbetalinger?.isNotEmpty(),
                         "ikkeHarSendtInnVedlegg" to melding.vedlegg.isEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
-                        "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
-                        "hjelper" to mapOf(
-                            "flereAktiveNæringsvirksomheter" to melding.harFlereAktiveVirksomheter()
-                        )
+                        "bekreftelser" to melding.bekreftelser.bekreftelserSomMap()
                     )
                 )
                 .resolver(MapValueResolver.INSTANCE)
