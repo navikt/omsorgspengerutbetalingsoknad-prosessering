@@ -288,7 +288,8 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
                     regnskapsfører = Regnskapsfører(
                         navn = "Bjarne Regnskap",
                         telefon = "65484578"
-                    )
+                    ),
+                    harFlereAktiveVirksomheter = true
                 )
             )
         )
