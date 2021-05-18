@@ -210,5 +210,3 @@ private fun String.sprakTilTekst() = when (this.toLowerCase()) {
     "nn" -> "Nynorsk"
     else -> this
 }
-
-private fun MeldingV1.harFlereAktiveVirksomheter() = this.selvstendigVirksomheter.filter { it.tilOgMed == null }.size > 1
