@@ -56,7 +56,7 @@ data class Virksomhet(
     val yrkesaktivSisteTreFerdigliknedeÅrene: YrkesaktivSisteTreFerdigliknedeÅrene? = null,
     val varigEndring: VarigEndring? = null,
     val regnskapsfører: Regnskapsfører? = null,
-    val harFlereAktiveVirksomheter: Boolean? // TODO: 18/05/2021 - Fjerne optional
+    val harFlereAktiveVirksomheter: Boolean
 ) {
     override fun toString(): String {
         return "Virksomhet()"
