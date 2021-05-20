@@ -129,30 +129,6 @@
         {{/each}}
     </section>
 
-    <section id="medlemskap">
-        <h2>Medlemskap i folketrygden</h2>
-
-        <p class="sporsmalstekst">Har du bodd i utlandet i de siste 12 månedene?</p>
-        {{jaNeiSvar medlemskap.siste12}}
-
-        <br/><br/>
-
-        <p class="sporsmalstekst">Skal du bo i utlandet i de neste 12 månedene?</p>
-        {{jaNeiSvar medlemskap.neste12}}
-        <br/><br/>
-
-        {{#if harBosteder}}
-            <h3>Utenlandsopphold i medlemsperioden</h3>
-        {{/if}}
-        <ul>
-            {{# each søknad.bosteder as |b|}}
-                <li>
-                    {{b.landnavn}}: {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
-                </li>
-            {{/each}}
-        </ul>
-
-    </section>
 
     <section id="frilans">
         {{# if søknad.frilans }}
@@ -248,6 +224,31 @@
                 {{/if}}
             {{/each}}
         {{/if}}
+    </section>
+
+    <section id="medlemskap">
+        <h2>Medlemskap i folketrygden</h2>
+
+        <p class="sporsmalstekst">Har du bodd i utlandet i de siste 12 månedene?</p>
+        {{jaNeiSvar medlemskap.siste12}}
+
+        <br/><br/>
+
+        <p class="sporsmalstekst">Skal du bo i utlandet i de neste 12 månedene?</p>
+        {{jaNeiSvar medlemskap.neste12}}
+        <br/><br/>
+
+        {{#if harBosteder}}
+            <h3>Utenlandsopphold i medlemsperioden</h3>
+        {{/if}}
+        <ul>
+            {{# each søknad.bosteder as |b|}}
+                <li>
+                    {{b.landnavn}}: {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
+                </li>
+            {{/each}}
+        </ul>
+
     </section>
 
     <section id="samtykke">
