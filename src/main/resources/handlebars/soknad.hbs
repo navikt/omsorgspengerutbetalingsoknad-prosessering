@@ -175,8 +175,10 @@
                     </ul>
                 {{/if}}
 
+                {{#if virksomhet.harFlereAktiveVirksomheter}}
                 <p class="sporsmalstekst">Har du flere enn én næringsvirksomhet som er aktiv?</p>
                 {{jaNeiSvar virksomhet.harFlereAktiveVirksomheter}}
+                {{/if}}
 
                 <h3>Næringsvirksomhet som du har lagt inn:</h3>
                 <p>{{virksomhet.navnPåVirksomheten}} (startet {{#dato virksomhet.fraOgMed}}{{/dato}},
