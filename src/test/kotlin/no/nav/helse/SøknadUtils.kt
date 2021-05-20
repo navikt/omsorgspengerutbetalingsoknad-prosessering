@@ -149,7 +149,8 @@ internal object SøknadUtils {
                     dato = LocalDate.now().minusDays(20),
                     inntektEtterEndring = 234543,
                     forklaring = "Forklaring som handler om varig endring"
-                )
+                ),
+                harFlereAktiveVirksomheter = true
             )
         ),
         erArbeidstakerOgså = true,

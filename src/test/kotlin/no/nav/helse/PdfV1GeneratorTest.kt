@@ -11,7 +11,6 @@ class PdfV1GeneratorTest {
 
     private companion object {
         private val generator = PdfV1Generator()
-        private val fødselsdato = LocalDate.now()
 
         private val gyldigFodselsnummerA = "02119970078"
         private val gyldigFodselsnummerB = "19066672169"
@@ -151,7 +150,8 @@ class PdfV1GeneratorTest {
                         dato = LocalDate.now().minusDays(20),
                         inntektEtterEndring = 234543,
                         forklaring = "Forklaring som handler om varig endring"
-                    )
+                    ),
+                    harFlereAktiveVirksomheter = true
                 ),
                 Virksomhet(
                     næringstyper = listOf(Næringstyper.JORDBRUK_SKOGBRUK, Næringstyper.DAGMAMMA, Næringstyper.FISKE),
@@ -174,7 +174,8 @@ class PdfV1GeneratorTest {
                     regnskapsfører = Regnskapsfører(
                         navn = "Bjarne Regnskap",
                         telefon = "65484578"
-                    )
+                    ),
+                    harFlereAktiveVirksomheter = true
                 )
             ),
             fosterbarn = listOf(

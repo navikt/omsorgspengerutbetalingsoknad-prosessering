@@ -129,30 +129,6 @@
         {{/each}}
     </section>
 
-    <section id="medlemskap">
-        <h2>Medlemskap i folketrygden</h2>
-
-        <p class="sporsmalstekst">Har du bodd i utlandet i de siste 12 månedene?</p>
-        {{jaNeiSvar medlemskap.siste12}}
-
-        <br/><br/>
-
-        <p class="sporsmalstekst">Skal du bo i utlandet i de neste 12 månedene?</p>
-        {{jaNeiSvar medlemskap.neste12}}
-        <br/><br/>
-
-        {{#if harBosteder}}
-            <h3>Utenlandsopphold i medlemsperioden</h3>
-        {{/if}}
-        <ul>
-            {{# each søknad.bosteder as |b|}}
-                <li>
-                    {{b.landnavn}}: {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
-                </li>
-            {{/each}}
-        </ul>
-
-    </section>
 
     <section id="frilans">
         {{# if søknad.frilans }}
@@ -176,12 +152,42 @@
             <h2>Selvstendig næringsdrivende</h2>
             {{# each søknad.selvstendigVirksomheter as |virksomhet|~}}
 
-                <h3>{{virksomhet.navnPåVirksomheten}} ({{#dato virksomhet.fraOgMed}}{{/dato}} -
+                {{#if virksomhet.næringsinntekt}}
+                    <p>Næringsinntekt: {{virksomhet.næringsinntekt}},-</p>
+                {{/if}}
+
+                {{#if virksomhet.yrkesaktivSisteTreFerdigliknedeÅrene}}
+                    <p>Oppgi dato for når du ble yrkesaktiv:
+                        {{#dato virksomhet.yrkesaktivSisteTreFerdigliknedeÅrene.oppstartsdato}}{{/dato}}</p>
+                {{/if}}
+
+                {{#if virksomhet.varigEndring}}
+                    <h3>Varig endring</h3>
+                    <ul>
+                        <li>
+                            <p>Dato for når varig endring oppsto: {{#dato virksomhet.varigEndring.dato}}{{/dato}}</p>
+                            <p>Næringsinntekt etter endringen: {{virksomhet.varigEndring.inntektEtterEndring}}</p>
+                            <div class="fritekst">
+                                <p class="sporsmalstekst">Din forklaring om varig endring</p>
+                                <p class="fritekst_textarea">{{virksomhet.varigEndring.forklaring}}</p>
+                            </div>
+                        </li>
+                    </ul>
+                {{/if}}
+
+                {{#if virksomhet.harFlereAktiveVirksomheter}}
+                <p class="sporsmalstekst">Har du flere enn én næringsvirksomhet som er aktiv?</p>
+                {{jaNeiSvar virksomhet.harFlereAktiveVirksomheter}}
+                {{/if}}
+
+                <h3>Næringsvirksomhet som du har lagt inn:</h3>
+                <p>{{virksomhet.navnPåVirksomheten}} (startet {{#dato virksomhet.fraOgMed}}{{/dato}},
                     {{#if virksomhet.tilOgMed}}
-                        {{#dato virksomhet.tilOgMed}}{{/dato}})
+                        avsluttet {{#dato virksomhet.tilOgMed}}{{/dato}})
                     {{else}}
-                        pågående)
-                    {{/if}}</h3>
+                        er pågående)
+                    {{/if}}</p>
+
                 <p>Næringstype:
                     {{# each virksomhet.næringstyper as |næringstype|~}}
                         {{#if @first}}
@@ -197,33 +203,14 @@
                             {{/if}}
                         {{/eq}}
                     {{/each}}</p>
-                {{#if virksomhet.næringsinntekt}}
-                    <p>Næringsinntekt: {{virksomhet.næringsinntekt}},-</p>
-                {{/if}}
+
                 {{#if virksomhet.registrertINorge}}
                     <p>Registrert i Norge</p>
                     <p>Organisasjonsnummeret: {{virksomhet.organisasjonsnummer}}</p>
                 {{else}}
-                    <p>Registrert i land: {{virksomhet.registrertIUtlandet.landnavn}}</p>
+                    <p>Registrert i land: {{virksomhet.registrertIUtlandet.landnavn}}({{virksomhet.registrertIUtlandet.landkode}})</p>
                 {{/if}}
 
-                {{#if virksomhet.yrkesaktivSisteTreFerdigliknedeÅrene}}
-                    <p>Oppgi dato for når du ble
-                        yrkesaktiv: {{#dato virksomhet.yrkesaktivSisteTreFerdigliknedeÅrene.oppstartsdato}}{{/dato}}</p>
-                {{/if}}
-                {{#if virksomhet.varigEndring}}
-                    <h3>Varig endring</h3>
-                    <ul>
-                        <li>
-                            <p>Dato for når varig endring oppsto: {{#dato virksomhet.varigEndring.dato}}{{/dato}}</p>
-                            <p>Næringsinntekt etter endringen: {{virksomhet.varigEndring.inntektEtterEndring}}</p>
-                            <div class="fritekst">
-                                <p class="sporsmalstekst">Din forklaring om varig endring</p>
-                                <p class="fritekst_textarea">{{virksomhet.varigEndring.forklaring}}</p>
-                            </div>
-                        </li>
-                    </ul>
-                {{/if}}
                 {{#if virksomhet.regnskapsfører}}
                     <h3>Regnskapsfører:</h3>
                     <ul>
@@ -239,6 +226,31 @@
                 {{/if}}
             {{/each}}
         {{/if}}
+    </section>
+
+    <section id="medlemskap">
+        <h2>Medlemskap i folketrygden</h2>
+
+        <p class="sporsmalstekst">Har du bodd i utlandet i de siste 12 månedene?</p>
+        {{jaNeiSvar medlemskap.siste12}}
+
+        <br/><br/>
+
+        <p class="sporsmalstekst">Skal du bo i utlandet i de neste 12 månedene?</p>
+        {{jaNeiSvar medlemskap.neste12}}
+        <br/><br/>
+
+        {{#if harBosteder}}
+            <h3>Utenlandsopphold i medlemsperioden</h3>
+        {{/if}}
+        <ul>
+            {{# each søknad.bosteder as |b|}}
+                <li>
+                    {{b.landnavn}}: {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
+                </li>
+            {{/each}}
+        </ul>
+
     </section>
 
     <section id="samtykke">

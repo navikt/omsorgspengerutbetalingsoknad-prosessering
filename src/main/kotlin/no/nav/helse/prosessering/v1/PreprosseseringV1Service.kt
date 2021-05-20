@@ -26,7 +26,6 @@ internal class PreprosseseringV1Service(
         logger.info("Preprosseserer $søknadId")
 
         val correlationId = CorrelationId(metadata.correlationId)
-
         val søkerAktørId = AktørId(melding.søker.aktørId)
 
         logger.info("Genererer Oppsummerings-PDF av søknaden.")

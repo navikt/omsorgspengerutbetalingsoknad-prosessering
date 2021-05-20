@@ -55,7 +55,8 @@ data class Virksomhet(
     val erNyoppstartet: Boolean,
     val yrkesaktivSisteTreFerdigliknedeÅrene: YrkesaktivSisteTreFerdigliknedeÅrene? = null,
     val varigEndring: VarigEndring? = null,
-    val regnskapsfører: Regnskapsfører? = null
+    val regnskapsfører: Regnskapsfører? = null,
+    val harFlereAktiveVirksomheter: Boolean? = null // TODO: 20/05/2021 Fjerne optinal når frontend og api er prodsatt
 ) {
     override fun toString(): String {
         return "Virksomhet()"
