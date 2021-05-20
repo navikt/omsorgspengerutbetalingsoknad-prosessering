@@ -24,9 +24,8 @@ internal class PreprosseseringV1Service(
     ): PreprossesertMeldingV1 {
         val søknadId = SoknadId(melding.søknadId)
         logger.info("Preprosseserer $søknadId")
-        logger.info("DEBUG: harFlereAktiveVirksomheter = ${melding.selvstendigVirksomheter[0].harFlereAktiveVirksomheter}") // TODO: 20/05/2021 FJERNE
-        val correlationId = CorrelationId(metadata.correlationId)
 
+        val correlationId = CorrelationId(metadata.correlationId)
         val søkerAktørId = AktørId(melding.søker.aktørId)
 
         logger.info("Genererer Oppsummerings-PDF av søknaden.")
