@@ -9,6 +9,7 @@ import com.github.jknack.handlebars.context.MapValueResolver
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
+import com.openhtmltopdf.util.XRLog
 import no.nav.helse.dusseldorf.ktor.core.fromResources
 import no.nav.helse.omsorgspengerKonfiguert
 import java.io.ByteArrayInputStream
@@ -16,6 +17,7 @@ import java.io.ByteArrayOutputStream
 import java.time.*
 import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.logging.Level
 
 internal class PdfV1Generator {
     private companion object {
@@ -28,11 +30,9 @@ internal class PdfV1Generator {
         private val BOLD_FONT = "$ROOT/fonts/SourceSansPro-Bold.ttf".fromResources().readBytes()
         private val ITALIC_FONT = "$ROOT/fonts/SourceSansPro-Italic.ttf".fromResources().readBytes()
 
-        private val images = loadImages()
+        private val sRGBColorSpace = "$ROOT/sRGB.icc".fromResources().readBytes()
+
         private val handlebars = Handlebars(ClassPathTemplateLoader("/$ROOT")).apply {
-            registerHelper("image", Helper<String> { context, _ ->
-                if (context == null) "" else images[context]
-            })
             registerHelper("eq", Helper<String> { context, options ->
                 if (context == options.param(0)) options.fn() else options.inverse()
             })
@@ -91,27 +91,13 @@ internal class PdfV1Generator {
         private val ZONE_ID = ZoneId.of("Europe/Oslo")
         private val DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(ZONE_ID)
         private val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").withZone(ZONE_ID)
-
-        private fun loadPng(name: String): String {
-            val bytes = "$ROOT/images/$name.png".fromResources().readBytes()
-            val base64string = Base64.getEncoder().encodeToString(bytes)
-            return "data:image/png;base64,$base64string"
-        }
-
-        private fun loadImages() = mapOf(
-            "Checkbox_off.png" to loadPng("Checkbox_off"),
-            "Checkbox_on.png" to loadPng("Checkbox_on"),
-            "Hjelp.png" to loadPng("Hjelp"),
-            "Navlogo.png" to loadPng("Navlogo"),
-            "Personikon.png" to loadPng("Personikon"),
-            "Fritekst.png" to loadPng("Fritekst")
-        )
     }
 
     internal fun generateSoknadOppsummeringPdf(
         melding: MeldingV1
     ): ByteArray {
         val mottatt = melding.mottatt.toLocalDate()
+        XRLog.listRegisteredLoggers().forEach { logger -> XRLog.setLevel(logger, Level.WARNING) }
         soknadTemplate.apply(
             Context
                 .newBuilder(
@@ -146,6 +132,8 @@ internal class PdfV1Generator {
             PdfRendererBuilder()
                 .useFastMode()
                 .usePdfUaAccessbility(true)
+                .usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_1_B)
+                .useColorProfile(sRGBColorSpace)
                 .withHtmlContent(html, "")
                 .medFonter()
                 .toStream(outputStream)
