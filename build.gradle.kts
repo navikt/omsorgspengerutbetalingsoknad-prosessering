@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val dusseldorfKtorVersion = "1.5.4.ae44e47"
 val k9FormatVersion = "5.1.38"
-val openhtmltopdfVersion = "1.0.8"
+val openhtmltopdfVersion = "1.0.9"
 val handlebarsVersion = "4.2.0"
 
 val ktorVersion = ext.get("ktorVersion").toString()
@@ -15,8 +15,8 @@ val kafkaVersion = ext.get("kafkaVersion").toString() // Alligned med version fr
 val mainClass = "no.nav.helse.OmsorgspengerutbetalingeSoknadProsesseringKt"
 
 plugins {
-    kotlin("jvm") version "1.5.10"
-    id("com.github.johnrengelman.shadow") version "6.1.0"
+    kotlin("jvm") version "1.5.20"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
 buildscript {
