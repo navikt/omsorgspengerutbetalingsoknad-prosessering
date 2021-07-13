@@ -15,7 +15,7 @@ val kafkaVersion = ext.get("kafkaVersion").toString() // Alligned med version fr
 val mainClass = "no.nav.helse.OmsorgspengerutbetalingeSoknadProsesseringKt"
 
 plugins {
-    kotlin("jvm") version "1.5.20"
+    kotlin("jvm") version "1.5.21"
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
