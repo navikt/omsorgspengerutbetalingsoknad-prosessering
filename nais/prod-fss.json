@@ -1,14 +1,15 @@
 {
   "app": "omsorgspengerutbetalingsoknad-prosessering",
   "cluster": "prod-fss",
-  "namespace": "default",
+  "namespace": "dusseldorf",
   "team": "dusseldorf",
+  "tenant" : "nav.no",
   "minReplicas": "1",
   "maxReplicas": "2",
   "ingresses": [
     "https://omsorgspengerutbetalingsoknad-prosessering.nais.adeo.no"
   ],
-  "vaultKvPath": "/kv/prod/fss/omsorgspengerutbetalingsoknad-prosessering/default",
+  "vaultKvPath": "/kv/prod/fss/omsorgspengerutbetalingsoknad-prosessering/dusseldorf",
   "azureadKvPath": "/azuread/data/prod/creds/omsorgspengerutbetalingsoknad-prosessering",
   "serviceuserKvPath": " /serviceuser/data/prod/srvomsut-prs",
   "env": {
