@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val dusseldorfKtorVersion = "1.5.4.ae44e47"
+val dusseldorfKtorVersion = "2.1.6.2-6ce5eaa"
 val k9FormatVersion = "5.1.38"
 val openhtmltopdfVersion = "1.0.9"
 val handlebarsVersion = "4.2.0"
@@ -11,17 +11,18 @@ val slf4jVersion = ext.get("slf4jVersion").toString()
 val kotlinxCoroutinesVersion = ext.get("kotlinxCoroutinesVersion").toString()
 val kafkaEmbeddedEnvVersion = ext.get("kafkaEmbeddedEnvVersion").toString()
 val kafkaVersion = ext.get("kafkaVersion").toString() // Alligned med version fra kafka-embedded-env
+val fuelVersion = "2.3.1"
 
 val mainClass = "no.nav.helse.OmsorgspengerutbetalingeSoknadProsesseringKt"
 
 plugins {
-    kotlin("jvm") version "1.5.20"
+    kotlin("jvm") version "1.5.21"
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
 buildscript {
     // Henter ut diverse dependency versjoner, i.e. ktorVersion.
-    apply("https://raw.githubusercontent.com/navikt/dusseldorf-ktor/ae44e47780062c9aa349cb88e14546b01325642f/gradle/dusseldorf-ktor.gradle.kts")
+    apply("https://raw.githubusercontent.com/navikt/dusseldorf-ktor/6ce5eaa4666595bb6b550fca5ca8bbdc242961a0/gradle/dusseldorf-ktor.gradle.kts")
 }
 
 dependencies {
@@ -33,6 +34,10 @@ dependencies {
     implementation ( "no.nav.helse:dusseldorf-ktor-auth:$dusseldorfKtorVersion")
     implementation ( "no.nav.k9:soknad:$k9FormatVersion")
     implementation ( "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:$kotlinxCoroutinesVersion")
+    implementation("com.github.kittinunf.fuel:fuel:$fuelVersion")
+    implementation("com.github.kittinunf.fuel:fuel-coroutines:$fuelVersion"){
+        exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-core")
+    }
     
     // Client
     implementation ( "no.nav.helse:dusseldorf-ktor-client:$dusseldorfKtorVersion")
@@ -55,6 +60,7 @@ dependencies {
         exclude(group = "org.eclipse.jetty")
     }
     testImplementation("org.skyscreamer:jsonassert:1.5.0")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 }
 
 repositories {
@@ -99,4 +105,8 @@ tasks.withType<ShadowJar> {
 
 tasks.withType<Wrapper> {
     gradleVersion = "7.0.2"
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
