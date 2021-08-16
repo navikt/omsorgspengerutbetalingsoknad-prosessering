@@ -5,6 +5,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.config.SaslConfigs
 import org.apache.kafka.common.config.SslConfigs
+import org.apache.kafka.common.security.auth.SecurityProtocol
 import org.apache.kafka.streams.StreamsConfig.*
 import org.apache.kafka.streams.errors.LogAndFailExceptionHandler
 import org.slf4j.Logger
@@ -53,7 +54,8 @@ private fun Properties.medProcessingGuarantee(exactlyOnce: Boolean) {
 private fun Properties.medTrustStore(trustStore: Pair<String, String>?) {
     trustStore?.let {
         try {
-            put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_SSL")
+            put(SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG, "jks")
+            put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, SecurityProtocol.SSL.name)
             put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, File(it.first).absolutePath)
             put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, it.second)
             logger.info("Truststore på '${it.first}' konfigurert.")
