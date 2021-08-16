@@ -18,7 +18,7 @@ private const val ID_PREFIX = "srvomsut-prs-"
 
 class KafkaConfig(
     bootstrapServers: String,
-    credentials: Pair<String, String>,
+    keyStore: Pair<String, String>?,
     trustStore: Pair<String, String>?,
     exactlyOnce: Boolean,
     autoOffsetReset: String,
@@ -28,15 +28,10 @@ class KafkaConfig(
         put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
         put(DEFAULT_DESERIALIZATION_EXCEPTION_HANDLER_CLASS_CONFIG, LogAndFailExceptionHandler::class.java)
         put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset)
-        medCredentials(credentials)
+        if(trustStore == null || keyStore == null) medCredentials(Pair("srvkafkaclient", "kafkaclient")) //For å skille mellom test/miljø
         medTrustStore(trustStore)
+        medKeyStore(keyStore)
         medProcessingGuarantee(exactlyOnce)
-    }
-
-    private val producer = Properties().apply {
-        put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
-        medCredentials(credentials)
-        medTrustStore(trustStore)
     }
 
     internal fun stream(name: String) = streams.apply {
@@ -70,6 +65,18 @@ private fun Properties.medTrustStore(trustStore: Pair<String, String>?) {
         }
     }
 }
+
+private fun Properties.medKeyStore(keyStore: Pair<String, String>?) {
+    keyStore?.let {
+        try {
+            put(SslConfigs.SSL_KEYSTORE_TYPE_CONFIG, "PKCS12")
+            put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, File(it.first).absolutePath)
+            put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, it.second)
+            logger.info("Keystore på '${it.first}' konfigurert.")
+        } catch (cause: Throwable) {}
+    }
+}
+
 private fun Properties.medCredentials(credentials: Pair<String, String>) {
     put(SaslConfigs.SASL_MECHANISM, "PLAIN")
     put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_PLAINTEXT")
