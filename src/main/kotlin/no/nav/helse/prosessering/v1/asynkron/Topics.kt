@@ -34,7 +34,7 @@ internal object Topics {
         serDes = MottattSoknadSerDes()
     )
     val PREPROSSESERT = Topic(
-        name = "dusseldorf.privat-omsorgspengerutbetalingsoknad-preprossesert",
+        name = "dusseldorf.privat-omsorgspengerutbetalingsoknad-preprosessert",
         serDes = PreprossesertSerDes()
     )
     val CLEANUP = Topic(
