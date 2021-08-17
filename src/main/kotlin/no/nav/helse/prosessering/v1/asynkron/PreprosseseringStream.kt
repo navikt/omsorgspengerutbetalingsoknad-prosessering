@@ -39,24 +39,22 @@ internal class PreprosseseringStream(
             val tilPreprossesert = Topics.PREPROSSESERT
 
             builder
-                .stream(
-                    fromMottatt.name,
-                    Consumed.with(fromMottatt.keySerde, fromMottatt.valueSerde)
-                )
-                .filter { _, entry -> entry.data.mottatt.erEtter(gittDato) }
+                .stream(fromMottatt.name, fromMottatt.consumed)
+                .filter { _, entry -> entry.deserialiserTilMelding().mottatt.erEtter(gittDato) }
                 .filter { _, entry -> 1 == entry.metadata.version }
                 .mapValues { soknadId, entry ->
                     process(NAME, soknadId, entry) {
                         logger.info("Preprosesserer søknad.")
+                        val melding = entry.deserialiserTilMelding()
                         val preprossesertMelding = preprosseseringV1Service.preprosseser(
-                            melding = entry.data,
+                            melding = melding,
                             metadata = entry.metadata
                         )
                         logger.info("Preprossesering ferdig.")
-                        preprossesertMelding
+                        preprossesertMelding.serialiserTilData()
                     }
                 }
-                .to(tilPreprossesert.name, Produced.with(tilPreprossesert.keySerde, tilPreprossesert.valueSerde))
+                .to(tilPreprossesert.name, tilPreprossesert.produced)
             return builder.build()
         }
     }

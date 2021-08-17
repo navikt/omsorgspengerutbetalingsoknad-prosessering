@@ -12,6 +12,8 @@ spec:
     application:
       enabled: true
       tenant: {{tenant}}
+  kafka:
+    pool: {{kafka-pool}}
   liveness:
     path: isalive
     initialDelay: 20
@@ -40,8 +42,6 @@ spec:
   prometheus:
     enabled: true
     path: /metrics
-  envFrom:
-    - secret: {{app}}
   webproxy: true
   env:
   {{#each env}}

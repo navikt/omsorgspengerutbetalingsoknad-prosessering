@@ -13,15 +13,10 @@ import kotlinx.coroutines.time.delay
 import no.nav.common.KafkaEnvironment
 import no.nav.helse.SøknadUtils.defaultSøknad
 import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
-import no.nav.helse.prosessering.v1.JaNei
-import no.nav.helse.prosessering.v1.Land
-import no.nav.helse.prosessering.v1.Næringstyper
-import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
-import no.nav.helse.prosessering.v1.Regnskapsfører
-import no.nav.helse.prosessering.v1.VarigEndring
-import no.nav.helse.prosessering.v1.Virksomhet
-import no.nav.helse.prosessering.v1.YrkesaktivSisteTreFerdigliknedeÅrene
+import no.nav.helse.prosessering.v1.*
 import no.nav.helse.prosessering.v1.asynkron.TopicEntry
+import no.nav.helse.prosessering.v1.asynkron.deserialiserTilMelding
+import no.nav.helse.prosessering.v1.asynkron.deserialiserTilPreprosessertMelding
 import org.json.JSONObject
 import org.junit.AfterClass
 import org.junit.BeforeClass
@@ -35,11 +30,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-
-@KtorExperimentalAPI
 class OmsorgspengerutbetalingsoknadProsesseringTest {
 
-    @KtorExperimentalAPI
     private companion object {
 
         private val logger: Logger = LoggerFactory.getLogger(OmsorgspengerutbetalingsoknadProsesseringTest::class.java)
@@ -58,6 +50,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
         private val cleanupKonsumer = kafkaEnvironment.cleanupKonsumer()
         private val preprossesertKonsumer = kafkaEnvironment.preprossesertKonsumer()
+        private val k9DittnavVarselKonsumer = kafkaEnvironment.k9DittnavVarselKonsumer()
 
         // Se https://github.com/navikt/dusseldorf-ktor#f%C3%B8dselsnummer
         private val gyldigFodselsnummerA = "02119970078"
@@ -140,9 +133,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        cleanupKonsumer
-            .hentCleanupMelding(melding.søknadId)
-            .assertJournalførtFormat()
+        assertInnsending(melding)
     }
 
     @Test
@@ -163,9 +154,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
         wireMockServer.stubJournalfor(201) // Simulerer journalføring fungerer igjen
         restartEngine()
-        cleanupKonsumer
-            .hentCleanupMelding(melding.søknadId)
-            .assertJournalførtFormat()
+        assertInnsending(melding)
     }
 
     private fun readyGir200HealthGir503() {
@@ -190,9 +179,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
 
         kafkaTestProducer.leggTilMottak(melding)
-        cleanupKonsumer
-            .hentCleanupMelding(melding.søknadId)
-            .assertJournalførtFormat()
+        assertInnsending(melding)
     }
 
     @Test
@@ -206,9 +193,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        cleanupKonsumer
-            .hentCleanupMelding(melding.søknadId)
-            .assertJournalførtFormat()
+        assertInnsending(melding)
     }
 
     @Test
@@ -222,7 +207,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        preprossesertKonsumer.hentPreprossesertMelding(melding.søknadId)
+        assertInnsending(melding)
     }
 
 
@@ -237,11 +222,10 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        val preprossesertMelding: TopicEntry<PreprossesertMeldingV1> =
-            preprossesertKonsumer.hentPreprossesertMelding(melding.søknadId)
-        assertEquals(4, preprossesertMelding.data.dokumentUrls.size)
+        val preprossesertMelding = preprossesertKonsumer.hentPreprossesertMelding(melding.søknadId)
+        assertEquals(4, preprossesertMelding.deserialiserTilPreprosessertMelding().dokumentUrls.size)
         // 2 legeerklæringsvedlegg, 2, to samværsavtalevedlegg, og 1 søknadPdf.
-
+        assertInnsending(melding)
     }
 
     @Test
@@ -254,9 +238,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        cleanupKonsumer
-            .hentCleanupMelding(melding.søknadId)
-            .assertJournalførtFormat()
+        assertInnsending(melding)
     }
 
     @Test
@@ -295,10 +277,18 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        cleanupKonsumer
-            .hentCleanupMelding(melding.søknadId)
-            .assertJournalførtFormat()
+        assertInnsending(melding)
     }
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }
+
+    private fun assertInnsending(meldingV1: MeldingV1) {
+        cleanupKonsumer
+            .hentCleanupMelding(meldingV1.søknadId)
+            .assertJournalførtFormat()
+        k9DittnavVarselKonsumer
+            .hentK9Beskjed(meldingV1.søknadId)
+            .assertGyldigK9Beskjed(meldingV1)
+    }
+
 }
