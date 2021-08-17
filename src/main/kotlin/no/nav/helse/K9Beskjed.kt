@@ -15,8 +15,8 @@ data class K9Beskjed(
     val ytelse: String
 )
 
-const val TEKST_K9BESKJED: String = "Vi har mottatt søknad fra deg om ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn."
-const val YTELSE_K9BESKJED: String = "OMSORGSPENGER_UTV_KS"
+const val TEKST_K9BESKJED: String = "Søknad om utbetaling av omsorgspenger er mottatt."
+const val YTELSE_K9BESKJED: String = "OMSORGSPENGER_UT_SNF"
 const val DAGER_SYNLIG_K9BESKJED: Long = 7
 
 fun Cleanup.tilK9Beskjed(): K9Beskjed {
