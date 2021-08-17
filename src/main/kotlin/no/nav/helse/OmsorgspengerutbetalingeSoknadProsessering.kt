@@ -37,7 +37,6 @@ private val logger: Logger = LoggerFactory.getLogger("nav.Omsorgspengerutbetalin
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
-@KtorExperimentalAPI
 fun Application.omsorgspengerutbetalingSoknadProsessering() {
     logProxyProperties()
     DefaultExports.initialize()

@@ -5,9 +5,9 @@ import no.nav.common.KafkaEnvironment
 import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.v1.MeldingV1
 import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
-import no.nav.helse.prosessering.v1.asynkron.Cleanup
-import no.nav.helse.prosessering.v1.asynkron.TopicEntry
+import no.nav.helse.prosessering.v1.asynkron.*
 import no.nav.helse.prosessering.v1.asynkron.Topics.CLEANUP
+import no.nav.helse.prosessering.v1.asynkron.Topics.K9_DITTNAV_VARSEL
 import no.nav.helse.prosessering.v1.asynkron.Topics.MOTTATT
 import no.nav.helse.prosessering.v1.asynkron.Topics.PREPROSSESERT
 import org.apache.kafka.clients.CommonClientConfigs
@@ -35,7 +35,8 @@ object KafkaWrapper {
             topicNames = listOf(
                 MOTTATT.name,
                 PREPROSSESERT.name,
-                CLEANUP.name
+                CLEANUP.name,
+                K9_DITTNAV_VARSEL.name
             )
         )
         return kafkaEnvironment
@@ -78,8 +79,8 @@ fun KafkaEnvironment.cleanupKonsumer(): KafkaConsumer<String, String> {
     return consumer
 }
 
-fun KafkaEnvironment.preprossesertKonsumer(): KafkaConsumer<String, TopicEntry<PreprossesertMeldingV1>> {
-    val consumer = KafkaConsumer<String, TopicEntry<PreprossesertMeldingV1>>(
+fun KafkaEnvironment.preprossesertKonsumer(): KafkaConsumer<String, TopicEntry> {
+    val consumer = KafkaConsumer(
         testConsumerProperties("OmsorgspengerutbetalingsoknadProsesseringPreprossesertKonsumer"),
         StringDeserializer(),
         PREPROSSESERT.serDes
@@ -88,16 +89,45 @@ fun KafkaEnvironment.preprossesertKonsumer(): KafkaConsumer<String, TopicEntry<P
     return consumer
 }
 
+fun KafkaEnvironment.k9DittnavVarselKonsumer(): KafkaConsumer<String, String> {
+    val consumer = KafkaConsumer(
+        testConsumerProperties("K9DittnavVarselKonsumer"),
+        StringDeserializer(),
+        StringDeserializer()
+    )
+    consumer.subscribe(listOf(Topics.K9_DITTNAV_VARSEL.name))
+    return consumer
+}
+
+fun KafkaConsumer<String, String>.hentK9Beskjed(
+    soknadId: String,
+    maxWaitInSeconds: Long = 20
+): String {
+    val end = System.currentTimeMillis() + Duration.ofSeconds(maxWaitInSeconds).toMillis()
+    while (System.currentTimeMillis() < end) {
+        seekToBeginning(assignment())
+        val entries = poll(Duration.ofSeconds(5))
+            .records(Topics.K9_DITTNAV_VARSEL.name)
+            .filter { it.key() == soknadId }
+
+        if (entries.isNotEmpty()) {
+            assertEquals(1, entries.size)
+            return entries.first().value()
+        }
+    }
+    throw IllegalStateException("Fant ikke opprettet K9Beskjed for søknad $soknadId etter $maxWaitInSeconds sekunder.")
+}
+
 fun KafkaEnvironment.meldingsProducer() = KafkaProducer(
     testProducerProperties(),
     MOTTATT.keySerializer,
     MOTTATT.serDes
 )
 
-fun KafkaConsumer<String, TopicEntry<PreprossesertMeldingV1>>.hentPreprossesertMelding(
+fun KafkaConsumer<String, TopicEntry>.hentPreprossesertMelding(
     soknadId: String,
     maxWaitInSeconds: Long = 20
-): TopicEntry<PreprossesertMeldingV1> {
+): TopicEntry {
     val end = System.currentTimeMillis() + Duration.ofSeconds(maxWaitInSeconds).toMillis()
     while (System.currentTimeMillis() < end) {
         seekToBeginning(assignment())
@@ -132,7 +162,7 @@ fun KafkaConsumer<String, String>.hentCleanupMelding(
     throw IllegalStateException("Fant ikke opprettet oppgave for søknad $soknadId etter $maxWaitInSeconds sekunder.")
 }
 
-fun KafkaProducer<String, TopicEntry<MeldingV1>>.leggTilMottak(soknad: MeldingV1) {
+fun KafkaProducer<String, TopicEntry>.leggTilMottak(soknad: MeldingV1) {
     send(
         ProducerRecord(
             MOTTATT.name,
@@ -142,7 +172,7 @@ fun KafkaProducer<String, TopicEntry<MeldingV1>>.leggTilMottak(soknad: MeldingV1
                     version = 1,
                     correlationId = UUID.randomUUID().toString()
                 ),
-                data = soknad
+                data = Data(omsorgspengerutbetalingsoknadKonfigurertMapper().writeValueAsString(soknad))
             )
         )
     ).get()
