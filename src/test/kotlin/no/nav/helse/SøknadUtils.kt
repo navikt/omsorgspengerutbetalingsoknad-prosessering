@@ -167,7 +167,6 @@ internal object SøknadUtils {
                 K9Barn(NorskIdentitetsnummer.of("10987654321"), null)
             ),
             OpptjeningAktivitet(
-                null,
                 listOf(
                     SelvstendigNæringsdrivende(
                         mapOf(
@@ -185,6 +184,7 @@ internal object SøknadUtils {
                                 .regnskapsførerNavn("Regnskapsfører Svensen")
                                 .regnskapsførerTelefon("+4799887766")
                                 .virksomhetstyper(listOf(VirksomhetType.DAGMAMMA, VirksomhetType.ANNEN))
+                                .erNyIArbeidslivet(true)
                                 .build()
                         ),
                         Organisasjonsnummer.of("12345678910112233444455667"),
@@ -212,21 +212,27 @@ internal object SøknadUtils {
                         "Something Fishy AS"
                     ),
                 ),
-                Frilanser(LocalDate.parse("2020-01-01"), null, true),
+                Frilanser(LocalDate.parse("2020-01-01"), null),
+                null,
+                null
             ),
             listOf(
                 FraværPeriode(
                     Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-05")),
                     Duration.ofHours(7),
                     FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE,
-                    listOf(AktivitetFravær.FRILANSER)
+                    null,
+                    listOf(AktivitetFravær.FRILANSER),
+                    null
                 ),
                 FraværPeriode(
                     Periode(LocalDate.parse("2020-01-06"), LocalDate.parse("2020-01-10")),
                     Duration.ofHours(4),
                     FraværÅrsak.SMITTEVERNHENSYN,
-                    listOf(AktivitetFravær.SELVSTENDIG_VIRKSOMHET)
-                ),
+                    null,
+                    listOf(AktivitetFravær.SELVSTENDIG_VIRKSOMHET),
+                    null
+                )
             ),
             Bosteder().medPerioder(
                 mapOf(
