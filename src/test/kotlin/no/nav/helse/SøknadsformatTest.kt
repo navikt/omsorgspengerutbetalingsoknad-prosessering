@@ -45,6 +45,7 @@ class SøknadsformatTest {
                               "regnskapsførerNavn": "Regnskapsfører Svensen",
                               "regnskapsførerTlf": "+4799887766",
                               "erVarigEndring": true,
+                              "erNyIArbeidslivet": true,
                               "endringDato": "2020-01-01",
                               "endringBegrunnelse": "Grunnet Covid-19",
                               "bruttoInntekt": 5000000,
@@ -75,8 +76,7 @@ class SøknadsformatTest {
                       ],
                       "frilanser": {
                         "startdato": "2020-01-01",
-                        "sluttdato": null,
-                        "jobberFortsattSomFrilans": true
+                        "sluttdato": null
                       }
                     },
                     "fraværsperioder": [
@@ -84,13 +84,17 @@ class SøknadsformatTest {
                         "periode": "2020-01-01/2020-01-05",
                         "duration": "PT7H",
                         "årsak": "STENGT_SKOLE_ELLER_BARNEHAGE",
-                        "aktivitetFravær": ["FRILANSER"]
+                        "aktivitetFravær": ["FRILANSER"],
+                        "søknadÅrsak": null,
+                        "arbeidsgiverOrgNr": null
                       },
                       {
                         "periode": "2020-01-06/2020-01-10",
                         "duration": "PT4H",
                         "årsak": "SMITTEVERNHENSYN",
-                        "aktivitetFravær": ["SELVSTENDIG_VIRKSOMHET"]
+                        "aktivitetFravær": ["SELVSTENDIG_VIRKSOMHET"],
+                        "søknadÅrsak": null,
+                        "arbeidsgiverOrgNr": null
                       }
                     ],
                     "bosteder": {
@@ -117,7 +121,8 @@ class SøknadsformatTest {
                       },
                       "perioderSomSkalSlettes": {}
                     }
-                  }
+                  },
+                  "journalposter": []
                 }
         """.trimIndent(), String(json), true
         )
