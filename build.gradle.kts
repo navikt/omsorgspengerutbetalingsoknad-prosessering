@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val dusseldorfKtorVersion = "2.1.6.2-6ce5eaa"
 val k9FormatVersion = "5.4.25"
-val openhtmltopdfVersion = "1.0.9"
-val handlebarsVersion = "4.2.0"
+val openhtmltopdfVersion = "1.0.10"
+val handlebarsVersion = "4.3.0"
 
 val ktorVersion = ext.get("ktorVersion").toString()
 val slf4jVersion = ext.get("slf4jVersion").toString()
@@ -16,8 +16,8 @@ val fuelVersion = "2.3.1"
 val mainClass = "no.nav.helse.OmsorgspengerutbetalingeSoknadProsesseringKt"
 
 plugins {
-    kotlin("jvm") version "1.5.21"
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    kotlin("jvm") version "1.5.31"
+    id("com.github.johnrengelman.shadow") version "7.1.0"
 }
 
 buildscript {

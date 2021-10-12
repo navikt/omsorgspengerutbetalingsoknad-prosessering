@@ -40,7 +40,7 @@ data class Configuration(private val config: ApplicationConfig) {
             }
 
             val autoOffsetReset = when (val offsetReset =
-                config.getOptionalString(key = "nav.kafka.auto_offset_reset", secret = false)?.toLowerCase()) {
+                config.getOptionalString(key = "nav.kafka.auto_offset_reset", secret = false)?.lowercase()) {
                 null -> "none"
                 "none" -> offsetReset
                 "latest" -> offsetReset
