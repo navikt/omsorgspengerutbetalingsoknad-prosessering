@@ -147,6 +147,79 @@
     </section>
 
     <section id="selvstendig">
+        {{#if selvstendigNæringsdrivende}}
+            <h2>Selvstendig næringsdrivende</h2>
+            {{#if selvstendigNæringsdrivende.næringsinntekt}}
+                <p>Næringsinntekt: {{selvstendigNæringsdrivende.næringsinntekt}},-</p>
+            {{/if}}
+
+            {{#if selvstendigNæringsdrivende.yrkesaktivSisteTreFerdigliknedeÅrene}}
+                <p>Oppgi dato for når du ble yrkesaktiv:
+                    {{selvstendigNæringsdrivende.yrkesaktivSisteTreFerdigliknedeÅrene.oppstartsdato}}</p>
+            {{/if}}
+
+            {{#if selvstendigNæringsdrivende.varigEndring}}
+                <h3>Varig endring</h3>
+                <ul>
+                    <li>
+                        <p>Dato for når varig endring oppsto: {{selvstendigNæringsdrivende.varigEndring.dato}}</p>
+                        <p>Næringsinntekt etter endringen: {{selvstendigNæringsdrivende.varigEndring.inntektEtterEndring}}</p>
+                        <div class="fritekst">
+                            <p class="sporsmalstekst">Din forklaring om varig endring</p>
+                            <p class="fritekst_textarea">{{selvstendigNæringsdrivende.varigEndring.forklaring}}</p>
+                        </div>
+                    </li>
+                </ul>
+            {{/if}}
+
+            <p class="sporsmalstekst">Har du flere enn én næringsvirksomhet som er aktiv?</p>
+            {{jaNeiSvar selvstendigNæringsdrivende.harFlereAktiveVirksomheter}}
+
+            <h3>Næringsvirksomhet som du har lagt inn:</h3>
+            <p>{{selvstendigNæringsdrivende.navnPåVirksomheten}} (startet {{selvstendigNæringsdrivende.fraOgMed}},
+                {{#if selvstendigNæringsdrivende.tilOgMed}}
+                    avsluttet {{selvstendigNæringsdrivende.tilOgMed}})
+                {{else}}
+                    er pågående)
+                {{/if}}
+            </p>
+
+            <p>Næringstype:
+                {{# each selvstendigNæringsdrivende.næringstyper as |næringstype|~}}
+                    {{#if @first}}
+                        {{næringstype.navn}}
+                    {{else}}
+                        , {{næringstype.navn}}
+                    {{/if}}
+                    {{#eq næringstype.navn "Fiske"}}
+                        {{#if selvstendigNæringsdrivende.fiskerErPåBladB}}
+                            (blad B)
+                        {{else}}
+                            (ikke blad B)
+                        {{/if}}
+                    {{/eq}}
+                {{/each}}
+            </p>
+
+            {{#if selvstendigNæringsdrivende.registrertINorge}}
+                <p>Registrert i Norge</p>
+                <p>Organisasjonsnummeret: {{selvstendigNæringsdrivende.organisasjonsnummer}}</p>
+            {{else}}
+                <p>Registrert i land: {{selvstendigNæringsdrivende.registrertIUtlandet.landnavn}}({{selvstendigNæringsdrivende.registrertIUtlandet.landkode}})</p>
+            {{/if}}
+
+            {{#if selvstendigNæringsdrivende.regnskapsfører}}
+                <h3>Regnskapsfører:</h3>
+                <ul>
+                    <li>
+                        <p>Navn: {{selvstendigNæringsdrivende.regnskapsfører.navn}}</p>
+                        <p>Telefon: {{selvstendigNæringsdrivende.regnskapsfører.telefon}}</p>
+                    </li>
+                </ul>
+            {{/if}}
+
+        {{/if}}
+
         {{#if søknad.selvstendigVirksomheter}}
             <h2>Selvstendig næringsdrivende</h2>
             {{# each søknad.selvstendigVirksomheter as |virksomhet|~}}

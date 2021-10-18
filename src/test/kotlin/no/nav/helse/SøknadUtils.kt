@@ -1,18 +1,8 @@
 package no.nav.helse
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import no.nav.helse.prosessering.v1.*
 import no.nav.helse.prosessering.v1.AktivitetFravær.*
-import no.nav.helse.prosessering.v1.Bekreftelser
-import no.nav.helse.prosessering.v1.Bosted
-import no.nav.helse.prosessering.v1.FosterBarn
-import no.nav.helse.prosessering.v1.JaNei
-import no.nav.helse.prosessering.v1.MeldingV1
-import no.nav.helse.prosessering.v1.Næringstyper
-import no.nav.helse.prosessering.v1.SpørsmålOgSvar
-import no.nav.helse.prosessering.v1.Søker
-import no.nav.helse.prosessering.v1.Utbetalingsperiode
-import no.nav.helse.prosessering.v1.VarigEndring
-import no.nav.helse.prosessering.v1.Virksomhet
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.fravær.AktivitetFravær
@@ -20,7 +10,6 @@ import no.nav.k9.søknad.felles.fravær.FraværPeriode
 import no.nav.k9.søknad.felles.fravær.FraværÅrsak
 import no.nav.k9.søknad.felles.opptjening.Frilanser
 import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet
-import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD
@@ -38,6 +27,7 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
+import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende as K9SelvstendigNæringsdrivende
 import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn
 
 internal object SøknadUtils {
@@ -136,7 +126,7 @@ internal object SøknadUtils {
             harForståttRettigheterOgPlikter = JaNei.Ja
         ),
         selvstendigVirksomheter = listOf(
-            Virksomhet(
+            SelvstendigNæringsdrivende(
                 næringstyper = listOf(Næringstyper.ANNEN, Næringstyper.FISKE),
                 fraOgMed = LocalDate.now(),
                 erNyoppstartet = true,
@@ -168,12 +158,12 @@ internal object SøknadUtils {
             ),
             OpptjeningAktivitet(
                 listOf(
-                    SelvstendigNæringsdrivende(
+                    K9SelvstendigNæringsdrivende(
                         mapOf(
                             Periode(
                                 LocalDate.parse("2018-01-01"),
                                 LocalDate.parse("2020-01-01")
-                            ) to SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
+                            ) to K9SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
                                 .erNyoppstartet(true)
                                 .registrertIUtlandet(false)
                                 .bruttoInntekt(BigDecimal(5_000_000))
@@ -190,12 +180,12 @@ internal object SøknadUtils {
                         Organisasjonsnummer.of("12345678910112233444455667"),
                         "Mamsen Bamsen AS"
                     ),
-                    SelvstendigNæringsdrivende(
+                    K9SelvstendigNæringsdrivende(
                         mapOf(
                             Periode(
                                 LocalDate.parse("2015-01-01"),
                                 LocalDate.parse("2017-01-01")
-                            ) to SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
+                            ) to K9SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
                                 .erNyoppstartet(false)
                                 .registrertIUtlandet(true)
                                 .bruttoInntekt(BigDecimal(500_000))
