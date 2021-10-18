@@ -22,9 +22,6 @@ internal class PreprosesseringV1Service(
         melding: MeldingV1,
         metadata: Metadata
     ): PreprossesertMeldingV1 {
-        val søknadId = SoknadId(melding.søknadId)
-        logger.info("Preprosesserer søknad med søknadID:$søknadId")
-
         val correlationId = CorrelationId(metadata.correlationId)
         val dokumentEier = DokumentEier(melding.søker.fødselsnummer)
 

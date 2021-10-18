@@ -7,6 +7,7 @@ import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
+import no.nav.helse.prosessering.formaterStatuslogging
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.slf4j.LoggerFactory
@@ -43,10 +44,11 @@ internal class JournalforingsStream(
                 .filter { _, entry -> 1 == entry.metadata.version }
                 .mapValues { soknadId, entry ->
                     process(NAME, soknadId, entry) {
+                        logger.info(formaterStatuslogging(soknadId, "journalføres."))
                         val preprossesertMeldingV1 = entry.deserialiserTilPreprosessertMelding()
                         val dokumenter = preprossesertMeldingV1.dokumentUrls
-                        logger.info("Journalfører dokumenter: {}", dokumenter)
 
+                        logger.info("Journalfører dokumenter: {}", dokumenter)
                         val journaPostId = joarkGateway.journalfør(
                             mottatt = preprossesertMeldingV1.mottatt,
                             søker = preprossesertMeldingV1.søker,

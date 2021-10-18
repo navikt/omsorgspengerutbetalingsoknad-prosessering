@@ -5,6 +5,7 @@ import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
+import no.nav.helse.prosessering.formaterStatuslogging
 import no.nav.helse.prosessering.v1.PreprosesseringV1Service
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
@@ -42,13 +43,13 @@ internal class PreprosesseringStream(
                 .filter { _, entry -> 1 == entry.metadata.version }
                 .mapValues { soknadId, entry ->
                     process(NAME, soknadId, entry) {
-                        logger.info("Preprosesserer søknad.")
+                        logger.info(formaterStatuslogging(soknadId, "preprosesseres."))
+
                         val melding = entry.deserialiserTilMelding()
                         val preprossesertMelding = preprosesseringV1Service.preprosesser(
                             melding = melding,
                             metadata = entry.metadata
                         )
-                        logger.info("Preprossesering ferdig.")
                         preprossesertMelding.serialiserTilData()
                     }
                 }
