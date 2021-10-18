@@ -1,6 +1,5 @@
-package no.nav.helse.dokument
+package no.nav.helse.k9mellomlagring
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -15,7 +14,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import no.nav.helse.CorrelationId
 import no.nav.helse.HttpError
-import no.nav.helse.aktoer.AktørId
 import no.nav.helse.dusseldorf.ktor.client.buildURL
 import no.nav.helse.dusseldorf.ktor.core.Retry
 import no.nav.helse.dusseldorf.ktor.health.HealthCheck
@@ -31,33 +29,28 @@ import java.io.ByteArrayInputStream
 import java.net.URI
 import java.time.Duration
 
-class DokumentGateway(
+class K9MellomlagringGateway(
     private val accessTokenClient: AccessTokenClient,
-    private val lagreDokumentScopes: Set<String>,
-    private val sletteDokumentScopes: Set<String>,
+    private val k9MellomlagringScopes: Set<String>,
     baseUrl : URI
 ) : HealthCheck {
 
     private companion object {
         private const val LAGRE_DOKUMENT_OPERATION = "lagre-dokument"
         private const val SLETTE_DOKUMENT_OPERATION = "slette-dokument"
-        private val logger: Logger = LoggerFactory.getLogger(DokumentGateway::class.java)
+        private val logger: Logger = LoggerFactory.getLogger(K9MellomlagringGateway::class.java)
     }
 
-    private val completeUrl = Url.buildURL(
-        baseUrl = baseUrl,
-        pathParts = listOf("v1", "dokument")
-    )
-
+    private val komplettUrl = Url.buildURL(baseUrl, listOf("v1", "dokument"))
     private val objectMapper = configuredObjectMapper()
     private val cachedAccessTokenClient = CachedAccessTokenClient(accessTokenClient)
 
     override suspend fun check(): Result {
-        val checkGetLagreDokumentAccessToken = checkGetAccessToken(LAGRE_DOKUMENT_OPERATION, lagreDokumentScopes)
-        val checkGetSletteDokumentAccessToken = checkGetAccessToken(SLETTE_DOKUMENT_OPERATION, sletteDokumentScopes)
+        val checkGetLagreDokumentAccessToken = checkGetAccessToken(LAGRE_DOKUMENT_OPERATION, k9MellomlagringScopes)
+        val checkGetSletteDokumentAccessToken = checkGetAccessToken(SLETTE_DOKUMENT_OPERATION, k9MellomlagringScopes)
         val combined = checkGetLagreDokumentAccessToken.result().toMutableMap()
         combined.putAll(checkGetSletteDokumentAccessToken.result())
-        combined["name"] = "DokumentGateway"
+        combined["name"] = "K9MellomlagringGateway"
         return if (checkGetLagreDokumentAccessToken is UnHealthy || checkGetSletteDokumentAccessToken is UnHealthy) UnHealthy(combined)
         else Healthy(combined)
     }
@@ -68,20 +61,19 @@ class DokumentGateway(
     ) : Result {
         return try {
             accessTokenClient.getAccessToken(scopes)
-            Healthy(mapOf(operation to "Henting av access token OK"))
+            Healthy(mapOf(operation to "Henting av access token for K9-mellomlagring OK"))
         } catch (cause: Throwable) {
-            logger.error("Feil ved henting av access token for henting av dokument", cause)
-            UnHealthy(mapOf(operation to "Henting av access token feilet"))
+            logger.error("Feil ved henting av access token for K9-mellomlagring", cause)
+            UnHealthy(mapOf(operation to "Henting av access token for K9-mellomlagring feilet"))
         }
     }
 
 
     internal suspend fun lagreDokmenter(
         dokumenter: Set<Dokument>,
-        aktørId: AktørId,
         correlationId: CorrelationId
     ) : List<URI> {
-        val authorizationHeader = cachedAccessTokenClient.getAccessToken(lagreDokumentScopes).asAuthoriationHeader()
+        val authorizationHeader = cachedAccessTokenClient.getAccessToken(k9MellomlagringScopes).asAuthoriationHeader()
 
         return coroutineScope {
             val deferred = mutableListOf<Deferred<URI>>()
@@ -90,7 +82,6 @@ class DokumentGateway(
                     requestLagreDokument(
                         dokument = dokument,
                         correlationId = correlationId,
-                        aktørId = aktørId,
                         authorizationHeader = authorizationHeader
                     )
                 })
@@ -101,10 +92,10 @@ class DokumentGateway(
 
     internal suspend fun slettDokmenter(
         urls: List<URI>,
-        aktørId: AktørId,
+        dokumentEier: DokumentEier,
         correlationId: CorrelationId
     ) {
-        val authorizationHeader = cachedAccessTokenClient.getAccessToken(sletteDokumentScopes).asAuthoriationHeader()
+        val authorizationHeader = cachedAccessTokenClient.getAccessToken(k9MellomlagringScopes).asAuthoriationHeader()
 
         coroutineScope {
             val deferred = mutableListOf<Deferred<Unit>>()
@@ -113,7 +104,7 @@ class DokumentGateway(
                     requestSlettDokument(
                         url = it,
                         correlationId = correlationId,
-                        aktørId = aktørId,
+                        dokumentEier = dokumentEier,
                         authorizationHeader = authorizationHeader
                     )
                 })
@@ -124,21 +115,21 @@ class DokumentGateway(
 
     private suspend fun requestSlettDokument(
         url: URI,
-        aktørId: AktørId,
+        dokumentEier: DokumentEier,
         correlationId: CorrelationId,
         authorizationHeader: String
     ) {
 
-        val urlMedEier = Url.buildURL(
-            baseUrl = url,
-            queryParameters = mapOf("eier" to listOf(aktørId.id))
-        ).toString()
+        val body = objectMapper.writeValueAsBytes(dokumentEier)
+        val contentStream = { ByteArrayInputStream(body) }
 
-        val httpRequest = urlMedEier
+        val httpRequest = url.toString()
             .httpDelete()
+            .body(contentStream)
             .header(
                 HttpHeaders.Authorization to authorizationHeader,
-                HttpHeaders.XCorrelationId to correlationId.value
+                HttpHeaders.XCorrelationId to correlationId.value,
+                HttpHeaders.ContentType to "application/json"
             )
 
         val (request, _, result) = Operation.monitored(
@@ -161,16 +152,9 @@ class DokumentGateway(
 
     private suspend fun requestLagreDokument(
         dokument: Dokument,
-        aktørId: AktørId,
         correlationId: CorrelationId,
         authorizationHeader: String
     ) : URI {
-
-        val urlMedEier = Url.buildURL(
-            baseUrl = completeUrl,
-            queryParameters = mapOf("eier" to listOf(aktørId.id))
-        ).toString()
-
         val body = objectMapper.writeValueAsBytes(dokument)
         val contentStream = { ByteArrayInputStream(body) }
 
@@ -184,7 +168,7 @@ class DokumentGateway(
                 operation = LAGRE_DOKUMENT_OPERATION,
                 resultResolver = { 201 == it.second.statusCode }
             ) {
-                urlMedEier
+                komplettUrl.toString()
                     .httpPost()
                     .body(contentStream)
                     .header(
@@ -210,10 +194,4 @@ class DokumentGateway(
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         return objectMapper
     }
-
-    data class Dokument(
-        val content: ByteArray,
-        @JsonProperty("content_type") val contentType: String,
-        val title: String
-    )
 }

@@ -21,6 +21,8 @@ import no.nav.helse.dusseldorf.ktor.health.UnHealthy
 import no.nav.helse.dusseldorf.ktor.metrics.Operation
 import no.nav.helse.dusseldorf.oauth2.client.AccessTokenClient
 import no.nav.helse.dusseldorf.oauth2.client.CachedAccessTokenClient
+import no.nav.helse.prosessering.v1.PreprossesertSøker
+import no.nav.helse.prosessering.v1.Søker
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
@@ -58,9 +60,7 @@ class JoarkGateway(
     }
 
     suspend fun journalfør(
-        aktørId: AktørId,
-        norskIdent: String,
-        navn: JoarkNavn,
+        søker: PreprossesertSøker,
         mottatt: ZonedDateTime,
         dokumenter: List<List<URI>>,
         correlationId: CorrelationId
@@ -69,11 +69,10 @@ class JoarkGateway(
         val authorizationHeader = cachedAccessTokenClient.getAccessToken(journalforeScopes).asAuthoriationHeader()
 
         val joarkRequest = JoarkRequest(
-            aktoerId = aktørId.id,
-            norskIdent = norskIdent,
+            norskIdent = søker.fødselsnummer,
             mottatt = mottatt,
             dokumenter = dokumenter,
-            sokerNavn = navn
+            sokerNavn = JoarkNavn(søker.fornavn, søker.mellomnavn, søker.etternavn)
         )
 
         val body = objectMapper.writeValueAsBytes(joarkRequest)
@@ -116,15 +115,18 @@ class JoarkGateway(
 }
 
 private data class JoarkRequest(
-    @JsonProperty("aktoer_id") val aktoerId: String,
-    @JsonProperty("norsk_ident") val norskIdent: String,
+    @JsonProperty("norsk_ident")
+    val norskIdent: String,
     val mottatt: ZonedDateTime,
     val dokumenter: List<List<URI>>,
     @JsonProperty("soker_navn")
     val sokerNavn: JoarkNavn
 )
 
-data class JournalPostId(@JsonProperty("journal_post_id") val journalpostId: String)
+data class JournalPostId(
+    @JsonProperty("journal_post_id")
+    val journalpostId: String
+)
 
 data class JoarkNavn(
     val fornavn: String,

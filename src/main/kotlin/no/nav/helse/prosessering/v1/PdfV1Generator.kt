@@ -93,7 +93,7 @@ internal class PdfV1Generator {
         private val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").withZone(ZONE_ID)
     }
 
-    internal fun generateSoknadOppsummeringPdf(
+    internal fun genererSøknadOppsummeringPdf(
         melding: MeldingV1
     ): ByteArray {
         val mottatt = melding.mottatt.toLocalDate()

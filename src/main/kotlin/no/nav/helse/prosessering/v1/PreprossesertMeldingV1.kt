@@ -26,11 +26,10 @@ data class PreprossesertMeldingV1(
     internal constructor(
         melding: MeldingV1,
         dokumentUrls: List<List<URI>>,
-        søkerAktørId: AktørId
     ) : this(
         soknadId = melding.søknadId,
         mottatt = melding.mottatt,
-        søker = PreprossesertSøker(melding.søker, søkerAktørId),
+        søker = PreprossesertSøker(melding.søker, AktørId(melding.søker.aktørId)),
         språk = melding.språk,
         bosteder = melding.bosteder,
         opphold = melding.opphold,

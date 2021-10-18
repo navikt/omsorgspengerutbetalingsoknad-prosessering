@@ -2,12 +2,14 @@ package no.nav.helse.prosessering.v1.asynkron
 
 import no.nav.helse.CorrelationId
 import no.nav.helse.aktoer.AktørId
-import no.nav.helse.dokument.DokumentService
+import no.nav.helse.k9mellomlagring.K9MellomlagringService
 import no.nav.helse.erEtter
+import no.nav.helse.k9mellomlagring.DokumentEier
 import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
+import no.nav.helse.prosessering.formaterStatuslogging
 import no.nav.helse.tilK9Beskjed
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
@@ -16,13 +18,13 @@ import java.time.ZonedDateTime
 
 internal class CleanupStream(
     kafkaConfig: KafkaConfig,
-    dokumentService: DokumentService,
+    k9MellomlagringService: K9MellomlagringService,
     datoMottattEtter: ZonedDateTime
 ) {
     private val stream = ManagedKafkaStreams(
         name = NAME,
         properties = kafkaConfig.stream(NAME),
-        topology = topology(dokumentService, datoMottattEtter),
+        topology = topology(k9MellomlagringService, datoMottattEtter),
         unreadyAfterStreamStoppedIn = kafkaConfig.unreadyAfterStreamStoppedIn
     )
 
@@ -33,7 +35,7 @@ internal class CleanupStream(
         private const val NAME = "CleanupV1"
         private val logger = LoggerFactory.getLogger("no.nav.$NAME.topology")
 
-        private fun topology(dokumentService: DokumentService, gittDato: ZonedDateTime): Topology {
+        private fun topology(k9MellomlagringService: K9MellomlagringService, gittDato: ZonedDateTime): Topology {
             val builder = StreamsBuilder()
             val fraCleanup = Topics.CLEANUP
             val tilK9DittnavVarsel = Topics.K9_DITTNAV_VARSEL
@@ -44,14 +46,16 @@ internal class CleanupStream(
                 .filter { _, entry -> 1 == entry.metadata.version }
                 .mapValues { soknadId, entry ->
                     process(NAME, soknadId, entry) {
-                        logger.info("Sletter dokumenter.")
+                        logger.info(formaterStatuslogging(soknadId, "kjører cleanup."))
+
                         val cleanup = entry.deserialiserTilCleanup()
-                        dokumentService.slettDokumeter(
+                        k9MellomlagringService.slettDokumeter(
                             urlBolks = cleanup.preprosessertMelding.dokumentUrls,
-                            aktørId = AktørId(cleanup.preprosessertMelding.søker.aktørId),
-                            correlationId = CorrelationId(entry.metadata.correlationId)
+                            correlationId = CorrelationId(entry.metadata.correlationId),
+                            dokumentEier = DokumentEier(cleanup.preprosessertMelding.søker.fødselsnummer)
                         )
                         logger.info("Dokumenter slettet.")
+
                         val k9beskjed = cleanup.tilK9Beskjed()
                         logger.info("Sender K9Beskjed viderer til ${tilK9DittnavVarsel.name}")
                         k9beskjed.serialiserTilData()

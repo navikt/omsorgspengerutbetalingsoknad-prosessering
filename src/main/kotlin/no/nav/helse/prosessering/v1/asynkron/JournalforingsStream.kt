@@ -1,14 +1,13 @@
 package no.nav.helse.prosessering.v1.asynkron
 
 import no.nav.helse.CorrelationId
-import no.nav.helse.aktoer.AktørId
 import no.nav.helse.erEtter
 import no.nav.helse.joark.JoarkGateway
-import no.nav.helse.joark.JoarkNavn
 import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
+import no.nav.helse.prosessering.formaterStatuslogging
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.slf4j.LoggerFactory
@@ -36,29 +35,23 @@ internal class JournalforingsStream(
 
         private fun topology(joarkGateway: JoarkGateway, gittDato: ZonedDateTime): Topology {
             val builder = StreamsBuilder()
-            val fraPreprossesert = Topics.PREPROSSESERT
+            val fraPreprosessert = Topics.PREPROSSESERT
             val tilCleanup = Topics.CLEANUP
 
             val mapValues = builder
-                .stream(fraPreprossesert.name, fraPreprossesert.consumed)
+                .stream(fraPreprosessert.name, fraPreprosessert.consumed)
                 .filter { _, entry -> entry.deserialiserTilPreprosessertMelding().mottatt.erEtter(gittDato) }
                 .filter { _, entry -> 1 == entry.metadata.version }
                 .mapValues { soknadId, entry ->
                     process(NAME, soknadId, entry) {
+                        logger.info(formaterStatuslogging(soknadId, "journalføres."))
                         val preprossesertMeldingV1 = entry.deserialiserTilPreprosessertMelding()
                         val dokumenter = preprossesertMeldingV1.dokumentUrls
-                        logger.info("Journalfører dokumenter: {}", dokumenter)
 
-                        val søker = preprossesertMeldingV1.søker
+                        logger.info("Journalfører dokumenter: {}", dokumenter)
                         val journaPostId = joarkGateway.journalfør(
                             mottatt = preprossesertMeldingV1.mottatt,
-                            aktørId = AktørId(søker.aktørId),
-                            norskIdent = søker.fødselsnummer,
-                            navn = JoarkNavn(
-                                fornavn = søker.fornavn,
-                                mellomnanvn = søker.mellomnavn,
-                                etternavn = søker.etternavn
-                            ),
+                            søker = preprossesertMeldingV1.søker,
                             correlationId = CorrelationId(entry.metadata.correlationId),
                             dokumenter = dokumenter
                         )

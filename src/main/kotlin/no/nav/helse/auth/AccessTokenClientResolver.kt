@@ -12,7 +12,6 @@ internal class AccessTokenClientResolver(
     clients : Map<String, Client>
 ) {
     companion object {
-        private val logger: Logger = LoggerFactory.getLogger(AccessTokenClientResolver::class.java)
         private const val AZURE_V2_ALIAS = "azure-v2"
     }
 
@@ -27,6 +26,5 @@ internal class AccessTokenClientResolver(
         keyIdProvider = DirectKeyId(azureV2Client.certificateHexThumbprint)
     )
 
-    internal fun dokumentAccessTokenClient() = azureV2AccessTokenClient
-    internal fun joarkAccessTokenClient() = azureV2AccessTokenClient
+    internal fun getAccessTokenClient() = azureV2AccessTokenClient
 }
