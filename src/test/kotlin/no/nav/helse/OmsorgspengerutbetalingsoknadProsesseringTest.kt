@@ -6,7 +6,6 @@ import io.ktor.config.*
 import io.ktor.http.*
 import io.ktor.server.engine.*
 import io.ktor.server.testing.*
-import io.ktor.util.*
 import io.prometheus.client.CollectorRegistry
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.time.delay
@@ -14,8 +13,6 @@ import no.nav.common.KafkaEnvironment
 import no.nav.helse.SøknadUtils.defaultSøknad
 import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
 import no.nav.helse.prosessering.v1.*
-import no.nav.helse.prosessering.v1.asynkron.TopicEntry
-import no.nav.helse.prosessering.v1.asynkron.deserialiserTilMelding
 import no.nav.helse.prosessering.v1.asynkron.deserialiserTilPreprosessertMelding
 import org.json.JSONObject
 import org.junit.AfterClass
@@ -28,7 +25,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class OmsorgspengerutbetalingsoknadProsesseringTest {
 
@@ -39,7 +35,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         private val wireMockServer: WireMockServer = WireMockBuilder()
             .withAzureSupport()
             .build()
-            .stubK9DokumentHealth()
+            .stubK9MellomlagringHealth()
             .stubK9JoarkHealth()
             .stubJournalfor()
             .stubLagreDokument()
@@ -49,7 +45,6 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         private val kafkaTestProducer = kafkaEnvironment.meldingsProducer()
 
         private val cleanupKonsumer = kafkaEnvironment.cleanupKonsumer()
-        private val preprossesertKonsumer = kafkaEnvironment.preprossesertKonsumer()
         private val k9DittnavVarselKonsumer = kafkaEnvironment.k9DittnavVarselKonsumer()
 
         // Se https://github.com/navikt/dusseldorf-ktor#f%C3%B8dselsnummer
@@ -222,9 +217,12 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
         )
 
         kafkaTestProducer.leggTilMottak(melding)
-        val preprossesertMelding = preprossesertKonsumer.hentPreprossesertMelding(melding.søknadId)
-        assertEquals(4, preprossesertMelding.deserialiserTilPreprosessertMelding().dokumentUrls.size)
+
+        val dokumentUrls = JSONObject(cleanupKonsumer.hentCleanupMelding(melding.søknadId))
+            .getJSONObject("data").getJSONObject("preprosessertMelding").getJSONArray("dokumentUrls")
+
         // 2 legeerklæringsvedlegg, 2, to samværsavtalevedlegg, og 1 søknadPdf.
+        assertEquals(4, dokumentUrls.length())
         assertInnsending(melding)
     }
 

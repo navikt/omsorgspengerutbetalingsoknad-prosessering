@@ -8,7 +8,7 @@ import no.nav.helse.prosessering.v1.PreprossesertMeldingV1
 import no.nav.helse.prosessering.v1.asynkron.*
 import no.nav.helse.prosessering.v1.asynkron.Topics.CLEANUP
 import no.nav.helse.prosessering.v1.asynkron.Topics.K9_DITTNAV_VARSEL
-import no.nav.helse.prosessering.v1.asynkron.Topics.MOTTATT
+import no.nav.helse.prosessering.v1.asynkron.Topics.MOTTATT_V2
 import no.nav.helse.prosessering.v1.asynkron.Topics.PREPROSSESERT
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -33,7 +33,7 @@ object KafkaWrapper {
             withSchemaRegistry = false,
             withSecurity = true,
             topicNames = listOf(
-                MOTTATT.name,
+                MOTTATT_V2.name,
                 PREPROSSESERT.name,
                 CLEANUP.name,
                 K9_DITTNAV_VARSEL.name
@@ -79,16 +79,6 @@ fun KafkaEnvironment.cleanupKonsumer(): KafkaConsumer<String, String> {
     return consumer
 }
 
-fun KafkaEnvironment.preprossesertKonsumer(): KafkaConsumer<String, TopicEntry> {
-    val consumer = KafkaConsumer(
-        testConsumerProperties("OmsorgspengerutbetalingsoknadProsesseringPreprossesertKonsumer"),
-        StringDeserializer(),
-        PREPROSSESERT.serDes
-    )
-    consumer.subscribe(listOf(PREPROSSESERT.name))
-    return consumer
-}
-
 fun KafkaEnvironment.k9DittnavVarselKonsumer(): KafkaConsumer<String, String> {
     val consumer = KafkaConsumer(
         testConsumerProperties("K9DittnavVarselKonsumer"),
@@ -120,28 +110,9 @@ fun KafkaConsumer<String, String>.hentK9Beskjed(
 
 fun KafkaEnvironment.meldingsProducer() = KafkaProducer(
     testProducerProperties(),
-    MOTTATT.keySerializer,
-    MOTTATT.serDes
+    MOTTATT_V2.keySerializer,
+    MOTTATT_V2.serDes
 )
-
-fun KafkaConsumer<String, TopicEntry>.hentPreprossesertMelding(
-    soknadId: String,
-    maxWaitInSeconds: Long = 20
-): TopicEntry {
-    val end = System.currentTimeMillis() + Duration.ofSeconds(maxWaitInSeconds).toMillis()
-    while (System.currentTimeMillis() < end) {
-        seekToBeginning(assignment())
-        val entries = poll(Duration.ofSeconds(1))
-            .records(PREPROSSESERT.name)
-            .filter { it.key() == soknadId }
-
-        if (entries.isNotEmpty()) {
-            assertEquals(1, entries.size)
-            return entries.first().value()
-        }
-    }
-    throw IllegalStateException("Fant ikke opprettet oppgave for søknad $soknadId etter $maxWaitInSeconds sekunder.")
-}
 
 fun KafkaConsumer<String, String>.hentCleanupMelding(
     soknadId: String,
@@ -165,7 +136,7 @@ fun KafkaConsumer<String, String>.hentCleanupMelding(
 fun KafkaProducer<String, TopicEntry>.leggTilMottak(soknad: MeldingV1) {
     send(
         ProducerRecord(
-            MOTTATT.name,
+            MOTTATT_V2.name,
             soknad.søknadId,
             TopicEntry(
                 metadata = Metadata(
@@ -177,6 +148,3 @@ fun KafkaProducer<String, TopicEntry>.leggTilMottak(soknad: MeldingV1) {
         )
     ).get()
 }
-
-fun KafkaEnvironment.username() = username
-fun KafkaEnvironment.password() = password

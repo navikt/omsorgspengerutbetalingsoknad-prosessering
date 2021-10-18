@@ -5,23 +5,21 @@ import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
-import no.nav.helse.prosessering.v1.PreprosseseringV1Service
+import no.nav.helse.prosessering.v1.PreprosesseringV1Service
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
-import org.apache.kafka.streams.kstream.Consumed
-import org.apache.kafka.streams.kstream.Produced
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
-internal class PreprosseseringStream(
-    preprosseseringV1Service: PreprosseseringV1Service,
+internal class PreprosesseringStream(
+    preprosesseringV1Service: PreprosesseringV1Service,
     kafkaConfig: KafkaConfig,
     datoMottattEtter: ZonedDateTime
 ) {
     private val stream = ManagedKafkaStreams(
         name = NAME,
         properties = kafkaConfig.stream(NAME),
-        topology = topology(preprosseseringV1Service, datoMottattEtter),
+        topology = topology(preprosesseringV1Service, datoMottattEtter),
         unreadyAfterStreamStoppedIn = kafkaConfig.unreadyAfterStreamStoppedIn
     )
 
@@ -33,9 +31,9 @@ internal class PreprosseseringStream(
         private const val NAME = "PreprosesseringV1"
         private val logger = LoggerFactory.getLogger("no.nav.$NAME.topology")
 
-        private fun topology(preprosseseringV1Service: PreprosseseringV1Service, gittDato: ZonedDateTime): Topology {
+        private fun topology(preprosesseringV1Service: PreprosesseringV1Service, gittDato: ZonedDateTime): Topology {
             val builder = StreamsBuilder()
-            val fromMottatt = Topics.MOTTATT
+            val fromMottatt = Topics.MOTTATT_V2
             val tilPreprossesert = Topics.PREPROSSESERT
 
             builder
@@ -46,7 +44,7 @@ internal class PreprosseseringStream(
                     process(NAME, soknadId, entry) {
                         logger.info("Preprosesserer søknad.")
                         val melding = entry.deserialiserTilMelding()
-                        val preprossesertMelding = preprosseseringV1Service.preprosseser(
+                        val preprossesertMelding = preprosesseringV1Service.preprosesser(
                             melding = melding,
                             metadata = entry.metadata
                         )

@@ -1,6 +1,6 @@
 package no.nav.helse
 
-import no.nav.helse.dokument.Søknadsformat
+import no.nav.helse.k9mellomlagring.Søknadsformat
 import no.nav.k9.søknad.JsonUtils
 import org.skyscreamer.jsonassert.JSONAssert
 import java.util.*

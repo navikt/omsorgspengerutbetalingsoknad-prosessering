@@ -18,7 +18,7 @@ class OmsorgspengerutbetalingsoknadProsesseringWithMocks {
                 .withPort(8091)
                 .withAzureSupport()
                 .build()
-                .stubK9DokumentHealth()
+                .stubK9MellomlagringHealth()
                 .stubK9JoarkHealth()
                 .stubJournalfor()
                 .stubLagreDokument()

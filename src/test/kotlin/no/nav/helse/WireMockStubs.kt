@@ -6,15 +6,15 @@ import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import java.util.*
 
 private const val k9JoarkBasePath = "/k9-joark-mock"
-private const val k9DokumentBasePath = "/k9-dokument-mock"
+private const val k9MellomlagringBasePath = "/k9-mellomlagring-mock"
 
 
 internal fun WireMockServer.stubLagreDokument(): WireMockServer {
     WireMock.stubFor(
-        WireMock.post(WireMock.urlPathMatching(".*$k9DokumentBasePath.*")).willReturn(
+        WireMock.post(WireMock.urlPathMatching(".*$k9MellomlagringBasePath.*")).willReturn(
             WireMock.aResponse()
                 .withHeader("Content-Type", "application/json")
-                .withHeader("Location", "${getK9DokumentBaseUrl()}/v1/dokument/${UUID.randomUUID()}")
+                .withHeader("Location", "${getK9MellomlagringBaseUrl()}/v1/dokument/${UUID.randomUUID()}")
                 .withStatus(201)
         )
     )
@@ -23,7 +23,7 @@ internal fun WireMockServer.stubLagreDokument(): WireMockServer {
 
 internal fun WireMockServer.stubSlettDokument(): WireMockServer {
     WireMock.stubFor(
-        WireMock.delete(WireMock.urlPathMatching(".*$k9DokumentBasePath.*")).willReturn(
+        WireMock.delete(WireMock.urlPathMatching(".*$k9MellomlagringBasePath.*")).willReturn(
             WireMock.aResponse()
                 .withStatus(204)
         )
@@ -67,7 +67,7 @@ private fun WireMockServer.stubHealthEndpoint(
     return this
 }
 
-internal fun WireMockServer.stubK9DokumentHealth() = stubHealthEndpoint("$k9DokumentBasePath/health")
+internal fun WireMockServer.stubK9MellomlagringHealth() = stubHealthEndpoint("$k9MellomlagringBasePath/health")
 internal fun WireMockServer.stubK9JoarkHealth() = stubHealthEndpoint("$k9JoarkBasePath/health")
 internal fun WireMockServer.getk9JoarkBaseUrl() = baseUrl() + k9JoarkBasePath
-internal fun WireMockServer.getK9DokumentBaseUrl() = baseUrl() + k9DokumentBasePath
+internal fun WireMockServer.getK9MellomlagringBaseUrl() = baseUrl() + k9MellomlagringBasePath
