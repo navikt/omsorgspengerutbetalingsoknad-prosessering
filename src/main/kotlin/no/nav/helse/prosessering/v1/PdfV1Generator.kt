@@ -212,7 +212,7 @@ private fun SelvstendigNæringsdrivende.somMap(): Map<String, Any?> = mapOf(
     "navnPåVirksomheten" to navnPåVirksomheten,
     "fraOgMed" to DATE_FORMATTER.format(fraOgMed),
     "tilOgMed" to if(tilOgMed != null) DATE_FORMATTER.format(tilOgMed) else null,
-    "registrertINorge" to registrertINorge,
+    "registrertINorge" to registrertINorge.boolean,
     "organisasjonsnummer" to organisasjonsnummer,
     "registrertIUtlandet" to registrertIUtlandet?.somMap(),
     "regnskapsfører" to regnskapsfører?.somMap()
