@@ -87,7 +87,7 @@ internal fun MeldingV1.reportMetrics() {
         erKunFrilanser() ->
             frilansCounter.inc()
 
-        erKunSelvstendigNæringsdrivende() -> { // TODO: 18/10/2021 Fiks for nytt felt
+        erKunSelvstendigNæringsdrivende() -> {
             selvstendigVirksomhetCounter.inc()
             virksomheterMetric()
         }
