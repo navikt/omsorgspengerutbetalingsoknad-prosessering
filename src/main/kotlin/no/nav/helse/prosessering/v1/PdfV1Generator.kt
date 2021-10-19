@@ -13,6 +13,7 @@ import com.openhtmltopdf.util.XRLog
 import no.nav.helse.dusseldorf.ktor.core.fromResources
 import no.nav.helse.omsorgspengerKonfiguert
 import no.nav.helse.prosessering.v1.PdfV1Generator.Companion.DATE_FORMATTER
+import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.time.*
@@ -23,6 +24,7 @@ import java.util.logging.Level
 internal class PdfV1Generator {
     companion object {
         private val mapper = jacksonObjectMapper().omsorgspengerKonfiguert()
+        val logger = LoggerFactory.getLogger("PDFGenerator")
 
         private const val ROOT = "handlebars"
         private const val SOKNAD = "soknad"
@@ -97,6 +99,7 @@ internal class PdfV1Generator {
     internal fun genererSøknadOppsummeringPdf(
         melding: MeldingV1
     ): ByteArray {
+        logger.info("SKAL IKKE VISES I PROD: {}", melding)
         val mottatt = melding.mottatt.toLocalDate()
         XRLog.listRegisteredLoggers().forEach { logger -> XRLog.setLevel(logger, Level.WARNING) }
         soknadTemplate.apply(
