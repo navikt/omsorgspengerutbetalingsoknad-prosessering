@@ -157,49 +157,6 @@ class PdfV1GeneratorTest {
                     telefon = "65484578"
                 )
             ),
-            selvstendigVirksomheter = listOf(
-                SelvstendigNæringsdrivende(
-                    næringstyper = listOf(Næringstyper.ANNEN, Næringstyper.FISKE),
-                    fraOgMed = LocalDate.now(),
-                    erNyoppstartet = true,
-                    tilOgMed = LocalDate.now().plusDays(10),
-                    navnPåVirksomheten = "Kjells Møbelsnekkeri",
-                    registrertINorge = JaNei.Ja,
-                    organisasjonsnummer = "111111",
-                    næringsinntekt = 123456789,
-                    fiskerErPåBladB = JaNei.Ja,
-                    varigEndring = VarigEndring(
-                        dato = LocalDate.now().minusDays(20),
-                        inntektEtterEndring = 234543,
-                        forklaring = "Forklaring som handler om varig endring"
-                    ),
-                    harFlereAktiveVirksomheter = true
-                ),
-                SelvstendigNæringsdrivende(
-                    næringstyper = listOf(Næringstyper.JORDBRUK_SKOGBRUK, Næringstyper.DAGMAMMA, Næringstyper.FISKE),
-                    fiskerErPåBladB = JaNei.Ja,
-                    fraOgMed = LocalDate.now(),
-                    erNyoppstartet = true,
-                    næringsinntekt = 1111,
-                    navnPåVirksomheten = "Tull Og Tøys",
-                    registrertINorge = JaNei.Nei,
-                    registrertIUtlandet = Land(
-                        landkode = "DEU",
-                        landnavn = "Tyskland"
-                    ),
-                    yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeÅrene(LocalDate.now()),
-                    varigEndring = VarigEndring(
-                        dato = LocalDate.now().minusDays(20),
-                        inntektEtterEndring = 234543,
-                        forklaring = "Forklaring som handler om varig endring"
-                    ),
-                    regnskapsfører = Regnskapsfører(
-                        navn = "Bjarne Regnskap",
-                        telefon = "65484578"
-                    ),
-                    harFlereAktiveVirksomheter = true
-                )
-            ),
             fosterbarn = listOf(
                 FosterBarn(
                     fødselsnummer = gyldigFodselsnummerB

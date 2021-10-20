@@ -125,23 +125,22 @@ internal object SøknadUtils {
             harBekreftetOpplysninger = JaNei.Ja,
             harForståttRettigheterOgPlikter = JaNei.Ja
         ),
-        selvstendigVirksomheter = listOf(
-            SelvstendigNæringsdrivende(
-                næringstyper = listOf(Næringstyper.ANNEN, Næringstyper.FISKE),
-                fraOgMed = LocalDate.now(),
-                erNyoppstartet = true,
-                tilOgMed = LocalDate.now().plusDays(10),
-                navnPåVirksomheten = "Kjells Møbelsnekkeri",
-                registrertINorge = JaNei.Ja,
-                næringsinntekt = 123456789,
-                organisasjonsnummer = "111111",
-                varigEndring = VarigEndring(
-                    dato = LocalDate.now().minusDays(20),
-                    inntektEtterEndring = 234543,
-                    forklaring = "Forklaring som handler om varig endring"
-                ),
-                harFlereAktiveVirksomheter = true
-            )
+        selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
+            næringstyper = listOf(Næringstyper.ANNEN, Næringstyper.FISKE),
+            fraOgMed = LocalDate.now(),
+            erNyoppstartet = true,
+            tilOgMed = LocalDate.now().plusDays(10),
+            navnPåVirksomheten = "Kjells Møbelsnekkeri",
+            registrertINorge = JaNei.Ja,
+            næringsinntekt = 123456789,
+            organisasjonsnummer = "111111",
+            varigEndring = VarigEndring(
+                dato = LocalDate.now().minusDays(20),
+                inntektEtterEndring = 234543,
+                forklaring = "Forklaring som handler om varig endring"
+            ),
+            harFlereAktiveVirksomheter = true
+
         ),
         erArbeidstakerOgså = true,
         k9FormatSøknad = defaultK9FormatOmsorgspengerutbetaling()

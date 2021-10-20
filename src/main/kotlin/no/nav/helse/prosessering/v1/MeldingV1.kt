@@ -24,7 +24,6 @@ data class MeldingV1(
     val vedlegg: List<URI>,
     val frilans: Frilans? = null,
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
-    val selvstendigVirksomheter: List<SelvstendigNæringsdrivende> = listOf(),
     val erArbeidstakerOgså: Boolean,
     val bekreftelser: Bekreftelser,
     val k9FormatSøknad: Søknad
