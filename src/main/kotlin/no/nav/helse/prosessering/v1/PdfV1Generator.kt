@@ -12,6 +12,8 @@ import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import com.openhtmltopdf.util.XRLog
 import no.nav.helse.dusseldorf.ktor.core.fromResources
 import no.nav.helse.omsorgspengerKonfiguert
+import no.nav.helse.prosessering.v1.PdfV1Generator.Companion.DATE_FORMATTER
+import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.time.*
@@ -20,7 +22,7 @@ import java.util.*
 import java.util.logging.Level
 
 internal class PdfV1Generator {
-    private companion object {
+    companion object {
         private val mapper = jacksonObjectMapper().omsorgspengerKonfiguert()
 
         private const val ROOT = "handlebars"
@@ -89,8 +91,8 @@ internal class PdfV1Generator {
         private val soknadTemplate = handlebars.compile(SOKNAD)
 
         private val ZONE_ID = ZoneId.of("Europe/Oslo")
-        private val DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(ZONE_ID)
-        private val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").withZone(ZONE_ID)
+        val DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(ZONE_ID)
+        val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").withZone(ZONE_ID)
     }
 
     internal fun genererSøknadOppsummeringPdf(
@@ -121,7 +123,8 @@ internal class PdfV1Generator {
                         "harSøktAndreYtelser" to melding.andreUtbetalinger?.isNotEmpty(),
                         "ikkeHarSendtInnVedlegg" to melding.vedlegg.isEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
-                        "bekreftelser" to melding.bekreftelser.bekreftelserSomMap()
+                        "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
+                        "selvstendigNæringsdrivende" to melding.selvstendigNæringsdrivende?.somMap()
                     )
                 )
                 .resolver(MapValueResolver.INSTANCE)
@@ -197,4 +200,46 @@ private fun String.sprakTilTekst() = when (this.lowercase()) {
     "nb" -> "Bokmål"
     "nn" -> "Nynorsk"
     else -> this
+}
+
+private fun SelvstendigNæringsdrivende.somMap(): Map<String, Any?> = mapOf(
+    "næringsinntekt" to næringsinntekt,
+    "næringstyper" to næringstyper.somMapNæringstyper(),
+    "fiskerErPåBladB" to fiskerErPåBladB,
+    "yrkesaktivSisteTreFerdigliknedeÅrene" to yrkesaktivSisteTreFerdigliknedeÅrene?.somMap(),
+    "varigEndring" to varigEndring?.somMap(),
+    "harFlereAktiveVirksomheter" to harFlereAktiveVirksomheter,
+    "navnPåVirksomheten" to navnPåVirksomheten,
+    "fraOgMed" to DATE_FORMATTER.format(fraOgMed),
+    "tilOgMed" to if(tilOgMed != null) DATE_FORMATTER.format(tilOgMed) else null,
+    "registrertINorge" to registrertINorge.boolean,
+    "organisasjonsnummer" to organisasjonsnummer,
+    "registrertIUtlandet" to registrertIUtlandet?.somMap(),
+    "regnskapsfører" to regnskapsfører?.somMap()
+)
+
+private fun YrkesaktivSisteTreFerdigliknedeÅrene.somMap() : Map<String, Any?> = mapOf(
+    "oppstartsdato" to DATE_FORMATTER.format(oppstartsdato)
+)
+
+private fun VarigEndring.somMap() : Map<String, Any?> = mapOf(
+    "dato" to DATE_FORMATTER.format(dato),
+    "inntektEtterEndring" to inntektEtterEndring,
+    "forklaring" to forklaring
+)
+
+private fun Land.somMap() = mapOf<String, Any?>(
+    "landnavn" to landnavn,
+    "landkode" to landkode
+)
+
+private fun Regnskapsfører.somMap() = mapOf<String, Any?>(
+    "navn" to navn,
+    "telefon" to telefon
+)
+
+private fun List<Næringstyper>.somMapNæringstyper() = map {
+    mapOf(
+        "navn" to it.beskrivelse
+    )
 }

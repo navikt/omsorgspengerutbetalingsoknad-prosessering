@@ -23,7 +23,8 @@ data class MeldingV1(
     val fosterbarn: List<FosterBarn>? = listOf(),
     val vedlegg: List<URI>,
     val frilans: Frilans? = null,
-    val selvstendigVirksomheter: List<Virksomhet> = listOf(),
+    val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
+    val selvstendigVirksomheter: List<SelvstendigNæringsdrivende> = listOf(),
     val erArbeidstakerOgså: Boolean,
     val bekreftelser: Bekreftelser,
     val k9FormatSøknad: Søknad
@@ -40,7 +41,7 @@ data class Frilans(
     val jobberFortsattSomFrilans: Boolean
 )
 
-data class Virksomhet(
+data class SelvstendigNæringsdrivende(
     val næringstyper: List<Næringstyper> = listOf(),
     val fiskerErPåBladB: JaNei? = JaNei.Nei,
     @JsonFormat(pattern = "yyyy-MM-dd")

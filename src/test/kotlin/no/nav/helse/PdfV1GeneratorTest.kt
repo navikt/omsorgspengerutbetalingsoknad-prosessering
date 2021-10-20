@@ -135,8 +135,30 @@ class PdfV1GeneratorTest {
                 sluttdato = LocalDate.now().minusYears(1),
                 jobberFortsattSomFrilans = false
             ),
+            selvstendigNæringsdrivende =  SelvstendigNæringsdrivende(
+                næringstyper = listOf(Næringstyper.ANNEN, Næringstyper.FISKE),
+                fraOgMed = LocalDate.now(),
+                yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeÅrene(LocalDate.now()),
+                erNyoppstartet = true,
+                tilOgMed = LocalDate.now().plusDays(10),
+                navnPåVirksomheten = "Kjells Møbelsnekkeri",
+                registrertINorge = JaNei.Ja,
+                organisasjonsnummer = "111111",
+                næringsinntekt = 123456789,
+                fiskerErPåBladB = JaNei.Ja,
+                varigEndring = VarigEndring(
+                    dato = LocalDate.now().minusDays(20),
+                    inntektEtterEndring = 234543,
+                    forklaring = "Forklaring som handler om varig endring"
+                ),
+                harFlereAktiveVirksomheter = true,
+                regnskapsfører = Regnskapsfører(
+                    navn = "Bjarne Regnskap",
+                    telefon = "65484578"
+                )
+            ),
             selvstendigVirksomheter = listOf(
-                Virksomhet(
+                SelvstendigNæringsdrivende(
                     næringstyper = listOf(Næringstyper.ANNEN, Næringstyper.FISKE),
                     fraOgMed = LocalDate.now(),
                     erNyoppstartet = true,
@@ -153,7 +175,7 @@ class PdfV1GeneratorTest {
                     ),
                     harFlereAktiveVirksomheter = true
                 ),
-                Virksomhet(
+                SelvstendigNæringsdrivende(
                     næringstyper = listOf(Næringstyper.JORDBRUK_SKOGBRUK, Næringstyper.DAGMAMMA, Næringstyper.FISKE),
                     fiskerErPåBladB = JaNei.Ja,
                     fraOgMed = LocalDate.now(),
