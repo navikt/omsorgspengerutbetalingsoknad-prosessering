@@ -125,23 +125,9 @@ private fun MeldingV1.virksomheterMetric() {
             )
             .inc()
     }
-
-    selvstendigVirksomheter.forEach { // TODO: 19/10/2021 Utgår når nytt felt prodsettes
-        val næringsTypeSomString = it.næringstyper.sortedDescending().joinToString(" , ")
-        virksomhetsCounter
-            .labels(
-                næringsTypeSomString,
-                it.fiskerErPåBladB?.boolean?.tilJaEllerNei() ?: "Nei",
-                it.registrertINorge.boolean.tilJaEllerNei(),
-                if (it.regnskapsfører == null) "Nei" else "Ja",
-                if (it.varigEndring == null) "Nei" else "Ja",
-                if (it.yrkesaktivSisteTreFerdigliknedeÅrene == null) "Nei" else "Ja"
-            )
-            .inc()
-    }
 }
 private fun MeldingV1.erFrilanser() = frilans != null
-private fun MeldingV1.erSelvstendigNæringsdrivende() = selvstendigVirksomheter.isNotEmpty() || selvstendigNæringsdrivende != null
+private fun MeldingV1.erSelvstendigNæringsdrivende() = selvstendigNæringsdrivende != null
 private fun MeldingV1.erArbeidstaker() = erArbeidstakerOgså
 
 private fun MeldingV1.erKunFrilanser() = erFrilanser() && !erSelvstendigNæringsdrivende() && !erArbeidstaker()

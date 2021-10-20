@@ -245,33 +245,32 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             søker = defaultSøknad.søker.copy(
                 fødselsnummer = gyldigFodselsnummerA
             ),
-            selvstendigVirksomheter = listOf(
-                SelvstendigNæringsdrivende(
-                    næringstyper = listOf(Næringstyper.JORDBRUK_SKOGBRUK, Næringstyper.DAGMAMMA, Næringstyper.FISKE),
-                    fiskerErPåBladB = JaNei.Ja,
-                    fraOgMed = LocalDate.now(),
-                    næringsinntekt = 1111,
-                    navnPåVirksomheten = "Tull Og Tøys",
-                    registrertINorge = JaNei.Nei,
-                    registrertIUtlandet = Land(
-                        landkode = "DK",
-                        landnavn = "Danmark"
-                    ),
-                    yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeÅrene(LocalDate.now()),
-                    erNyoppstartet = true,
-                    varigEndring = VarigEndring(
-                        dato = LocalDate.now().minusDays(20),
-                        inntektEtterEndring = 234543,
-                        forklaring = "Forklaring som handler om varig endring"
-                    ),
-                    regnskapsfører = Regnskapsfører(
-                        navn = "Bjarne Regnskap",
-                        telefon = "65484578"
-                    ),
-                    harFlereAktiveVirksomheter = true
-                )
+            selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
+                næringstyper = listOf(Næringstyper.JORDBRUK_SKOGBRUK, Næringstyper.DAGMAMMA, Næringstyper.FISKE),
+                fiskerErPåBladB = JaNei.Ja,
+                fraOgMed = LocalDate.now(),
+                næringsinntekt = 1111,
+                navnPåVirksomheten = "Tull Og Tøys",
+                registrertINorge = JaNei.Nei,
+                registrertIUtlandet = Land(
+                    landkode = "DK",
+                    landnavn = "Danmark"
+                ),
+                yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeÅrene(LocalDate.now()),
+                erNyoppstartet = true,
+                varigEndring = VarigEndring(
+                    dato = LocalDate.now().minusDays(20),
+                    inntektEtterEndring = 234543,
+                    forklaring = "Forklaring som handler om varig endring"
+                ),
+                regnskapsfører = Regnskapsfører(
+                    navn = "Bjarne Regnskap",
+                    telefon = "65484578"
+                ),
+                harFlereAktiveVirksomheter = true
             )
         )
+
 
         kafkaTestProducer.leggTilMottak(melding)
         assertInnsending(melding)

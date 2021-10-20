@@ -20,7 +20,6 @@ data class PreprossesertMeldingV1(
     val fosterbarn: List<FosterBarn>? = listOf(),
     val frilans: Frilans? = null,
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
-    val selvstendigVirksomheter: List<SelvstendigNæringsdrivende> = listOf(),
     val bekreftelser: Bekreftelser,
     val k9FormatSøknad: Søknad
 ) {
@@ -42,7 +41,6 @@ data class PreprossesertMeldingV1(
         fosterbarn = melding.fosterbarn,
         frilans = melding.frilans,
         selvstendigNæringsdrivende = melding.selvstendigNæringsdrivende,
-        selvstendigVirksomheter = melding.selvstendigVirksomheter,
         bekreftelser = melding.bekreftelser,
         k9FormatSøknad = melding.k9FormatSøknad
     )
