@@ -3,7 +3,7 @@
 ![NAIS Alerts](https://github.com/navikt/omsorgspengerutbetalingsoknad-prosessering/workflows/Alerts/badge.svg)
 
 Tjeneste som prosesserer søknader om omsorgspengerutbetaling.
-Leser søknader fra Kafka topic `privat-omsorgspengerutbetaling-mottatt` som legges der av [omsorgspengerutbetalingsoknad-mottak](https://github.com/navikt/omsorgspengerutbetalingsoknad-mottak)
+Leser søknader fra Kafka topic `privat-omsorgspengerutbetaling-mottatt` som legges der av [omsorgspengerutbetalig-api](https://github.com/navikt/omsorgspengerutbetaling-api)
 
 ## Prosessering
 - Genererer Søknad-PDF
