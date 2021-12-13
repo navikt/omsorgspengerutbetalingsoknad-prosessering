@@ -2,7 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val dusseldorfKtorVersion = "3.1.6.4-e07c5ec"
-val k9FormatVersion = "5.4.25"
+val k9FormatVersion = "5.5.20"
 val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.3.0"
 
