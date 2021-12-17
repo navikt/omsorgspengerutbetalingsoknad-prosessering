@@ -39,8 +39,7 @@ class SøknadsformatTest {
                           "perioder": {
                             "2018-01-01/2020-01-01": {
                               "virksomhetstyper": [
-                                "DAGMAMMA",
-                                "ANNEN"
+                                "DAGMAMMA"
                               ],
                               "regnskapsførerNavn": "Regnskapsfører Svensen",
                               "regnskapsførerTlf": "+4799887766",
@@ -56,22 +55,6 @@ class SøknadsformatTest {
                           },
                           "organisasjonsnummer": "12345678910112233444455667",
                           "virksomhetNavn": "Mamsen Bamsen AS"
-                        },
-                        {
-                          "perioder": {
-                            "2015-01-01/2017-01-01": {
-                              "virksomhetstyper": [
-                                "FISKE"
-                              ],
-                              "erVarigEndring": false,
-                              "bruttoInntekt": 500000,
-                              "erNyoppstartet": false,
-                              "registrertIUtlandet": true,
-                              "landkode": "ESP"
-                            }
-                          },
-                          "organisasjonsnummer": "54549049090490498048940940",
-                          "virksomhetNavn": "Something Fishy AS"
                         }
                       ],
                       "frilanser": {
@@ -86,17 +69,22 @@ class SøknadsformatTest {
                         "årsak": "STENGT_SKOLE_ELLER_BARNEHAGE",
                         "aktivitetFravær": ["FRILANSER"],
                         "søknadÅrsak": null,
-                        "arbeidsgiverOrgNr": null
+                        "arbeidsgiverOrgNr": null,
+                        "arbeidsforholdId": null
                       },
                       {
                         "periode": "2020-01-06/2020-01-10",
                         "duration": "PT4H",
                         "årsak": "SMITTEVERNHENSYN",
-                        "aktivitetFravær": ["SELVSTENDIG_VIRKSOMHET"],
                         "søknadÅrsak": null,
+                        "aktivitetFravær": [
+                          "SELVSTENDIG_VIRKSOMHET"
+                        ],
+                        "arbeidsforholdId": null,
                         "arbeidsgiverOrgNr": null
                       }
                     ],
+                    "fraværsperioderKorrigeringIm": null,
                     "bosteder": {
                        "perioder": {
                         "2020-01-01/2020-01-05": {
@@ -122,7 +110,10 @@ class SøknadsformatTest {
                       "perioderSomSkalSlettes": {}
                     }
                   },
-                  "journalposter": []
+                  "journalposter": [],
+                  "begrunnelseForInnsending": {
+                    "tekst": null
+                  }
                 }
         """.trimIndent(), String(json), true
         )
