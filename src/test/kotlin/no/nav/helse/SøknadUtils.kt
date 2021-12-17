@@ -28,7 +28,6 @@ import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende as K9SelvstendigNæringsdrivende
-import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn
 
 internal object SøknadUtils {
     internal val objectMapper = jacksonObjectMapper().omsorgspengerKonfiguert()
@@ -151,109 +150,95 @@ internal object SøknadUtils {
         Versjon.of("1.0"),
         ZonedDateTime.parse("2020-01-01T10:00:00Z"),
         no.nav.k9.søknad.felles.personopplysninger.Søker(NorskIdentitetsnummer.of("12345678910")),
-        OmsorgspengerUtbetaling(
-            listOf(
-                K9Barn(NorskIdentitetsnummer.of("10987654321"), null)
-            ),
-            OpptjeningAktivitet(
+        OmsorgspengerUtbetaling()
+            .medFosterbarn(
+                listOf(no.nav.k9.søknad.felles.personopplysninger.Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("10987654321")))
+            )
+            .medFraværsperioder(
                 listOf(
-                    K9SelvstendigNæringsdrivende(
-                        mapOf(
-                            Periode(
-                                LocalDate.parse("2018-01-01"),
-                                LocalDate.parse("2020-01-01")
-                            ) to K9SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
-                                .erNyoppstartet(true)
-                                .registrertIUtlandet(false)
-                                .bruttoInntekt(BigDecimal(5_000_000))
-                                .erVarigEndring(true)
-                                .endringDato(LocalDate.parse("2020-01-01"))
-                                .endringBegrunnelse("Grunnet Covid-19")
-                                .landkode(Landkode.NORGE)
-                                .regnskapsførerNavn("Regnskapsfører Svensen")
-                                .regnskapsførerTelefon("+4799887766")
-                                .virksomhetstyper(listOf(VirksomhetType.DAGMAMMA, VirksomhetType.ANNEN))
-                                .erNyIArbeidslivet(true)
-                                .build()
-                        ),
-                        Organisasjonsnummer.of("12345678910112233444455667"),
-                        "Mamsen Bamsen AS"
+                    FraværPeriode(
+                        Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-05")),
+                        Duration.ofHours(7),
+                        FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE,
+                        null,
+                        listOf(AktivitetFravær.FRILANSER),
+                        null,
+                        null
                     ),
-                    K9SelvstendigNæringsdrivende(
-                        mapOf(
-                            Periode(
-                                LocalDate.parse("2015-01-01"),
-                                LocalDate.parse("2017-01-01")
-                            ) to K9SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo.builder()
-                                .erNyoppstartet(false)
-                                .registrertIUtlandet(true)
-                                .bruttoInntekt(BigDecimal(500_000))
-                                .erVarigEndring(false)
-                                .endringDato(null)
-                                .endringBegrunnelse(null)
-                                .landkode(Landkode.SPANIA)
-                                .regnskapsførerNavn(null)
-                                .regnskapsførerTelefon(null)
-                                .virksomhetstyper(listOf(VirksomhetType.FISKE))
-                                .build()
-                        ),
-                        Organisasjonsnummer.of("54549049090490498048940940"),
-                        "Something Fishy AS"
-                    ),
-                ),
-                Frilanser(LocalDate.parse("2020-01-01"), null),
-                null,
-                null
-            ),
-            listOf(
-                FraværPeriode(
-                    Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-05")),
-                    Duration.ofHours(7),
-                    FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE,
-                    null,
-                    listOf(AktivitetFravær.FRILANSER),
-                    null
-                ),
-                FraværPeriode(
-                    Periode(LocalDate.parse("2020-01-06"), LocalDate.parse("2020-01-10")),
-                    Duration.ofHours(4),
-                    FraværÅrsak.SMITTEVERNHENSYN,
-                    null,
-                    listOf(AktivitetFravær.SELVSTENDIG_VIRKSOMHET),
-                    null
-                )
-            ),
-            Bosteder().medPerioder(
-                mapOf(
-                    Periode(
-                        LocalDate.parse("2020-01-01"),
-                        LocalDate.parse("2020-01-05")
-                    ) to Bosteder.BostedPeriodeInfo().medLand(Landkode.SPANIA),
-                    Periode(
-                        LocalDate.parse("2020-01-06"),
-                        LocalDate.parse("2020-01-10")
-                    ) to Bosteder.BostedPeriodeInfo().medLand(Landkode.NORGE)
-                )
-            ),
-            Utenlandsopphold().medPerioder(
-                mapOf(
-                    Periode(
-                        LocalDate.parse("2020-01-01"),
-                        LocalDate.parse("2020-01-05")
-                    ) to Utenlandsopphold.UtenlandsoppholdPeriodeInfo()
-                        .medLand(Landkode.CANADA)
-                        .medÅrsak(BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD),
-                    Periode(
-                        LocalDate.parse("2020-01-06"),
-                        LocalDate.parse("2020-01-10")
-                    ) to Utenlandsopphold.UtenlandsoppholdPeriodeInfo()
-                        .medLand(Landkode.SVERIGE)
-                        .medÅrsak(BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING)
+                    FraværPeriode(
+                        Periode(LocalDate.parse("2020-01-06"), LocalDate.parse("2020-01-10")),
+                        Duration.ofHours(4),
+                        FraværÅrsak.SMITTEVERNHENSYN,
+                        null,
+                        listOf(AktivitetFravær.SELVSTENDIG_VIRKSOMHET),
+                        null,
+                        null
+                    )
                 )
             )
-        )
+            .medBosteder(
+                Bosteder().medPerioder(
+                    mapOf(
+                        Periode(
+                            LocalDate.parse("2020-01-01"),
+                            LocalDate.parse("2020-01-05")
+                        ) to Bosteder.BostedPeriodeInfo().medLand(Landkode.SPANIA),
+                        Periode(
+                            LocalDate.parse("2020-01-06"),
+                            LocalDate.parse("2020-01-10")
+                        ) to Bosteder.BostedPeriodeInfo().medLand(Landkode.NORGE)
+                    )
+                )
+            )
+            .medUtenlandsopphold(
+                Utenlandsopphold().medPerioder(
+                    mapOf(
+                        Periode(
+                            LocalDate.parse("2020-01-01"),
+                            LocalDate.parse("2020-01-05")
+                        ) to Utenlandsopphold.UtenlandsoppholdPeriodeInfo()
+                            .medLand(Landkode.CANADA)
+                            .medÅrsak(BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD),
+                        Periode(
+                            LocalDate.parse("2020-01-06"),
+                            LocalDate.parse("2020-01-10")
+                        ) to Utenlandsopphold.UtenlandsoppholdPeriodeInfo()
+                            .medLand(Landkode.SVERIGE)
+                            .medÅrsak(BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING)
+                    )
+                )
+            )
+            .medAktivitet(
+                OpptjeningAktivitet()
+                    .medFrilanser(
+                        Frilanser().medStartDato(LocalDate.parse("2020-01-01"))
+                    )
+                    .medSelvstendigNæringsdrivende(
+                        K9SelvstendigNæringsdrivende()
+                            .medVirksomhetNavn("Mamsen Bamsen AS")
+                            .medOrganisasjonsnummer(Organisasjonsnummer.of("12345678910112233444455667"))
+                            .medPerioder(
+                                mapOf(
+                                    Periode(
+                                        LocalDate.parse("2018-01-01"),
+                                        LocalDate.parse("2020-01-01")
+                                    ) to no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo()
+                                        .medErNyoppstartet(true)
+                                        .medRegistrertIUtlandet(false)
+                                        .medBruttoInntekt(BigDecimal(5_000_000L))
+                                        .medErVarigEndring(true)
+                                        .medEndringDato(LocalDate.parse("2020-01-01"))
+                                        .medEndringBegrunnelse("Grunnet Covid-19")
+                                        .medLandkode(Landkode.NORGE)
+                                        .medRegnskapsførerNavn("Regnskapsfører Svensen")
+                                        .medRegnskapsførerTlf("+4799887766")
+                                        .medVirksomhetstyper(listOf(VirksomhetType.DAGMAMMA))
+                                        .medErNyIArbeidslivet(true)
+                                )
+                            )
+                    )
+            ),
     )
 }
-
 
 internal fun MeldingV1.somJson() = SøknadUtils.objectMapper.writeValueAsString(this)
