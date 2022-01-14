@@ -2,7 +2,8 @@ package no.nav.helse
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.helse.prosessering.v1.*
-import no.nav.helse.prosessering.v1.AktivitetFravær.*
+import no.nav.helse.prosessering.v1.AktivitetFravær.FRILANSER
+import no.nav.helse.prosessering.v1.AktivitetFravær.SELVSTENDIG_VIRKSOMHET
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.fravær.AktivitetFravær
@@ -14,15 +15,9 @@ import no.nav.k9.søknad.felles.personopplysninger.Bosteder
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING
-import no.nav.k9.søknad.felles.type.Landkode
-import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9.søknad.felles.type.Organisasjonsnummer
-import no.nav.k9.søknad.felles.type.Periode
-import no.nav.k9.søknad.felles.type.SøknadId
-import no.nav.k9.søknad.felles.type.VirksomhetType
+import no.nav.k9.søknad.felles.type.*
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling
 import java.math.BigDecimal
-import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -115,10 +110,10 @@ internal object SøknadUtils {
                 fødselsnummer = "02119970078"
             )
         ),
-        vedlegg = listOf(
-            URI("http://localhost:8080/vedlegg/1"),
-            URI("http://localhost:8080/vedlegg/2"),
-            URI("http://localhost:8080/vedlegg/3")
+        vedleggId = listOf(
+            "123",
+            "456",
+            "789"
         ),
         bekreftelser = Bekreftelser(
             harBekreftetOpplysninger = JaNei.Ja,
