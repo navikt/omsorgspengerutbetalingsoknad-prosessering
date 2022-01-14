@@ -128,8 +128,7 @@ class PdfV1GeneratorTest {
                 )
             ),
             andreUtbetalinger = listOf("dagpenger", "sykepenger", "midlertidigkompensasjonsnfri"),
-            vedlegg = listOf(
-            ),
+            vedleggId = listOf("12345"),
             frilans = Frilans(
                 startdato = LocalDate.now().minusYears(3),
                 sluttdato = LocalDate.now().minusYears(1),

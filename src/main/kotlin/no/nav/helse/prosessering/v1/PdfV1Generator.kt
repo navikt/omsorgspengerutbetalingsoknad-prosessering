@@ -13,12 +13,13 @@ import com.openhtmltopdf.util.XRLog
 import no.nav.helse.dusseldorf.ktor.core.fromResources
 import no.nav.helse.omsorgspengerKonfiguert
 import no.nav.helse.prosessering.v1.PdfV1Generator.Companion.DATE_FORMATTER
-import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.time.*
+import java.time.Duration
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 import java.util.logging.Level
 
 internal class PdfV1Generator {
@@ -121,7 +122,7 @@ internal class PdfV1Generator {
                         "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harSøktAndreYtelser" to melding.andreUtbetalinger.isNotEmpty(),
-                        "ikkeHarSendtInnVedlegg" to melding.vedlegg.isEmpty(),
+                        "ikkeHarSendtInnVedlegg" to melding.vedleggId.isEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
                         "selvstendigNæringsdrivende" to melding.selvstendigNæringsdrivende?.somMap()

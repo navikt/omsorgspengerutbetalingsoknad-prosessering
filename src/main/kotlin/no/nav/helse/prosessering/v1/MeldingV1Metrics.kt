@@ -69,7 +69,7 @@ private val utbetalingsperioderCounter = Counter.build()
     .register()
 
 internal fun MeldingV1.reportMetrics() {
-    opplastedeVedleggHistogram.observe(vedlegg.size.toDouble())
+    opplastedeVedleggHistogram.observe(vedleggId.size.toDouble())
 
     utbetalingsperioderCounter.labels(
         this.utbetalingsperioder.søkerBareOmTimer(),

@@ -62,10 +62,6 @@ internal class PreprosesseringV1Service(
             melding.vedleggId.forEach { komplettDokumentId.add(listOf(it)) }
         }
 
-        if(melding.vedlegg.isNotEmpty()){
-            melding.vedlegg.forEach { komplettDokumentId.add(listOf(it.dokumentId())) }
-        }
-
         logger.info("Totalt ${komplettDokumentId.size} dokumentbolker med totalt ${komplettDokumentId.flatten().size} dokumenter.")
 
         val preprossesertMeldingV1 = PreprossesertMeldingV1(
