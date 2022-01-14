@@ -13,7 +13,8 @@ import no.nav.common.KafkaEnvironment
 import no.nav.helse.SøknadUtils.defaultSøknad
 import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
 import no.nav.helse.prosessering.v1.*
-import org.json.JSONObject
+import no.nav.helse.prosessering.v1.asynkron.TopicEntry
+import no.nav.helse.prosessering.v1.asynkron.deserialiserTilCleanup
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.slf4j.Logger
@@ -206,8 +207,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
 
     @Test
-    fun `Forvent 2 legeerklæringer og 2 samværsavtaler dersom den er satt i melding`() {
-
+    fun `Forvent 3 vedlegg fra søknad og 2 fra prosessering`() {
         val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
             søker = defaultSøknad.søker.copy(
@@ -217,11 +217,14 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
         kafkaTestProducer.leggTilMottak(melding)
 
-        val dokumentUrls = JSONObject(cleanupKonsumer.hentCleanupMelding(melding.søknadId))
-            .getJSONObject("data").getJSONObject("preprosessertMelding").getJSONArray("dokumentUrls")
+        val dokumentIds = TopicEntry(cleanupKonsumer.hentCleanupMelding(melding.søknadId))
+            .deserialiserTilCleanup()
+            .preprosessertMelding
+            .dokumentId
+            .flatten()
 
-        // 2 legeerklæringsvedlegg, 2, to samværsavtalevedlegg, og 1 søknadPdf.
-        assertEquals(4, dokumentUrls.length())
+        // 3 vedlegg fra søknad, 1 søknadPdf og 1 søknadJson.
+        assertEquals(5, dokumentIds.size)
         assertInnsending(melding)
     }
 

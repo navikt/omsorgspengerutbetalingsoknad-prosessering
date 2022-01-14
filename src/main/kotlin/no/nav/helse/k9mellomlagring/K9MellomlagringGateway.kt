@@ -6,8 +6,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
 import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpPost
-import io.ktor.http.HttpHeaders
-import io.ktor.http.Url
+import io.ktor.http.*
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -91,7 +90,7 @@ class K9MellomlagringGateway(
     }
 
     internal suspend fun slettDokmenter(
-        urls: List<URI>,
+        dokumentId: List<String>,
         dokumentEier: DokumentEier,
         correlationId: CorrelationId
     ) {
@@ -99,10 +98,14 @@ class K9MellomlagringGateway(
 
         coroutineScope {
             val deferred = mutableListOf<Deferred<Unit>>()
-            urls.forEach {
+            dokumentId.forEach { dokumentId ->
                 deferred.add(async {
+                    val url = Url.buildURL(
+                        baseUrl = komplettUrl,
+                        pathParts = listOf(dokumentId)
+                    )
                     requestSlettDokument(
-                        url = it,
+                        url = url,
                         correlationId = correlationId,
                         dokumentEier = dokumentEier,
                         authorizationHeader = authorizationHeader

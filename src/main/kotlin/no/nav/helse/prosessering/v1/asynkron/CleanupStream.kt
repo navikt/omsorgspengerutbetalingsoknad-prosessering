@@ -1,10 +1,9 @@
 package no.nav.helse.prosessering.v1.asynkron
 
 import no.nav.helse.CorrelationId
-import no.nav.helse.aktoer.AktørId
-import no.nav.helse.k9mellomlagring.K9MellomlagringService
 import no.nav.helse.erEtter
 import no.nav.helse.k9mellomlagring.DokumentEier
+import no.nav.helse.k9mellomlagring.K9MellomlagringService
 import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
@@ -50,7 +49,7 @@ internal class CleanupStream(
 
                         val cleanup = entry.deserialiserTilCleanup()
                         k9MellomlagringService.slettDokumeter(
-                            urlBolks = cleanup.preprosessertMelding.dokumentUrls,
+                            dokumentIdBolks = cleanup.preprosessertMelding.dokumentId,
                             correlationId = CorrelationId(entry.metadata.correlationId),
                             dokumentEier = DokumentEier(cleanup.preprosessertMelding.søker.fødselsnummer)
                         )
