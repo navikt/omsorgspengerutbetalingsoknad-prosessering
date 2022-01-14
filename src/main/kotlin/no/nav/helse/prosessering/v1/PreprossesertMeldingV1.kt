@@ -2,7 +2,6 @@ package no.nav.helse.prosessering.v1
 
 import no.nav.helse.aktoer.AktørId
 import no.nav.k9.søknad.Søknad
-import java.net.URI
 import java.time.ZonedDateTime
 
 data class PreprossesertMeldingV1(
@@ -14,7 +13,7 @@ data class PreprossesertMeldingV1(
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
-    val dokumentUrls: List<List<URI>>,
+    val dokumentId: List<List<String>>,
     val utbetalingsperioder: List<Utbetalingsperiode>,
     val andreUtbetalinger: List<String>,
     val fosterbarn: List<FosterBarn>? = listOf(),
@@ -25,7 +24,7 @@ data class PreprossesertMeldingV1(
 ) {
     internal constructor(
         melding: MeldingV1,
-        dokumentUrls: List<List<URI>>,
+        dokumentId: List<List<String>>,
     ) : this(
         soknadId = melding.søknadId,
         mottatt = melding.mottatt,
@@ -34,7 +33,7 @@ data class PreprossesertMeldingV1(
         bosteder = melding.bosteder,
         opphold = melding.opphold,
         spørsmål = melding.spørsmål,
-        dokumentUrls = dokumentUrls,
+        dokumentId = dokumentId,
         harDekketTiFørsteDagerSelv = melding.harDekketTiFørsteDagerSelv,
         utbetalingsperioder = melding.utbetalingsperioder,
         andreUtbetalinger = melding.andreUtbetalinger,

@@ -1,10 +1,6 @@
 package no.nav.helse.k9mellomlagring
 
 import no.nav.helse.CorrelationId
-import no.nav.helse.aktoer.AktørId
-import no.nav.k9.søknad.Søknad
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.net.URI
 
 class K9MellomlagringService(
@@ -22,12 +18,12 @@ class K9MellomlagringService(
     }
 
     internal suspend fun slettDokumeter(
-        urlBolks: List<List<URI>>,
+        dokumentIdBolks: List<List<String>>,
         dokumentEier: DokumentEier,
         correlationId : CorrelationId
     ) {
         k9MellomlagringGateway.slettDokmenter(
-            urls = urlBolks.flatten(),
+            dokumentId = dokumentIdBolks.flatten(),
             dokumentEier = dokumentEier,
             correlationId = correlationId
         )
