@@ -169,7 +169,15 @@ class PdfV1GeneratorTest {
                     navn = "Barn Barnesen",
                     fødselsdato = LocalDate.parse("2021-01-01"),
                     aktørId = "1000000000001",
-                    identitetsnummer = gyldigFodselsnummerB
+                    identitetsnummer = gyldigFodselsnummerB,
+                    utvidetRett = false
+                ),
+                Barn(
+                    navn = "Barn Barnesen V2",
+                    fødselsdato = LocalDate.parse("2021-01-01"),
+                    aktørId = "1000000000001",
+                    identitetsnummer = gyldigFodselsnummerB,
+                    utvidetRett = true
                 )
             ),
             bekreftelser = Bekreftelser(

@@ -250,6 +250,8 @@ private fun List<Barn>.somMap() = map {
     mapOf(
         "navn" to it.navn,
         "fødselsdato" to it.fødselsdato,
-        "identitetsnummer" to it.identitetsnummer
+        "identitetsnummer" to it.identitetsnummer,
+        "utvidetRettSatt" to (it.utvidetRett != null),
+        "utvidetRett" to it.utvidetRett
     )
 }

@@ -49,6 +49,9 @@
             {{# each barn as |barn|}}
                 <p>{{ barn.navn }}</p>
                 <p>{{ barn.identitetsnummer }}</p>
+                {{#if barn.utvidetRettSatt}}
+                    <p>Utvidet rett: {{jaNeiSvar barn.utvidetRett}}</p>
+                {{/if}}
             {{/each}}
         {{/if}}
     </div>
