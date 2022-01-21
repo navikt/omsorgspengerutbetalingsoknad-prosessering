@@ -164,6 +164,14 @@ class PdfV1GeneratorTest {
                     fødselsnummer = gyldigFodselsnummerC
                 )
             ),
+            barn = listOf(
+                Barn(
+                    navn = "Barn Barnesen",
+                    fødselsdato = LocalDate.parse("2021-01-01"),
+                    aktørId = "1000000000001",
+                    identitetsnummer = gyldigFodselsnummerB
+                )
+            ),
             bekreftelser = Bekreftelser(
                 harBekreftetOpplysninger = JaNei.Ja,
                 harForståttRettigheterOgPlikter = JaNei.Ja
@@ -194,4 +202,7 @@ class PdfV1GeneratorTest {
     fun `opprett lesbar oppsummerings-PDF`() {
         genererOppsummeringsPdfer(true)
     }
+
+    // TODO: 21/01/2022 Lage test som sjekker at map som produseres er som forventet. Sikrer at vi oppdager dersom noe faller ut
+
 }

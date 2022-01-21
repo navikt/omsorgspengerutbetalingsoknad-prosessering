@@ -20,12 +20,21 @@ data class MeldingV1(
     val utbetalingsperioder: List<Utbetalingsperiode>,
     val andreUtbetalinger: List<String>,
     val fosterbarn: List<FosterBarn>? = listOf(),
+    val barn: List<Barn> = listOf(),
     val vedleggId: List<String> = listOf(),
     val frilans: Frilans? = null,
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
     val erArbeidstakerOgså: Boolean,
     val bekreftelser: Bekreftelser,
     val k9FormatSøknad: Søknad
+)
+
+data class Barn(
+    val navn: String,
+    val fødselsdato: LocalDate,
+    var identitetsnummer: String,
+    val aktørId: String? = null,
+    val utvidetRett: Boolean? = null
 )
 
 data class Bekreftelser(

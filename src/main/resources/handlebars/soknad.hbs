@@ -43,6 +43,14 @@
                 <br/>
             {{/each}}
         {{/if}}
+
+        {{#if barn}}
+            <p> <b>Barn</b></p>
+            {{# each barn as |barn|}}
+                <p>{{ barn.navn }}</p>
+                <p>{{ barn.identitetsnummer }}</p>
+            {{/each}}
+        {{/if}}
     </div>
 
     <section id="utbetalingsperioder">

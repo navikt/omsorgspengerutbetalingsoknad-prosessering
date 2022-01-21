@@ -120,6 +120,7 @@ internal class PdfV1Generator {
                             }
                         ),
                         "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
+                        "barn" to if(melding.barn.isNotEmpty()) melding.barn.somMap() else null,
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harSøktAndreYtelser" to melding.andreUtbetalinger.isNotEmpty(),
                         "ikkeHarSendtInnVedlegg" to melding.vedleggId.isEmpty(),
@@ -242,5 +243,13 @@ private fun Regnskapsfører.somMap() = mapOf<String, Any?>(
 private fun List<Næringstyper>.somMapNæringstyper() = map {
     mapOf(
         "navn" to it.beskrivelse
+    )
+}
+
+private fun List<Barn>.somMap() = map {
+    mapOf(
+        "navn" to it.navn,
+        "fødselsdato" to it.fødselsdato,
+        "identitetsnummer" to it.identitetsnummer
     )
 }
