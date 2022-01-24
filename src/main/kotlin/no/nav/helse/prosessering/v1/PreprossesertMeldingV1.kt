@@ -9,7 +9,7 @@ data class PreprossesertMeldingV1(
     val mottatt: ZonedDateTime,
     val søker: PreprossesertSøker,
     val språk: String?,
-    val harDekketTiFørsteDagerSelv: Boolean,
+    val harDekketTiFørsteDagerSelv: Boolean?,
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
