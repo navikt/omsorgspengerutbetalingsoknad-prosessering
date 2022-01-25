@@ -123,6 +123,8 @@
                 <li>
                     {{#eq utbetaling "midlertidigkompensasjonsnfri"}}
                         Midlertidig kompensasjon for selvstendig næringsdrivende og frilansere
+                    {{else eq utbetaling "MIDLERTIDIG_KOMPENSASJON_SN_FRI"}}
+                        Midlertidig kompensasjon for selvstendig næringsdrivende og frilansere
                     {{else}}
                         {{#storForbokstav utbetaling}}{{/storForbokstav}} <br/>
                     {{/eq}}
