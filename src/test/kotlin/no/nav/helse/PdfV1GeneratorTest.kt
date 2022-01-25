@@ -1,6 +1,7 @@
 package no.nav.helse
 
 import no.nav.helse.prosessering.v1.*
+import no.nav.helse.prosessering.v1.AndreUtbetalinger.*
 import java.io.File
 import java.time.Duration
 import java.time.LocalDate
@@ -127,7 +128,7 @@ class PdfV1GeneratorTest {
                     aktivitetFravær = listOf(AktivitetFravær.FRILANSER, AktivitetFravær.SELVSTENDIG_VIRKSOMHET)
                 )
             ),
-            andreUtbetalinger = listOf("dagpenger", "sykepenger", "MIDLERTIDIG_KOMPENSASJON_SN_FRI"),
+            andreUtbetalinger = listOf(DAGPENGER, SYKEPENGER, MIDLERTIDIG_KOMPENSASJON_SN_FRI ),
             vedleggId = listOf("12345"),
             frilans = Frilans(
                 startdato = LocalDate.now().minusYears(3),

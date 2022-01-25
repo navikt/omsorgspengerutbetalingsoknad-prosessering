@@ -1,5 +1,6 @@
 package no.nav.helse.prosessering.v1
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonValue
@@ -18,7 +19,7 @@ data class MeldingV1(
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
     val utbetalingsperioder: List<Utbetalingsperiode>,
-    val andreUtbetalinger: List<String>,
+    val andreUtbetalinger: List<AndreUtbetalinger>,
     val fosterbarn: List<FosterBarn>? = listOf(),
     val barn: List<Barn> = listOf(),
     val vedleggId: List<String> = listOf(),
@@ -28,6 +29,12 @@ data class MeldingV1(
     val bekreftelser: Bekreftelser,
     val k9FormatSøknad: Søknad
 )
+
+enum class AndreUtbetalinger (val pdfTekst: String){ // TODO: 24/01/2022 Fjerne JsonAlias når api er oppdatert
+    @JsonAlias("dagpenger") DAGPENGER("Dagpenger"),
+    @JsonAlias("sykepenger") SYKEPENGER("Sykepenger"),
+    @JsonAlias("midlertidigkompensasjonsnfri") MIDLERTIDIG_KOMPENSASJON_SN_FRI ("Midlertidig kompensasjon for selvstendig næringsdrivende og frilansere")
+}
 
 data class Barn(
     val navn: String,

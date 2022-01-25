@@ -125,6 +125,7 @@ internal class PdfV1Generator {
                         "harSøktAndreYtelser" to melding.andreUtbetalinger.isNotEmpty(),
                         "ikkeHarSendtInnVedlegg" to melding.vedleggId.isEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
+                        "andreUtbetalinger" to melding.andreUtbetalinger.somMapAndreUtbetalinger(),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
                         "selvstendigNæringsdrivende" to melding.selvstendigNæringsdrivende?.somMap()
                     )
@@ -202,6 +203,12 @@ private fun String.sprakTilTekst() = when (this.lowercase()) {
     "nb" -> "Bokmål"
     "nn" -> "Nynorsk"
     else -> this
+}
+
+private fun List<AndreUtbetalinger>.somMapAndreUtbetalinger() = map {
+    mapOf(
+        "utbetaling" to it.pdfTekst
+    )
 }
 
 private fun SelvstendigNæringsdrivende.somMap(): Map<String, Any?> = mapOf(

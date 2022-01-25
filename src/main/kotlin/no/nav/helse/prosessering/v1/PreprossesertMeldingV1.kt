@@ -15,7 +15,7 @@ data class PreprossesertMeldingV1(
     val spørsmål: List<SpørsmålOgSvar>,
     val dokumentId: List<List<String>>,
     val utbetalingsperioder: List<Utbetalingsperiode>,
-    val andreUtbetalinger: List<String>,
+    val andreUtbetalinger: List<AndreUtbetalinger>,
     val fosterbarn: List<FosterBarn>? = listOf(),
     val barn: List<Barn>,
     val frilans: Frilans? = null,
