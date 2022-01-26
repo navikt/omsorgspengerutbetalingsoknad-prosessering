@@ -212,6 +212,4 @@ class PdfV1GeneratorTest {
         genererOppsummeringsPdfer(true)
     }
 
-    // TODO: 21/01/2022 Lage test som sjekker at map som produseres er som forventet. Sikrer at vi oppdager dersom noe faller ut
-
 }
