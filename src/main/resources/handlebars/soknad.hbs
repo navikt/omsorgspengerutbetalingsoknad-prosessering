@@ -47,18 +47,20 @@
         {{#if barn}}
             <p> <b>Barn</b></p>
             {{# each barn as |barn|}}
-                <p>{{ barn.navn }} {{barn.type}}</p>
-                <p>{{ barn.identitetsnummer }}</p>
-                {{#if barn.harUtvidetRett}}
-                    <p>Utvidet rett</p>
-                {{/if}}
+                <p>{{ barn.navn }}
+                    {{ barn.identitetsnummer }}
+                    {{ barn.type }}
+                    {{#if barn.harUtvidetRett}}
+                        Utvidet rett
+                    {{/if}}
+                </p>
             {{/each}}
         {{/if}}
     </div>
 
     <section id="utbetalingsperioder">
         <h2>Omsorgsdager du søker utbetaling for</h2>
-        <p class="sporsmalstekst">Har du dekket de 10 første omsorgsdagene selv</p>
+        <p class="sporsmalstekst">Har du dekket de 10 første omsorgsdagene selv?</p>
         {{jaNeiSvar søknad.harDekketTiFørsteDagerSelv}} <br/>
 
         <ul>
