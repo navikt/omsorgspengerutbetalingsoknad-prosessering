@@ -49,9 +49,9 @@
             {{# each barn as |barn|}}
                 <p>{{ barn.navn }}
                     {{ barn.identitetsnummer }}
-                    {{ barn.type }}
+                    {{ barn.type }}.
                     {{#if barn.harUtvidetRett}}
-                        Utvidet rett
+                         Ekstra omsorgsdager.
                     {{/if}}
                 </p>
             {{/each}}
