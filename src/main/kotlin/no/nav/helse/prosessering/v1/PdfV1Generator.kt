@@ -258,7 +258,7 @@ private fun List<Barn>.somMap() = map {
         "navn" to it.navn,
         "fødselsdato" to it.fødselsdato,
         "identitetsnummer" to it.identitetsnummer,
-        "utvidetRettSatt" to (it.utvidetRett != null),
-        "utvidetRett" to it.utvidetRett
+        "type" to it.type.pdfTekst,
+        "harUtvidetRett" to (it.utvidetRett == true)
     )
 }

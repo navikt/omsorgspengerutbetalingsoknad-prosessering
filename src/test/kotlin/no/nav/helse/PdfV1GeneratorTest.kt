@@ -171,6 +171,7 @@ class PdfV1GeneratorTest {
                     fødselsdato = LocalDate.parse("2021-01-01"),
                     aktørId = "1000000000001",
                     identitetsnummer = gyldigFodselsnummerB,
+                    type = TypeBarn.FOSTERBARN,
                     utvidetRett = false
                 ),
                 Barn(
@@ -178,6 +179,15 @@ class PdfV1GeneratorTest {
                     fødselsdato = LocalDate.parse("2021-01-01"),
                     aktørId = "1000000000001",
                     identitetsnummer = gyldigFodselsnummerB,
+                    type = TypeBarn.BARNET_BOR_I_UTLANDET,
+                    utvidetRett = true
+                ),
+                Barn(
+                    navn = "Barn Barnesen V3",
+                    fødselsdato = LocalDate.parse("2021-01-01"),
+                    aktørId = "1000000000001",
+                    identitetsnummer = gyldigFodselsnummerB,
+                    type = TypeBarn.FRA_OPPSLAG,
                     utvidetRett = true
                 )
             ),

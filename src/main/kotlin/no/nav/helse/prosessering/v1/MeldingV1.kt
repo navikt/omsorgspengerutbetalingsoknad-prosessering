@@ -39,10 +39,18 @@ enum class AndreUtbetalinger (val pdfTekst: String){ // TODO: 24/01/2022 Fjerne 
 data class Barn(
     val navn: String,
     val fødselsdato: LocalDate,
-    var identitetsnummer: String,
+    val identitetsnummer: String,
+    val type: TypeBarn,
     val aktørId: String? = null,
     val utvidetRett: Boolean? = null
 )
+
+enum class TypeBarn(val pdfTekst: String){
+    FOSTERBARN("(Fosterbarn)"),
+    BARNET_BOR_I_UTLANDET("(Bor i utlandet)"),
+    ANNET("(Annet)"),
+    FRA_OPPSLAG("")
+}
 
 data class Bekreftelser(
     val harBekreftetOpplysninger: JaNei,
