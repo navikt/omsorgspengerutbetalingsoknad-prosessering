@@ -66,35 +66,38 @@
         <p class="sporsmalstekst">Har du dekket de 10 første omsorgsdagene selv?</p>
         {{jaNeiSvar søknad.harDekketTiFørsteDagerSelv}} <br/>
 
-        <ul>
-            {{# each søknad.utbetalingsperioder as |u|}}
-                <li>
-                    Periode: {{#dato u.fraOgMed}}{{/dato}} - {{#dato u.tilOgMed}}{{/dato}}
-                    {{#if u.antallTimerBorte}}
-                        <br/>Antall timer du skulle ha jobbet denne dagen: {{#varighet
-                            u.antallTimerPlanlagt}}{{/varighet}}
-                        <br/>Antall timer du var borte fra jobb denne dagen: {{#varighet
-                            u.antallTimerBorte}}{{/varighet}}
-                    {{/if}}
-                    {{#if u.årsak}}
-                        <br/>Årsak: {{#årsak u.årsak}}{{/årsak}}
-                    {{/if}}
-
-                    <!--Hvis u.aktivitetFravær == 1 -> Fravær som-->
-                    <!--Hvis u.aktivitetFravær == 2 -> Fravær både som-->
-                    <br/> {{#fraværSomFormat u.aktivitetFravær }}{{/fraværSomFormat}}
-                    {{#each u.aktivitetFravær as |aktivitet|}}
-                        {{#aktivitetFravær aktivitet}}{{/aktivitetFravær}}
-
-                        {{#if @last}}
-                        {{else}}
-                            og
+        {{#if harUtbetalingsperioder}}
+            <p><b>Omsorgsdager du søker utbetaling for</b></p>
+            <ul>
+                {{# each søknad.utbetalingsperioder as |u|}}
+                    <li>
+                        Periode: {{#dato u.fraOgMed}}{{/dato}} - {{#dato u.tilOgMed}}{{/dato}}
+                        {{#if u.antallTimerBorte}}
+                            <br/>Antall timer du skulle ha jobbet denne dagen: {{#varighet
+                                u.antallTimerPlanlagt}}{{/varighet}}
+                            <br/>Antall timer du var borte fra jobb denne dagen: {{#varighet
+                                u.antallTimerBorte}}{{/varighet}}
                         {{/if}}
-                    {{/each}}
-                    <br/><br/>
-                </li>
-            {{/each}}
-        </ul>
+                        {{#if u.årsak}}
+                            <br/>Årsak: {{#årsak u.årsak}}{{/årsak}}
+                        {{/if}}
+
+                        <!--Hvis u.aktivitetFravær == 1 -> Fravær som-->
+                        <!--Hvis u.aktivitetFravær == 2 -> Fravær både som-->
+                        <br/> {{#fraværSomFormat u.aktivitetFravær }}{{/fraværSomFormat}}
+                        {{#each u.aktivitetFravær as |aktivitet|}}
+                            {{#aktivitetFravær aktivitet}}{{/aktivitetFravær}}
+
+                            {{#if @last}}
+                            {{else}}
+                                og
+                            {{/if}}
+                        {{/each}}
+                        <br/><br/>
+                    </li>
+                {{/each}}
+            </ul>
+        {{/if}}
 
         {{#if harOpphold}}
             <h3>Utenlandsopphold i dager med fravær</h3>
