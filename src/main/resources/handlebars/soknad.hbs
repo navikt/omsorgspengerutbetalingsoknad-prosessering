@@ -47,9 +47,12 @@
         {{#if barn}}
             <p> <b>Barn</b></p>
             {{# each barn as |barn|}}
-                <p>{{ barn.navn }}
-                    {{ barn.identitetsnummer }}
-                    {{ barn.type }}.
+                <p>{{barn.navn}}
+                    {{#if barn.type}}
+                        {{barn.identitetsnummer}} {{barn.type}}.
+                    {{else}}
+                        {{barn.identitetsnummer}}.
+                    {{/if}}
                     {{#if barn.harUtvidetRett}}
                          Ekstra omsorgsdager.
                     {{/if}}

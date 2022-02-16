@@ -45,10 +45,10 @@ data class Barn(
     val utvidetRett: Boolean? = null
 )
 
-enum class TypeBarn(val pdfTekst: String){
+enum class TypeBarn(val pdfTekst: String?){
     FOSTERBARN("(Fosterbarn)"),
     ANNET("(Annet)"),
-    FRA_OPPSLAG("")
+    FRA_OPPSLAG(null)
 }
 
 data class Bekreftelser(
