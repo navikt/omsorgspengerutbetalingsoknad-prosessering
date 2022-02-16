@@ -47,7 +47,6 @@ data class Barn(
 
 enum class TypeBarn(val pdfTekst: String){
     FOSTERBARN("(Fosterbarn)"),
-    BARNET_BOR_I_UTLANDET("(Bor i utlandet)"),
     ANNET("(Annet)"),
     FRA_OPPSLAG("")
 }

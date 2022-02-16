@@ -179,7 +179,7 @@ class PdfV1GeneratorTest {
                     fødselsdato = LocalDate.parse("2021-01-01"),
                     aktørId = "1000000000001",
                     identitetsnummer = gyldigFodselsnummerB,
-                    type = TypeBarn.BARNET_BOR_I_UTLANDET,
+                    type = TypeBarn.ANNET,
                     utvidetRett = true
                 ),
                 Barn(
