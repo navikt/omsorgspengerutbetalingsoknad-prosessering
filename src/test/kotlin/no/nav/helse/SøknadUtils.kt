@@ -104,7 +104,7 @@ internal object SøknadUtils {
                 årsak = no.nav.helse.prosessering.v1.FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
             )
         ),
-        andreUtbetalinger = listOf("dagpenger", "sykepenger"),
+        andreUtbetalinger = listOf(AndreUtbetalinger.SYKEPENGER, AndreUtbetalinger.DAGPENGER),
         fosterbarn = listOf(
             FosterBarn(
                 fødselsnummer = "02119970078"

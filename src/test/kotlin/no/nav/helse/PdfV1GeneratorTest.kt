@@ -1,6 +1,7 @@
 package no.nav.helse
 
 import no.nav.helse.prosessering.v1.*
+import no.nav.helse.prosessering.v1.AndreUtbetalinger.*
 import java.io.File
 import java.time.Duration
 import java.time.LocalDate
@@ -127,7 +128,7 @@ class PdfV1GeneratorTest {
                     aktivitetFravær = listOf(AktivitetFravær.FRILANSER, AktivitetFravær.SELVSTENDIG_VIRKSOMHET)
                 )
             ),
-            andreUtbetalinger = listOf("dagpenger", "sykepenger", "midlertidigkompensasjonsnfri"),
+            andreUtbetalinger = listOf(DAGPENGER, SYKEPENGER, MIDLERTIDIG_KOMPENSASJON_SN_FRI ),
             vedleggId = listOf("12345"),
             frilans = Frilans(
                 startdato = LocalDate.now().minusYears(3),
@@ -164,6 +165,32 @@ class PdfV1GeneratorTest {
                     fødselsnummer = gyldigFodselsnummerC
                 )
             ),
+            barn = listOf(
+                Barn(
+                    navn = "Barn Barnesen",
+                    fødselsdato = LocalDate.parse("2021-01-01"),
+                    aktørId = "1000000000001",
+                    identitetsnummer = gyldigFodselsnummerB,
+                    type = TypeBarn.FOSTERBARN,
+                    utvidetRett = false
+                ),
+                Barn(
+                    navn = "Barn Barnesen V2",
+                    fødselsdato = LocalDate.parse("2021-01-01"),
+                    aktørId = "1000000000001",
+                    identitetsnummer = gyldigFodselsnummerB,
+                    type = TypeBarn.ANNET,
+                    utvidetRett = true
+                ),
+                Barn(
+                    navn = "Barn Barnesen V3",
+                    fødselsdato = LocalDate.parse("2021-01-01"),
+                    aktørId = "1000000000001",
+                    identitetsnummer = gyldigFodselsnummerB,
+                    type = TypeBarn.FRA_OPPSLAG,
+                    utvidetRett = true
+                )
+            ),
             bekreftelser = Bekreftelser(
                 harBekreftetOpplysninger = JaNei.Ja,
                 harForståttRettigheterOgPlikter = JaNei.Ja
@@ -194,4 +221,5 @@ class PdfV1GeneratorTest {
     fun `opprett lesbar oppsummerings-PDF`() {
         genererOppsummeringsPdfer(true)
     }
+
 }

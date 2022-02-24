@@ -1,5 +1,6 @@
 package no.nav.helse.prosessering.v1
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonValue
@@ -13,13 +14,14 @@ data class MeldingV1(
     val mottatt: ZonedDateTime,
     val søker: Søker,
     val språk: String,
-    val harDekketTiFørsteDagerSelv: Boolean,
+    val harDekketTiFørsteDagerSelv: Boolean?,
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
     val utbetalingsperioder: List<Utbetalingsperiode>,
-    val andreUtbetalinger: List<String>,
+    val andreUtbetalinger: List<AndreUtbetalinger>,
     val fosterbarn: List<FosterBarn>? = listOf(),
+    val barn: List<Barn> = listOf(),
     val vedleggId: List<String> = listOf(),
     val frilans: Frilans? = null,
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
@@ -27,6 +29,27 @@ data class MeldingV1(
     val bekreftelser: Bekreftelser,
     val k9FormatSøknad: Søknad
 )
+
+enum class AndreUtbetalinger (val pdfTekst: String){ // TODO: 24/01/2022 Fjerne JsonAlias når api er oppdatert
+    @JsonAlias("dagpenger") DAGPENGER("Dagpenger"),
+    @JsonAlias("sykepenger") SYKEPENGER("Sykepenger"),
+    @JsonAlias("midlertidigkompensasjonsnfri") MIDLERTIDIG_KOMPENSASJON_SN_FRI ("Midlertidig kompensasjon for selvstendig næringsdrivende og frilansere")
+}
+
+data class Barn(
+    val navn: String,
+    val fødselsdato: LocalDate,
+    val identitetsnummer: String,
+    val type: TypeBarn,
+    val aktørId: String? = null,
+    val utvidetRett: Boolean? = null
+)
+
+enum class TypeBarn(val pdfTekst: String?){
+    FOSTERBARN("(Fosterbarn)"),
+    ANNET("(Annet)"),
+    FRA_OPPSLAG(null)
+}
 
 data class Bekreftelser(
     val harBekreftetOpplysninger: JaNei,

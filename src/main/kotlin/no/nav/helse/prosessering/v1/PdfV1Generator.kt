@@ -120,10 +120,13 @@ internal class PdfV1Generator {
                             }
                         ),
                         "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
+                        "barn" to if(melding.barn.isNotEmpty()) melding.barn.somMap() else null,
+                        "harUtbetalingsperioder" to melding.utbetalingsperioder.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harSøktAndreYtelser" to melding.andreUtbetalinger.isNotEmpty(),
                         "ikkeHarSendtInnVedlegg" to melding.vedleggId.isEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
+                        "andreUtbetalinger" to melding.andreUtbetalinger.somMapAndreUtbetalinger(),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
                         "selvstendigNæringsdrivende" to melding.selvstendigNæringsdrivende?.somMap()
                     )
@@ -203,6 +206,12 @@ private fun String.sprakTilTekst() = when (this.lowercase()) {
     else -> this
 }
 
+private fun List<AndreUtbetalinger>.somMapAndreUtbetalinger() = map {
+    mapOf(
+        "utbetaling" to it.pdfTekst
+    )
+}
+
 private fun SelvstendigNæringsdrivende.somMap(): Map<String, Any?> = mapOf(
     "næringsinntekt" to næringsinntekt,
     "næringstyper" to næringstyper.somMapNæringstyper(),
@@ -242,5 +251,15 @@ private fun Regnskapsfører.somMap() = mapOf<String, Any?>(
 private fun List<Næringstyper>.somMapNæringstyper() = map {
     mapOf(
         "navn" to it.beskrivelse
+    )
+}
+
+private fun List<Barn>.somMap() = map {
+    mapOf(
+        "navn" to it.navn,
+        "fødselsdato" to it.fødselsdato,
+        "identitetsnummer" to it.identitetsnummer,
+        "type" to it.type.pdfTekst,
+        "harUtvidetRett" to (it.utvidetRett == true)
     )
 }
