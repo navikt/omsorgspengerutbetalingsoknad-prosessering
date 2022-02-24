@@ -11,7 +11,7 @@
                   søknad.mottatt}}{{/tidspunkt}}"/>
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
-        <bookmark name="Fosterbarn" href="#fosterbarn"/>
+        <bookmark name="Barn" href="#barn"/>
         <bookmark name="Utbetalingsperioder" href="#utbetalingsperioder"/>
         <bookmark name="Spørsmål" href="#spørsmål"/>
         <bookmark name="Medlemskap" href="#medlemskap"/>
@@ -34,16 +34,7 @@
         <p>{{ søknad.søker.fødselsnummer }}<br/></p>
     </div>
 
-    <div class="person" id="fosterbarn">
-        {{#if harFosterbarn}}
-            <p>Fosterbarn</p>
-            {{# each søknad.fosterbarn as |barn|}}
-                <p>Fødselsnummer</p>
-                <p>{{ barn.fødselsnummer }}</p>
-                <br/>
-            {{/each}}
-        {{/if}}
-
+    <div class="person" id="barn">
         {{#if barn}}
             <p> <b>Barn</b></p>
             {{# each barn as |barn|}}

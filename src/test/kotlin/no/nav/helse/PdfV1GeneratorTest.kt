@@ -157,14 +157,6 @@ class PdfV1GeneratorTest {
                     telefon = "65484578"
                 )
             ),
-            fosterbarn = listOf(
-                FosterBarn(
-                    fødselsnummer = gyldigFodselsnummerB
-                ),
-                FosterBarn(
-                    fødselsnummer = gyldigFodselsnummerC
-                )
-            ),
             barn = listOf(
                 Barn(
                     navn = "Barn Barnesen",
