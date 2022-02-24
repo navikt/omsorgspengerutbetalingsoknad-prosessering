@@ -105,11 +105,6 @@ internal object SøknadUtils {
             )
         ),
         andreUtbetalinger = listOf(AndreUtbetalinger.SYKEPENGER, AndreUtbetalinger.DAGPENGER),
-        fosterbarn = listOf(
-            FosterBarn(
-                fødselsnummer = "02119970078"
-            )
-        ),
         vedleggId = listOf(
             "123",
             "456",
