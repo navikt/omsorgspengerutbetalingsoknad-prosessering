@@ -1,6 +1,6 @@
 package no.nav.helse
 
-import io.ktor.config.ApplicationConfig
+import io.ktor.server.config.*
 import no.nav.helse.dusseldorf.ktor.core.getOptionalString
 import no.nav.helse.dusseldorf.ktor.core.getRequiredList
 import no.nav.helse.dusseldorf.ktor.core.getRequiredString
@@ -9,7 +9,6 @@ import java.net.URI
 import java.time.Duration
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
-import java.util.*
 
 data class Configuration(private val config: ApplicationConfig) {
 
