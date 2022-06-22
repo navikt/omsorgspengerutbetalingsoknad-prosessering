@@ -16,9 +16,6 @@ spec:
     retentionHours: 730
   acl:
     - team: dusseldorf
-      application: omsorgspengerutbetaling-api
-      access: write
-    - team: dusseldorf
       application: k9-brukerdialog-api
       access: write
     - team: dusseldorf
