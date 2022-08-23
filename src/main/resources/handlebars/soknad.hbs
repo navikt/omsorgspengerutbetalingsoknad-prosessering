@@ -192,7 +192,7 @@
 
             <p>Næringstype:
                 {{ selvstendigNæringsdrivende.næringstype }}
-                {{#eq næringstype.navn "Fiske"}}
+                {{#eq selvstendigNæringsdrivende.næringstype.navn "Fiske"}}
                     {{#if selvstendigNæringsdrivende.fiskerErPåBladB}}
                         (blad B)
                     {{else}}
