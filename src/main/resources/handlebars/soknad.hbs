@@ -191,20 +191,14 @@
             </p>
 
             <p>Næringstype:
-                {{# each selvstendigNæringsdrivende.næringstyper as |næringstype|~}}
-                    {{#if @first}}
-                        {{næringstype.navn}}
+                {{ selvstendigNæringsdrivende.næringstype }}
+                {{#eq selvstendigNæringsdrivende.næringstype "Fiske"}}
+                    {{#if selvstendigNæringsdrivende.fiskerErPåBladB}}
+                        (blad B)
                     {{else}}
-                        , {{næringstype.navn}}
+                        (ikke blad B)
                     {{/if}}
-                    {{#eq næringstype.navn "Fiske"}}
-                        {{#if selvstendigNæringsdrivende.fiskerErPåBladB}}
-                            (blad B)
-                        {{else}}
-                            (ikke blad B)
-                        {{/if}}
-                    {{/eq}}
-                {{/each}}
+                {{/eq}}
             </p>
 
             {{#if selvstendigNæringsdrivende.registrertINorge}}
