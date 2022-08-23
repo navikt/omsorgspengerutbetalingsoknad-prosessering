@@ -113,7 +113,7 @@ internal fun MeldingV1.reportMetrics() {
 private fun MeldingV1.virksomheterMetric() {
 
     selvstendigNæringsdrivende?.let {
-        val næringsTypeSomString = it.næringstyper.sortedDescending().joinToString(" , ")
+        val næringsTypeSomString = it.næringstype.name
         virksomhetsCounter
             .labels(
                 næringsTypeSomString,

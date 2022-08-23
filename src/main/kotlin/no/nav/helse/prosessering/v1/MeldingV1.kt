@@ -61,7 +61,7 @@ data class Frilans(
 )
 
 data class SelvstendigNæringsdrivende(
-    val næringstyper: List<Næringstyper> = listOf(),
+    val næringstype: Næringstyper,
     val fiskerErPåBladB: JaNei? = JaNei.Nei,
     @JsonFormat(pattern = "yyyy-MM-dd")
     val fraOgMed: LocalDate,

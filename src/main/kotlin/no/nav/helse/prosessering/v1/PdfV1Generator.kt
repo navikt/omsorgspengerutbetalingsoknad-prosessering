@@ -213,7 +213,7 @@ private fun List<AndreUtbetalinger>.somMapAndreUtbetalinger() = map {
 
 private fun SelvstendigNæringsdrivende.somMap(): Map<String, Any?> = mapOf(
     "næringsinntekt" to næringsinntekt,
-    "næringstyper" to næringstyper.somMapNæringstyper(),
+    "næringstype" to næringstype.beskrivelse,
     "fiskerErPåBladB" to fiskerErPåBladB,
     "yrkesaktivSisteTreFerdigliknedeÅrene" to yrkesaktivSisteTreFerdigliknedeÅrene?.somMap(),
     "varigEndring" to varigEndring?.somMap(),
@@ -246,12 +246,6 @@ private fun Regnskapsfører.somMap() = mapOf<String, Any?>(
     "navn" to navn,
     "telefon" to telefon
 )
-
-private fun List<Næringstyper>.somMapNæringstyper() = map {
-    mapOf(
-        "navn" to it.beskrivelse
-    )
-}
 
 private fun List<Barn>.somMap() = map {
     mapOf(

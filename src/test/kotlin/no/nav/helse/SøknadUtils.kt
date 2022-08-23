@@ -115,7 +115,7 @@ internal object SøknadUtils {
             harForståttRettigheterOgPlikter = JaNei.Ja
         ),
         selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
-            næringstyper = listOf(Næringstyper.ANNEN, Næringstyper.FISKE),
+            næringstype = Næringstyper.FISKE,
             fraOgMed = LocalDate.now(),
             erNyoppstartet = true,
             tilOgMed = LocalDate.now().plusDays(10),

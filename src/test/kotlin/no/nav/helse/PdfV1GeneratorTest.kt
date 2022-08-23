@@ -136,7 +136,7 @@ class PdfV1GeneratorTest {
                 jobberFortsattSomFrilans = false
             ),
             selvstendigNæringsdrivende =  SelvstendigNæringsdrivende(
-                næringstyper = listOf(Næringstyper.ANNEN, Næringstyper.FISKE),
+                næringstype = Næringstyper.FISKE,
                 fraOgMed = LocalDate.now(),
                 yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeÅrene(LocalDate.now()),
                 erNyoppstartet = true,
