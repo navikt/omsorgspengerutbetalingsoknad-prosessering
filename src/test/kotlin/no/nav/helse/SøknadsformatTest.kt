@@ -20,7 +20,7 @@ class SøknadsformatTest {
                 {
                   "søknadId": "$søknadId",
                   "språk": "nb",
-                  "versjon": "1.0",
+                  "versjon": "1.1",
                   "mottattDato": "2020-01-01T10:00:00.000Z",
                   "søker": {
                     "norskIdentitetsnummer": "12345678910"
@@ -70,7 +70,8 @@ class SøknadsformatTest {
                         "aktivitetFravær": ["FRILANSER"],
                         "søknadÅrsak": null,
                         "arbeidsgiverOrgNr": null,
-                        "arbeidsforholdId": null
+                        "arbeidsforholdId": null,
+                        "delvisFravær": null
                       },
                       {
                         "periode": "2020-01-06/2020-01-10",
@@ -81,7 +82,8 @@ class SøknadsformatTest {
                           "SELVSTENDIG_VIRKSOMHET"
                         ],
                         "arbeidsforholdId": null,
-                        "arbeidsgiverOrgNr": null
+                        "arbeidsgiverOrgNr": null,
+                        "delvisFravær": null
                       }
                     ],
                     "fraværsperioderKorrigeringIm": null,
