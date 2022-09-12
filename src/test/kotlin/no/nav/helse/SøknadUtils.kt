@@ -137,7 +137,7 @@ internal object SøknadUtils {
 
     fun defaultK9FormatOmsorgspengerutbetaling(søknadId: UUID = UUID.randomUUID()) = Søknad(
         SøknadId.of(søknadId.toString()),
-        Versjon.of("1.0"),
+        Versjon.of("1.1"),
         ZonedDateTime.parse("2020-01-01T10:00:00Z"),
         no.nav.k9.søknad.felles.personopplysninger.Søker(NorskIdentitetsnummer.of("12345678910")),
         OmsorgspengerUtbetaling()
@@ -149,6 +149,7 @@ internal object SøknadUtils {
                     FraværPeriode(
                         Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-05")),
                         Duration.ofHours(7),
+                        null,
                         FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE,
                         null,
                         listOf(AktivitetFravær.FRILANSER),
@@ -158,6 +159,7 @@ internal object SøknadUtils {
                     FraværPeriode(
                         Periode(LocalDate.parse("2020-01-06"), LocalDate.parse("2020-01-10")),
                         Duration.ofHours(4),
+                        null,
                         FraværÅrsak.SMITTEVERNHENSYN,
                         null,
                         listOf(AktivitetFravær.SELVSTENDIG_VIRKSOMHET),
