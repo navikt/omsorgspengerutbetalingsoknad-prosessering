@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val dusseldorfKtorVersion = "3.2.1.0-f35fe61"
+val dusseldorfKtorVersion = "3.2.1.1-15e2e63"
 val k9FormatVersion = "6.1.5"
 val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.3.0"
@@ -102,7 +102,7 @@ tasks.withType<ShadowJar> {
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = "7.4.2"
+    gradleVersion = "7.5.1"
 }
 
 tasks.withType<Test> {
