@@ -286,7 +286,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             .hentCleanupMelding(meldingV1.søknadId)
             .assertJournalførtFormat()
         k9DittnavVarselKonsumer
-            .hentK9Beskjed(meldingV1.søknadId)
+            .hentK9Beskjed(meldingV1.søknadId, maxWaitInSeconds = 60)
             .assertGyldigK9Beskjed(meldingV1)
     }
 
