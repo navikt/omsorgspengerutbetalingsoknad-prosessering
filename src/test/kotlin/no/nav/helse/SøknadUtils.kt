@@ -104,7 +104,7 @@ internal object SøknadUtils {
                 årsak = no.nav.helse.prosessering.v1.FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
             )
         ),
-        andreUtbetalinger = listOf(AndreUtbetalinger.SYKEPENGER, AndreUtbetalinger.DAGPENGER),
+        andreUtbetalinger = null,
         vedleggId = listOf(
             "123",
             "456",
