@@ -128,7 +128,7 @@ class PdfV1GeneratorTest {
                     aktivitetFravær = listOf(AktivitetFravær.FRILANSER, AktivitetFravær.SELVSTENDIG_VIRKSOMHET)
                 )
             ),
-            andreUtbetalinger = listOf(DAGPENGER, SYKEPENGER, MIDLERTIDIG_KOMPENSASJON_SN_FRI ),
+            andreUtbetalinger = null,
             vedleggId = listOf("12345"),
             frilans = Frilans(
                 startdato = LocalDate.now().minusYears(3),

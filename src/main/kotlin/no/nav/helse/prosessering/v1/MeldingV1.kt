@@ -18,7 +18,7 @@ data class MeldingV1(
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
     val utbetalingsperioder: List<Utbetalingsperiode>,
-    val andreUtbetalinger: List<AndreUtbetalinger>,
+    @Deprecated("Kan fjernes etter lansering") val andreUtbetalinger: List<AndreUtbetalinger>? = null,
     val barn: List<Barn> = listOf(),
     val vedleggId: List<String> = listOf(),
     val frilans: Frilans? = null,
@@ -28,6 +28,7 @@ data class MeldingV1(
     val k9FormatSøknad: Søknad
 )
 
+@Deprecated("Kan fjernes etter lansering")
 enum class AndreUtbetalinger (val pdfTekst: String){
     DAGPENGER("Dagpenger"),
     SYKEPENGER("Sykepenger"),

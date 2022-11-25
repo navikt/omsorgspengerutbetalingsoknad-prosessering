@@ -122,10 +122,10 @@ internal class PdfV1Generator {
                         "barn" to if(melding.barn.isNotEmpty()) melding.barn.somMap() else null,
                         "harUtbetalingsperioder" to melding.utbetalingsperioder.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
-                        "harSøktAndreYtelser" to melding.andreUtbetalinger.isNotEmpty(),
+                        "harSøktAndreYtelser" to melding.andreUtbetalinger?.isNotEmpty(), // TOOD: Fjerne
                         "ikkeHarSendtInnVedlegg" to melding.vedleggId.isEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
-                        "andreUtbetalinger" to melding.andreUtbetalinger.somMapAndreUtbetalinger(),
+                        "andreUtbetalinger" to melding.andreUtbetalinger?.somMapAndreUtbetalinger(), // TODO: Fjerne
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
                         "selvstendigNæringsdrivende" to melding.selvstendigNæringsdrivende?.somMap()
                     )
@@ -205,6 +205,7 @@ private fun String.sprakTilTekst() = when (this.lowercase()) {
     else -> this
 }
 
+@Deprecated("Kan fjernes etter lansering")
 private fun List<AndreUtbetalinger>.somMapAndreUtbetalinger() = map {
     mapOf(
         "utbetaling" to it.pdfTekst
