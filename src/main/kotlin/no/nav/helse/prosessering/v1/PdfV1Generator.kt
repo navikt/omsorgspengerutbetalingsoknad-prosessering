@@ -125,6 +125,7 @@ internal class PdfV1Generator {
                         "harSøktAndreYtelser" to melding.andreUtbetalinger?.isNotEmpty(), // TOOD: Fjerne
                         "ikkeHarSendtInnVedlegg" to melding.vedleggId.isEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
+                        "harVedlegg" to melding.vedleggId.isNotEmpty(),
                         "andreUtbetalinger" to melding.andreUtbetalinger?.somMapAndreUtbetalinger(), // TODO: Fjerne
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
                         "selvstendigNæringsdrivende" to melding.selvstendigNæringsdrivende?.somMap(),
