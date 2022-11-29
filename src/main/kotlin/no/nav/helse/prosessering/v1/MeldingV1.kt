@@ -21,6 +21,7 @@ data class MeldingV1(
     @Deprecated("Kan fjernes etter lansering") val andreUtbetalinger: List<AndreUtbetalinger>? = null,
     val barn: List<Barn> = listOf(),
     val vedleggId: List<String> = listOf(),
+    val titler: List<String>? = null,
     val frilans: Frilans? = null,
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
     val erArbeidstakerOgså: Boolean,
@@ -150,7 +151,7 @@ data class Utbetalingsperiode(
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,
     val antallTimerBorte: Duration? = null,
     val antallTimerPlanlagt: Duration? = null,
-    val årsak: FraværÅrsak,
+    val årsak: FraværÅrsak? = null,
     val aktivitetFravær: List<AktivitetFravær> = listOf()
 )
 

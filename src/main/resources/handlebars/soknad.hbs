@@ -17,6 +17,7 @@
         <bookmark name="Medlemskap" href="#medlemskap"/>
         <bookmark name="Frilans" href="#frilans"/>
         <bookmark name="Selvstendig næringsdrivende" href="#selvstendig"/>
+        <bookmark name="Vedlegg" href="#vedlegg" />
         <bookmark name="Samtykke" href="#samtykke"/>
     </bookmarks>
     {{#block 'style-common' }}
@@ -244,6 +245,19 @@
             {{/each}}
         </ul>
 
+    </section>
+
+    <section id="vedlegg">
+        <h2>Vedlegg</h2>
+        {{#if harVedlegg}}
+            <ul>
+                {{#each titler.vedlegg as |vedlegg|}}
+                    <li><p>{{vedlegg.tittel}}</p></li>
+                {{/each}}
+            </ul>
+        {{else}}
+            <p>Har ikke lastet opp vedlegg</p>
+        {{/if}}
     </section>
 
     <section id="samtykke">

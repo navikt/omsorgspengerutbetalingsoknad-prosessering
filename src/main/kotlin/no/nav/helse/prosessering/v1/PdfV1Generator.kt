@@ -127,7 +127,10 @@ internal class PdfV1Generator {
                         "harBosteder" to melding.bosteder.isNotEmpty(),
                         "andreUtbetalinger" to melding.andreUtbetalinger?.somMapAndreUtbetalinger(), // TODO: Fjerne
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
-                        "selvstendigNæringsdrivende" to melding.selvstendigNæringsdrivende?.somMap()
+                        "selvstendigNæringsdrivende" to melding.selvstendigNæringsdrivende?.somMap(),
+                        "titler" to mapOf(
+                            "vedlegg" to melding.titler?.somMapTitler()
+                        )
                     )
                 )
                 .resolver(MapValueResolver.INSTANCE)
@@ -181,6 +184,14 @@ internal class PdfV1Generator {
             TypeReference<MutableMap<String, Any?>>() {}
     )
 
+}
+
+private fun List<String>.somMapTitler(): List<Map<String, Any?>> {
+    return map {
+        mapOf(
+            "tittel" to it
+        )
+    }
 }
 
 private fun Bekreftelser.bekreftelserSomMap(): Map<String, Boolean> {

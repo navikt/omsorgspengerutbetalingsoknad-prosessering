@@ -118,7 +118,7 @@ class PdfV1GeneratorTest {
                     tilOgMed = start.plusDays(3),
                     antallTimerPlanlagt = Duration.ofHours(4).plusMinutes(30),
                     antallTimerBorte = Duration.ofHours(5).plusMinutes(0),
-                    årsak = FraværÅrsak.ORDINÆRT_FRAVÆR,
+                    årsak = null,
                     aktivitetFravær = listOf(AktivitetFravær.SELVSTENDIG_VIRKSOMHET)
                 ),
                 Utbetalingsperiode(
