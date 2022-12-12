@@ -203,7 +203,7 @@ internal object SøknadUtils {
             .medAktivitet(
                 OpptjeningAktivitet()
                     .medFrilanser(
-                        Frilanser().medStartDato(LocalDate.parse("2020-01-01"))
+                        Frilanser().medStartdato(LocalDate.parse("2020-01-01"))
                     )
                     .medSelvstendigNæringsdrivende(
                         K9SelvstendigNæringsdrivende()
