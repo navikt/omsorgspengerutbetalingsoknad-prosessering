@@ -9,7 +9,6 @@ import io.ktor.server.testing.*
 import io.prometheus.client.CollectorRegistry
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.time.delay
-import no.nav.common.KafkaEnvironment
 import no.nav.helse.SøknadUtils.defaultSøknad
 import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
 import no.nav.helse.prosessering.v1.*
@@ -19,6 +18,7 @@ import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.testcontainers.containers.KafkaContainer
 import java.time.Duration
 import java.time.LocalDate
 import java.util.*
@@ -57,20 +57,20 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             start(wait = true)
         }
 
-        private fun getConfig(kafkaEnvironment: KafkaEnvironment?): ApplicationConfig {
+        private fun getConfig(kafkaContainer: KafkaContainer): ApplicationConfig {
             val fileConfig = ConfigFactory.load()
             val testConfig = ConfigFactory.parseMap(
                 TestConfiguration.asMap(
                     wireMockServer = wireMockServer,
-                    kafkaEnvironment = kafkaEnvironment
+                    kafkaEnvironment = kafkaContainer
                 )
             )
             val mergedConfig = testConfig.withFallback(fileConfig)
             return HoconApplicationConfig(mergedConfig)
         }
 
-        private fun newEngine(kafkaEnvironment: KafkaEnvironment?) = TestApplicationEngine(createTestEnvironment {
-            config = getConfig(kafkaEnvironment)
+        private fun newEngine(kafkaContainer: KafkaContainer) = TestApplicationEngine(createTestEnvironment {
+            config = getConfig(kafkaContainer)
         })
 
         private fun stopEngine() = engine.stop(5, 60, TimeUnit.SECONDS)
@@ -95,7 +95,7 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
             cleanupKonsumer.close()
             kafkaTestProducer.close()
             stopEngine()
-            kafkaEnvironment.tearDown()
+            kafkaEnvironment.stop()
             logger.info("Tear down complete")
         }
     }
@@ -129,38 +129,6 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
         kafkaTestProducer.leggTilMottak(melding)
         assertInnsending(melding)
-    }
-
-    @Test
-    fun `En feilprosessert melding vil bli prosessert etter at tjenesten restartes`() {
-
-        val melding = defaultSøknad.copy(
-            søknadId = UUID.randomUUID().toString(),
-            søker = defaultSøknad.søker.copy(
-                fødselsnummer = gyldigFodselsnummerA
-            )
-        )
-
-        wireMockServer.stubJournalfor(500) // Simulerer feil ved journalføring
-
-        kafkaTestProducer.leggTilMottak(melding)
-        ventPaaAtRetryMekanismeIStreamProsessering()
-        readyGir200HealthGir503()
-
-        wireMockServer.stubJournalfor(201) // Simulerer journalføring fungerer igjen
-        restartEngine()
-        assertInnsending(melding)
-    }
-
-    private fun readyGir200HealthGir503() {
-        with(engine) {
-            handleRequest(HttpMethod.Get, "/isready") {}.apply {
-                assertEquals(HttpStatusCode.OK, response.status())
-                handleRequest(HttpMethod.Get, "/health") {}.apply {
-                    assertEquals(HttpStatusCode.ServiceUnavailable, response.status())
-                }
-            }
-        }
     }
 
     @Test
@@ -277,6 +245,38 @@ class OmsorgspengerutbetalingsoknadProsesseringTest {
 
         kafkaTestProducer.leggTilMottak(melding)
         assertInnsending(melding)
+    }
+
+    @Test
+    fun `En feilprosessert melding vil bli prosessert etter at tjenesten restartes`() {
+
+        val melding = defaultSøknad.copy(
+            søknadId = UUID.randomUUID().toString(),
+            søker = defaultSøknad.søker.copy(
+                fødselsnummer = gyldigFodselsnummerA
+            )
+        )
+
+        wireMockServer.stubJournalfor(500) // Simulerer feil ved journalføring
+
+        kafkaTestProducer.leggTilMottak(melding)
+        ventPaaAtRetryMekanismeIStreamProsessering()
+        readyGir200HealthGir503()
+
+        wireMockServer.stubJournalfor(201) // Simulerer journalføring fungerer igjen
+        restartEngine()
+        assertInnsending(melding)
+    }
+
+    private fun readyGir200HealthGir503() {
+        with(engine) {
+            handleRequest(HttpMethod.Get, "/isready") {}.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+                handleRequest(HttpMethod.Get, "/health") {}.apply {
+                    assertEquals(HttpStatusCode.ServiceUnavailable, response.status())
+                }
+            }
+        }
     }
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }
