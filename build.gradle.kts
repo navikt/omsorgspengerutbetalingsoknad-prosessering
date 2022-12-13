@@ -5,7 +5,7 @@ val dusseldorfKtorVersion = "3.2.2.1-4942135"
 val ktorVersion = "2.2.1"
 
 val k9FormatVersion = "8.0.0"
-val slf4jVersion = "2.0.5"
+val slf4jVersion = "2.0.6"
 val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.0.10"
 val kafkaTestcontainerVersion = "1.17.6"
