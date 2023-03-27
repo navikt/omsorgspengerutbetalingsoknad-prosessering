@@ -37,7 +37,7 @@ internal fun WireMockServer.stubJournalfor(responseCode: Int = 201): WireMockSer
                 WireMock
                 .urlPathMatching(".*$k9JoarkBasePath/v1/omsorgspengeutbetaling/journalforing"))
                 .withQueryParam("arbeidstype", equalTo("frilanser"))
-                .withQueryParam("arbeidstype", equalTo("selvstendig næringsdrivende"))
+                .withQueryParam("arbeidstype", equalTo("selvstendig-naeringsdrivende"))
                 .willReturn(
                     WireMock.aResponse()
                         .withHeader("Content-Type", "application/json")

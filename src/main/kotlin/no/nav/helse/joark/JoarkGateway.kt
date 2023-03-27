@@ -39,7 +39,7 @@ class JoarkGateway(
     private val completeUrl = Url.buildURL(
         baseUrl = baseUrl,
         pathParts = listOf("v1", "omsorgspengeutbetaling", "journalforing"),
-        queryParameters = mapOf("arbeidstype" to listOf("frilanser", "selvstendig næringsdrivende"))
+        queryParameters = mapOf("arbeidstype" to listOf("frilanser", "selvstendig-naeringsdrivende"))
     ).toString()
 
     private val objectMapper = configuredObjectMapper()
