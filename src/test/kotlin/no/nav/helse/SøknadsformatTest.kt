@@ -25,6 +25,7 @@ class SøknadsformatTest {
                   "søker": {
                     "norskIdentitetsnummer": "12345678910"
                   },
+                  "kildesystem": "søknadsdialog",
                   "ytelse": {
                     "type": "OMP_UT",
                     "fosterbarn": [

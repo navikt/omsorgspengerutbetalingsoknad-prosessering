@@ -5,6 +5,7 @@ import no.nav.helse.prosessering.v1.*
 import no.nav.helse.prosessering.v1.AktivitetFravær.FRILANSER
 import no.nav.helse.prosessering.v1.AktivitetFravær.SELVSTENDIG_VIRKSOMHET
 import no.nav.k9.søknad.Søknad
+import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.fravær.AktivitetFravær
 import no.nav.k9.søknad.felles.fravær.FraværPeriode
@@ -230,7 +231,7 @@ internal object SøknadUtils {
                             )
                     )
             ),
-    )
+    ).medKildesystem(Kildesystem.SØKNADSDIALOG)
 }
 
 internal fun MeldingV1.somJson() = SøknadUtils.objectMapper.writeValueAsString(this)
