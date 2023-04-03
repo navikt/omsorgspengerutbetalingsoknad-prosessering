@@ -26,6 +26,7 @@ updates:
     registries:
       - dusseldorf-ktor
       - k9-format
+    open-pull-requests-limit: 15
 
   - package-ecosystem: docker
     directory: "/"
